@@ -115,5 +115,18 @@ namespace Rogers_Toolbox_v3._0
                 MessageBox.Show($"Failed to load serials: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
+        private void CTRUpdate()
+        {
+
+        }
+        public void CombineExcels()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Title = "Open an Excel files to combine",
+                Filter = "Excel files (*.xlsx)|*.xlsx|All files (*.*)|*.*"
+            };
+        }
     }
 }
