@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
@@ -8,6 +8,8 @@ using Microsoft.Win32;
 using ClosedXML.Excel;
 using System.Linq;
 using System.Diagnostics.Contracts;
+using System.Diagnostics;
+using System.IO;
 
 
 namespace Rogers_Toolbox_v3._0
@@ -18,6 +20,8 @@ namespace Rogers_Toolbox_v3._0
     public partial class MainWindow : Window
     {
         // Global Variables
+        static string bartenderNotepad = "C:\\path\\to\\your\\notepad.txt";
+        // Useful Functions
         private InputSimulator inputSimulator = new InputSimulator();  // Initialize InputSimulator
         private List<string> serialsList = new List<string>(); // Stores the serials
         private int remainingSerials; // Stores the count of remaining serials
@@ -88,7 +92,6 @@ namespace Rogers_Toolbox_v3._0
                 // Simulate Ctrl+Left
                 sim.Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.LEFT);
             }
-        }
         private async Task SimulateTyping(string text)
         {
             foreach (char c in text)
@@ -394,7 +397,92 @@ namespace Rogers_Toolbox_v3._0
         {
             return string.Join(Environment.NewLine, deviceOrder.Select(device => totals.ContainsKey(device) ? totals[device].ToString() : "0"));
         }
+        public void CreatePurolatorSheet()
+        {
+            string device = DetermineDevice(serialsList[0]);
+
+            if (device == "IPTVARXI6HD" || device == "IPTVTCXI6HD" || device == "SCXI11BEI")
+            {
+                string puroSheet = MakeTVSheet(device);
+
+                // Write Purolator sheet to notepad
+                File.WriteAllText(bartenderNotepad, puroSheet + Environment.NewLine);
+
+                // Create and execute batch file
+                string cmdScript = @" @echo off
+                                    set ""target_printer=55EXP_Purolator""
+                                    powershell -Command ""Get-WmiObject -Query 'SELECT * FROM Win32_Printer WHERE ShareName=''%target_printer%'' ' | Invoke-WmiMethod -Name SetDefaultPrinter""
+                                    ""C:\Seagull\BarTender 7.10\Standard\bartend.exe"" /f=C:\BTAutomation\XI6.btw /p /x
+                                    ";
+                ExecuteBatchScript(cmdScript);
+            }
+            else
+            {
+                string puroSheet = MakeModemSheet(device);
+
+                // Write Purolator sheet to notepad
+                File.WriteAllText(bartenderNotepad, puroSheet + Environment.NewLine);
+
+                // Create and execute batch file
+                string cmdScript = @"
+                                    @echo off
+                                    set ""target_printer=55EXP_Purolator""
+                                    powershell -Command ""Get-WmiObject -Query 'SELECT * FROM Win32_Printer WHERE ShareName=''%target_printer%'' ' | Invoke-WmiMethod -Name SetDefaultPrinter""
+                                    ""C:\Seagull\BarTender 7.10\Standard\bartend.exe"" /f=C:\BTAutomation\CODA.btw /p /x
+                                    ";
+                ExecuteBatchScript(cmdScript);
+            }
+        }
+        public string DetermineDevice(string serial)
+        {
+            if (serial.StartsWith("TM"))
+                return "IPTVTCXI6HD";
+            else if (serial.StartsWith("M"))
+                return "IPTVARXI6HD";
+            else if (serial.StartsWith("409"))
+                return "CGM4981COM";
+            else if (serial.StartsWith("XI1"))
+                return "SCXI11BEI";
+            else if (serial.StartsWith("336"))
+                return "CGM4331COM";
+            else
+                return "TG4482A";
+        }
+        static string MakeTVSheet(string device)
+        {
+            // Placeholder for creating TV Purolator sheet logic
+            return $"TV Purolator Sheet for {device}";
+        }
+        static string MakeModemSheet(string device)
+        {
+            // Placeholder for creating Modem Purolator sheet logic
+            return $"Modem Purolator Sheet for {device}";
+        }
+        static void ExecuteBatchScript(string scriptContent)
+        {
+            string tempFilePath = "temp_cmd.bat";
+
+            // Write script content to a temporary file
+            File.WriteAllText(tempFilePath, scriptContent);
+
+            // Execute the batch file
+            Process process = new Process
+            {
+                StartInfo = new ProcessStartInfo
+                {
+                    FileName = "cmd.exe",
+                    Arguments = $"/c {tempFilePath}",
+                    RedirectStandardOutput = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                }
+            };
+
+            process.Start();
+            process.WaitForExit();
+
+            // Clean up temporary file
+            File.Delete(tempFilePath);
+        }
     }
-    
-    
-   
+}
