@@ -70,7 +70,25 @@ namespace Rogers_Toolbox_v3._0
                 CombineExcels();
             }
         }
+        private async void CtrAutomation(string contractorData)
+        {
+            await Task.Delay(60000)
+            System.Windows.Forms.Clipboard.SetText(contractorData)
+            // Wait for 6 seconds
+            Thread.Sleep(6000);
 
+            // Simulate Ctrl+V (Paste)
+            var sim = new InputSimulator();
+            sim.Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.VK_V);
+
+            // Simulate Ctrl+Alt+PageDown
+            sim.Keyboard.ModifiedKeyStroke(
+                new[] { VirtualKeyCode.CONTROL, VirtualKeyCode.MENU }, VirtualKeyCode.NEXT);
+
+                // Simulate Ctrl+Left
+                sim.Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.LEFT);
+            }
+        }
         private async Task SimulateTyping(string text)
         {
             foreach (char c in text)
@@ -81,6 +99,10 @@ namespace Rogers_Toolbox_v3._0
             }
         }
         private void SimulateTabKey() // Presses Tab
+        {
+            inputSimulator.Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.RETURN);
+        }
+        private void SimulateKey(string key)
         {
             inputSimulator.Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.RETURN);
         }
@@ -363,14 +385,16 @@ namespace Rogers_Toolbox_v3._0
         }
         private void SaveCTRResults(List<string> results)
         {
-            return;
+            foreach (data in results)
+            {
+                CtrAutomation(data);
+            }
         }
         public string FormatTotals(Dictionary<string, int> totals, List<string> deviceOrder)
         {
             return string.Join(Environment.NewLine, deviceOrder.Select(device => totals.ContainsKey(device) ? totals[device].ToString() : "0"));
         }
     }
-        
-}
+    
     
    
