@@ -56,7 +56,7 @@
         <Label x:Name="InfoBox" Content="Welcome to The Rogers Toolbox v3.0" HorizontalAlignment="Center" Height="34" Margin="0,66,0,0" VerticalAlignment="Top" Width="500" Foreground="White" FontSize="15" FontFamily="Sitka Text" Background="#FF282828" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
 
         <!-- Outer ScrollViewer to scroll both number and TextBox -->
-        <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="10,115,10,0">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="10,115,0,0" HorizontalAlignment="Left" Width="780">
             <StackPanel Orientation="Horizontal">
                 <!-- StackPanel for displaying line numbers and TextBox -->
                 <StackPanel Orientation="Vertical" Margin="10,0,10,0" Background="#FF3D3D3D">

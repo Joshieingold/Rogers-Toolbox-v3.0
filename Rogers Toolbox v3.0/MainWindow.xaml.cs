@@ -8,6 +8,8 @@ using Microsoft.Win32;
 using ClosedXML.Excel;
 using System.Linq;
 using System.Diagnostics.Contracts;
+using System.Diagnostics;
+using System.IO;
 
 
 namespace Rogers_Toolbox_v3._0
@@ -18,6 +20,9 @@ namespace Rogers_Toolbox_v3._0
     public partial class MainWindow : Window
     {
         // Global Variables
+        static string bartenderNotepad = "C:\\path\\to\\your\\notepad.txt";
+        static List<string> allContractors = new List<string> { "8017", "8037", "8038", "8041", "8047", "8080", "8093", "8052", "8067", "8975", "8986", "8990", "8994", "8997", "8993 and 8982", "NB1", "NF1", "Cleaning Up" };
+        // Useful Functions
         private InputSimulator inputSimulator = new InputSimulator();  // Initialize InputSimulator
         private List<string> serialsList = new List<string>(); // Stores the serials
         private int remainingSerials; // Stores the count of remaining serials
@@ -67,10 +72,10 @@ namespace Rogers_Toolbox_v3._0
             }
             else if (((Button)sender).Content.ToString() == "CTR")
             {
-                CombineExcels();
+                CTRUpdate();
             }
         }
-
+        
         private async Task SimulateTyping(string text)
         {
             foreach (char c in text)
@@ -81,6 +86,10 @@ namespace Rogers_Toolbox_v3._0
             }
         }
         private void SimulateTabKey() // Presses Tab
+        {
+            inputSimulator.Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.RETURN);
+        }
+        private void SimulateKey(string key)
         {
             inputSimulator.Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.RETURN);
         }
@@ -230,9 +239,30 @@ namespace Rogers_Toolbox_v3._0
                 SaveCTRResults(results);
             }
         }
-        private void UpdateTotals(Dictionary<string, int> totals, string itemCode, List<string> allowedDevices, Dictionary<string,string> deviceMapping)
+        public async Task CtrAutomation(string contractorData)
         {
-            if (deviceMapping.ContainsKey(itemCode)) 
+            // Probably Want to add a freeze here
+            Clipboard.SetText(contractorData);
+    
+            var sim = new InputSimulator();
+            sim.Keyboard.ModifiedKeyStroke(WindowsInput.Native.VirtualKeyCode.CONTROL, WindowsInput.Native.VirtualKeyCode.VK_V);
+            
+            
+            // For Testing
+            inputSimulator.Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.RIGHT);
+
+
+
+            // Simulate Ctrl+Alt+PageDown
+            //sim.Keyboard.ModifiedKeyStroke(
+            //new[] { WindowsInput.Native.VirtualKeyCode.CONTROL, WindowsInput.Native.VirtualKeyCode.MENU }, WindowsInput.Native.VirtualKeyCode.NEXT);
+
+            // Simulate Ctrl+Left
+            //sim.Keyboard.ModifiedKeyStroke(WindowsInput.Native.VirtualKeyCode.CONTROL, WindowsInput.Native.VirtualKeyCode.LEFT);
+        }
+        private void UpdateTotals(Dictionary<string, int> totals, string itemCode, List<string> allowedDevices, Dictionary<string, string> deviceMapping)
+        {
+            if (deviceMapping.ContainsKey(itemCode))
             {
                 string device = deviceMapping[itemCode];  // Get the device from the mapping
 
@@ -257,9 +287,9 @@ namespace Rogers_Toolbox_v3._0
 
             var CTRList = new HashSet<string> { "8052", "8067", "8975", "8986", "8990", "8994", "8997" };
             var robitailleList = new HashSet<string> { "8017", "8037", "8038", "8041", "8047", "8080", "8093" };
-            var combinedCTRS = new HashSet<string> { "8993", "8982" };
+            var combinedCTRS = new List<string> { "8993", "8982" };
             var warehouseList = new HashSet<string> { "NB1", "NF1" };
-
+            
             var deviceMapping = new Dictionary<string, string>
             {
                 {"CGM4981COM", "XB8"},
@@ -272,39 +302,42 @@ namespace Rogers_Toolbox_v3._0
                 {"SCHC2AEW", "CAM2"},
                 {"SCHC3AE0", "CAM3"},
                 {"SCXI11BEI-ENTOS", "ENTOS" },
-                {"MR36HW", "MR36HW" },
-                {"S5A134A", "S5A134A" },
-                {"CM8200A", "CM8200A" },
-                {"CODA5810", "CODA5810" }
+                {"MR36HW", "MERAKI" },
+                {"S5A134A", "CRADLEPOINT" },
+                {"CM8200A", "SOMEDEVICE" },
+                {"CODA5810", "CODA" }
             };
 
             List<string> robitailleDevices = new List<string>
              {
-                 "XB8", "XB7", "XI6", "XIONE", "PODS", "ONTS","SCHB1AEW", "SCHC2AEW", "SCHC3AEW", "SCXI11BEI-ENTOS","MR36HW", "S5A134A", "CM8200A", "CODA5810"
+                 "XB8", "XB7", "XI6", "XIONE", "PODS", "ONTS","CAM1", "CAM2", "CAM3", "ENTOS","MERAKI", "CRADLEPOINT", "SOMEDEVICE", "CODA"
              };
             List<string> contractorDevices = new List<string>
             {
-                "XB8", "XB7", "XI6", "XIONE", "PODS", "ONTS", "SCHB1AEW", "SCHC2AEW", "SCHC3AEW", "SCXI11BEI-ENTOS", "CODA5810"
+                "XB8", "XB7", "XI6", "XIONE", "PODS", "ONTS","CAM1", "CAM2", "CAM3", "ENTOS", "CODA"
             };
-                
-    
+
+
             // Processing robitaille
             foreach (var RobCTR in robitailleList)
             {
-                var contractorTotals = robitailleDevices.ToDictionary(device => device, device => 0);
+                var robTotals = robitailleDevices.ToDictionary(device => device, device => 0);
                 foreach (var row in sheet.RowsUsed().Skip(2))
                 {
                     var contractorId = row.Cell(8).GetValue<string>(); // Column H
                     var itemCode = row.Cell(6).GetValue<string>();     // Column F
-                    var inventoryType = row.Cell(9).GetValue<string>();// Column J
-                    if (contractorTotals.ContainsKey(itemCode) && inventoryType == $"CTR.Subready.{RobCTR}")
+                    var inventoryType = row.Cell(10).GetValue<string>();// Column J
+                    if (contractorId == RobCTR && inventoryType.StartsWith("CTR.Subready."))
                     {
-                        UpdateTotals(contractorTotals, itemCode, robitailleDevices, deviceMapping);
+                        UpdateTotals(robTotals, itemCode, robitailleDevices, deviceMapping);
                     }
+
                 }
-                results.Add(FormatTotals(contractorTotals, robitailleDevices));
+                results.Add(FormatTotals(robTotals, robitailleDevices));
             }
+
             // Processing normal CTRS
+ 
             foreach (var contractor in CTRList)
             {
                 var contractorTotals = contractorDevices.ToDictionary(device => device, device => 0);
@@ -312,8 +345,8 @@ namespace Rogers_Toolbox_v3._0
                 {
                     var contractorId = row.Cell(8).GetValue<string>(); // Column H
                     var itemCode = row.Cell(6).GetValue<string>();     // Column F
-                    var inventoryType = row.Cell(9).GetValue<string>();// Column J
-                    if (contractorTotals.ContainsKey(itemCode) && inventoryType == $"CTR.Subready.{contractor}")
+                    var inventoryType = row.Cell(10).GetValue<string>();// Column J
+                    if (contractorId == contractor && inventoryType.StartsWith("CTR.Subready."))
                     {
                         UpdateTotals(contractorTotals, itemCode, contractorDevices, deviceMapping);
                     }
@@ -324,22 +357,20 @@ namespace Rogers_Toolbox_v3._0
 
             // Placing this outside in the hope that it will combine the numbers oganically
             var combinedContractorTotals = contractorDevices.ToDictionary(device => device, device => 0);
-
-            foreach (var combinedCTR in combinedCTRS)
+            foreach (var row in sheet.RowsUsed().Skip(2))
             {
-                
-                foreach (var row in sheet.RowsUsed().Skip(2))
+                var contractorId = row.Cell(8).GetValue<string>().Trim(); // Column H
+                var itemCode = row.Cell(6).GetValue<string>();           // Column F
+                var inventoryType = row.Cell(10).GetValue<string>();      // Column J
+
+                if ((contractorId == "8993" || contractorId == "8982") && inventoryType.StartsWith("CTR.Subready."))
                 {
-                    var contractorId = row.Cell(8).GetValue<string>(); // Column H
-                    var itemCode = row.Cell(6).GetValue<string>();     // Column F
-                    var inventoryType = row.Cell(9).GetValue<string>();// Column J
-                    if (combinedContractorTotals.ContainsKey(itemCode) && inventoryType == $"CTR.Subready.{combinedCTR}")
-                    {
-                        UpdateTotals(combinedContractorTotals, itemCode, contractorDevices, deviceMapping);
-                    }
+                    UpdateTotals(combinedContractorTotals, itemCode, contractorDevices, deviceMapping);
                 }
-                results.Add(FormatTotals(combinedContractorTotals, contractorDevices));
             }
+            var formattedTotals = FormatTotals(combinedContractorTotals, contractorDevices);
+            results.Add(formattedTotals);
+
 
             // Processing Warehouses.
 
@@ -350,27 +381,126 @@ namespace Rogers_Toolbox_v3._0
                 {
                     var contractorId = row.Cell(2).GetValue<string>(); // Column B
                     var itemCode = row.Cell(6).GetValue<string>();     // Column F
-                    var inventoryType = row.Cell(9).GetValue<string>();// Column J
+                    var inventoryType = row.Cell(10).GetValue<string>();// Column J
                     if (contractorId == warehouse)
                     {
                         UpdateTotals(warehouseTotals, itemCode, robitailleDevices, deviceMapping);
                     }
                 }
-                results.Add(FormatTotals(warehouseTotals, contractorDevices));
+                results.Add(FormatTotals(warehouseTotals, robitailleDevices));
             }
 
             return results;
         }
-        private void SaveCTRResults(List<string> results)
+        private async Task SaveCTRResults(List<string> results)
         {
-            return;
+            int count = 0;
+
+            foreach (string data in results)
+            {
+                // Update the InfoBox before starting the automation
+                InfoBox.Content = $"Updating {allContractors[count]}";
+
+                // Add a delay for visual feedback
+                await Task.Delay(500);
+
+                // Ensure we await the CtrAutomation method
+                await CtrAutomation(data); // This will now wait for the CtrAutomation to complete before moving on
+
+                count++;
+            }
+            InfoBox.Content = $"CTR Update Completed!";
         }
         public string FormatTotals(Dictionary<string, int> totals, List<string> deviceOrder)
         {
             return string.Join(Environment.NewLine, deviceOrder.Select(device => totals.ContainsKey(device) ? totals[device].ToString() : "0"));
         }
+        public void CreatePurolatorSheet()
+        {
+            string device = DetermineDevice(serialsList[0]);
+
+            if (device == "IPTVARXI6HD" || device == "IPTVTCXI6HD" || device == "SCXI11BEI")
+            {
+                string puroSheet = MakeTVSheet(device);
+
+                // Write Purolator sheet to notepad
+                File.WriteAllText(bartenderNotepad, puroSheet + Environment.NewLine);
+
+                // Create and execute batch file
+                string cmdScript = @" @echo off
+                                    set ""target_printer=55EXP_Purolator""
+                                    powershell -Command ""Get-WmiObject -Query 'SELECT * FROM Win32_Printer WHERE ShareName=''%target_printer%'' ' | Invoke-WmiMethod -Name SetDefaultPrinter""
+                                    ""C:\Seagull\BarTender 7.10\Standard\bartend.exe"" /f=C:\BTAutomation\XI6.btw /p /x
+                                    ";
+                ExecuteBatchScript(cmdScript);
+            }
+            else
+            {
+                string puroSheet = MakeModemSheet(device);
+
+                // Write Purolator sheet to notepad
+                File.WriteAllText(bartenderNotepad, puroSheet + Environment.NewLine);
+
+                // Create and execute batch file
+                string cmdScript = @"
+                                    @echo off
+                                    set ""target_printer=55EXP_Purolator""
+                                    powershell -Command ""Get-WmiObject -Query 'SELECT * FROM Win32_Printer WHERE ShareName=''%target_printer%'' ' | Invoke-WmiMethod -Name SetDefaultPrinter""
+                                    ""C:\Seagull\BarTender 7.10\Standard\bartend.exe"" /f=C:\BTAutomation\CODA.btw /p /x
+                                    ";
+                ExecuteBatchScript(cmdScript);
+            }
+        }
+        public string DetermineDevice(string serial)
+        {
+            if (serial.StartsWith("TM"))
+                return "IPTVTCXI6HD";
+            else if (serial.StartsWith("M"))
+                return "IPTVARXI6HD";
+            else if (serial.StartsWith("409"))
+                return "CGM4981COM";
+            else if (serial.StartsWith("XI1"))
+                return "SCXI11BEI";
+            else if (serial.StartsWith("336"))
+                return "CGM4331COM";
+            else
+                return "TG4482A";
+        }
+        static string MakeTVSheet(string device)
+        {
+            // Placeholder for creating TV Purolator sheet logic
+            return $"TV Purolator Sheet for {device}";
+        }
+        static string MakeModemSheet(string device)
+        {
+            // Placeholder for creating Modem Purolator sheet logic
+            return $"Modem Purolator Sheet for {device}";
+        }
+        static void ExecuteBatchScript(string scriptContent)
+        {
+            string tempFilePath = "temp_cmd.bat";
+
+            // Write script content to a temporary file
+            File.WriteAllText(tempFilePath, scriptContent);
+
+            // Execute the batch file
+            Process process = new Process
+            {
+                StartInfo = new ProcessStartInfo
+                {
+                    FileName = "cmd.exe",
+                    Arguments = $"/c {tempFilePath}",
+                    RedirectStandardOutput = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                }
+            };
+
+            process.Start();
+            process.WaitForExit();
+
+            // Clean up temporary file
+            File.Delete(tempFilePath);
+        }
     }
-        
 }
-    
-   
