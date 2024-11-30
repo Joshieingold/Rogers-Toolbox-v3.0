@@ -10,6 +10,7 @@ using System.Linq;
 using System.Diagnostics.Contracts;
 using System.Diagnostics;
 using System.IO;
+using DocumentFormat.OpenXml.Packaging;
 
 
 namespace Rogers_Toolbox_v3._0
@@ -19,6 +20,7 @@ namespace Rogers_Toolbox_v3._0
     /// </summary>
     public partial class MainWindow : Window
     {
+
         // Global Variables
         static string bartenderNotepad = "C:\\path\\to\\your\\notepad.txt";
         static List<string> allContractors = new List<string> { "8017", "8037", "8038", "8041", "8047", "8080", "8093", "8052", "8067", "8975", "8986", "8990", "8994", "8997", "8993 and 8982", "NB1", "NF1", "Cleaning Up" };
@@ -29,8 +31,17 @@ namespace Rogers_Toolbox_v3._0
         public MainWindow()
         {
             InitializeComponent();
+            LoadSettings();
+
         }
         // Processing what happens on button Click
+        private void LoadSettings()
+        {
+            string username = Properties.Settings.Default.Username;
+            InfoBox.Content = ($"Welcome to Rogers Toolbox v3.0, {username}");
+        }
+        
+        
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             // Split the text of the TextBox into lines based on newline characters
@@ -99,7 +110,7 @@ namespace Rogers_Toolbox_v3._0
                 TextBox.Clear();
                 TextBox.Text = string.Join(Environment.NewLine, serialsList);
                 remainingSerials = serialsList.Count; // Update remaining se
-                                                      // rial count
+                                             
                 InfoBox.Content = ($"{remainingSerials} Serials Loaded");
             }
         }

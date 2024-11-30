@@ -15,39 +15,51 @@
                 <Setter Property="BorderBrush" Value="Black" />
                 <Setter Property="Cursor" Value="Arrow" />
                 <Setter Property="FontFamily" Value="Mongolian Baiti" />
+                <Setter Property="OverridesDefaultStyle" Value="True"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Grid Background="{TemplateBinding Background}">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
                 <!-- Disable the focus visual style -->
                 <Setter Property="FocusVisualStyle" Value="{x:Null}" />
                 <Style.Triggers>
-                    <!-- Change Foreground color to Red on Hover -->
                     <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Foreground" Value="Red" />
+                        <Setter Property="Background" Value="BlueViolet"></Setter>
+                    </Trigger>
+                    <Trigger Property="IsMouseOver" Value="False">
+                        <Setter Property="Background" Value="Yellow" />
                     </Trigger>
                 </Style.Triggers>
             </Style>
         </Grid.Resources>
 
         <Rectangle x:Name="navBar" Height="56" Stroke="#FF282828" VerticalAlignment="Top" Fill="#FF282828"/>
-        <Button Content="Import" HorizontalAlignment="Left" Height="50" Margin="3,3,0,0" VerticalAlignment="Top" Width="50" Click="Button_Click" Foreground="{x:Null}" BorderBrush="{x:Null}">
+        <Button Content="Import" x:Name="ImportButton" HorizontalAlignment="Left" Height="50" Margin="3,3,0,0" VerticalAlignment="Top" Width="50" Click="Button_Click" Foreground="{x:Null}" BorderBrush="{x:Null}">
             <Button.Background>
                 <ImageBrush ImageSource="/button_6.png" Stretch="Fill"/>
             </Button.Background>
         </Button>
-        <Button Content="WMS" HorizontalAlignment="Left" Height="50" Margin="58,3,0,0" VerticalAlignment="Top" Width="50" Click="Button_Click" Foreground="{x:Null}" BorderBrush="{x:Null}">
+        <Button Content="WMS" HorizontalAlignment="Left" Height="50" Margin="168,3,0,0" VerticalAlignment="Top" Width="50" Click="Button_Click" Foreground="{x:Null}" BorderBrush="{x:Null}">
             <Button.Background>
                 <ImageBrush ImageSource="/button_7.png"/>
             </Button.Background>
         </Button>
-        <Button Content="Flexi" HorizontalAlignment="Left" Height="50" Margin="113,3,0,0" VerticalAlignment="Top" Width="50" Click="Button_Click" Foreground="{x:Null}" BorderBrush="{x:Null}">
+        <Button Content="Flexi" HorizontalAlignment="Left" Height="50" Margin="113,4,0,0" VerticalAlignment="Top" Width="50" Click="Button_Click" Foreground="{x:Null}" BorderBrush="{x:Null}">
             <Button.Background>
                 <ImageBrush ImageSource="/button_8.png" Stretch="None"/>
             </Button.Background>
         </Button>
-        <Button Content="Blitz" x:Name="BlitzButton" HorizontalAlignment="Left" Height="50" Margin="168,3,0,0" VerticalAlignment="Top" Width="50" Click="Button_Click" Foreground="{x:Null}" BorderBrush="{x:Null}">
+        <Button Content="Blitz" x:Name="BlitzButton" HorizontalAlignment="Left" Height="50" Margin="58,2,0,0" VerticalAlignment="Top" Width="50" Click="Button_Click" Foreground="{x:Null}" BorderBrush="{x:Null}">
             <Button.Background>
                 <ImageBrush ImageSource="/button_9.png" Stretch="None" TileMode="None"/>
             </Button.Background>
         </Button>
-        <Button Content="CTR" x:Name="CTR" HorizontalAlignment="Left" Height="50" Margin="223,3,0,0" VerticalAlignment="Top" Width="50" Click="Button_Click" Foreground="{x:Null}" BorderBrush="{x:Null}">
+        <Button Content="CTR" x:Name="CTR" HorizontalAlignment="Left" Height="50" VerticalAlignment="Top" Width="50" Click="Button_Click" Foreground="{x:Null}" BorderBrush="{x:Null}" Margin="223,2,0,0">
             <Button.Background>
                 <ImageBrush ImageSource="/button_2.png" Stretch="None"/>
             </Button.Background>
@@ -56,7 +68,7 @@
         <Label x:Name="InfoBox" Content="Welcome to The Rogers Toolbox v3.0" HorizontalAlignment="Center" Height="34" Margin="0,66,0,0" VerticalAlignment="Top" Width="500" Foreground="White" FontSize="15" FontFamily="Sitka Text" Background="#FF282828" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
 
         <!-- Outer ScrollViewer to scroll both number and TextBox -->
-        <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="10,115,0,0" HorizontalAlignment="Left" Width="780">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalAlignment="Center" Width="780" Margin="0,115,0,0">
             <StackPanel Orientation="Horizontal">
                 <!-- StackPanel for displaying line numbers and TextBox -->
                 <StackPanel Orientation="Vertical" Margin="10,0,10,0" Background="#FF3D3D3D">
@@ -72,7 +84,7 @@
                 </StackPanel>
 
                 <!-- TextBox for input with scrolling enabled -->
-                <TextBox x:Name="TextBox" Width="694" TextWrapping="Wrap" 
+                <TextBox x:Name="TextBox" Width="714" TextWrapping="Wrap" 
                  Foreground="White" Background="#FF3D3D3D" AcceptsReturn="True" TextChanged="TextBox_TextChanged" 
                  BorderBrush="{x:Null}" />
             </StackPanel>
