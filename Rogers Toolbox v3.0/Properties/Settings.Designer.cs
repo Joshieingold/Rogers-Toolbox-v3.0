@@ -82,7 +82,7 @@ namespace Rogers_Toolbox_v3._0.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool ReverseImport {
             get {
                 return ((bool)(this["ReverseImport"]));

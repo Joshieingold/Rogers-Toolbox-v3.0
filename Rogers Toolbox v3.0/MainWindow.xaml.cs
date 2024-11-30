@@ -30,17 +30,17 @@ namespace Rogers_Toolbox_v3._0
         bool reverseImport = false;
         int typingSpeed = 0;
         static List<string> allContractors = new List<string> { "8017", "8037", "8038", "8041", "8047", "8080", "8093", "8052", "8067", "8975", "8986", "8990", "8994", "8997", "8993 and 8982", "NB1", "NF1", "Cleaning Up" };
-        // Useful Functions
         private InputSimulator inputSimulator = new InputSimulator();  // Initialize InputSimulator
         private List<string> serialsList = new List<string>(); // Stores the serials
         private int remainingSerials; // Stores the count of remaining serials
+        
+        // Base Functions
         public MainWindow()
         {
             InitializeComponent();
             LoadSettings();
 
         }
-        // Processing what happens on button Click
         private void LoadSettings()
         {
             username = Properties.Settings.Default.Username;
@@ -52,8 +52,6 @@ namespace Rogers_Toolbox_v3._0
             reverseImport = Properties.Settings.Default.ReverseImport;
             typingSpeed = Properties.Settings.Default.TypingSpeed;
         }
-        
-        
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             // Split the text of the TextBox into lines based on newline characters
@@ -98,7 +96,6 @@ namespace Rogers_Toolbox_v3._0
                 CTRUpdate();
             }
         }
-        
         private async Task SimulateTyping(string text)
         {
             foreach (char c in text)
@@ -108,7 +105,7 @@ namespace Rogers_Toolbox_v3._0
                 await Task.Delay(typingSpeed);  // Adjust speed (lower is faster)
             }
         }
-        private void SimulateTabKey() // Presses Tab
+        private void SimulateTabKey()
         {
             inputSimulator.Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.RETURN);
         }
@@ -126,6 +123,7 @@ namespace Rogers_Toolbox_v3._0
                 InfoBox.Content = ($"{remainingSerials} Serials Loaded");
             }
         }
+        // For Importing Serials from Excel
         private void OpenExcel()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog
@@ -158,7 +156,11 @@ namespace Rogers_Toolbox_v3._0
                         }
                     }
                 }
+                if (reverseImport == true)
+                {
+                    ReverseSerials(serialsList);
 
+                }
                 // Update remaining serials and display
                 remainingSerials = serialsList.Count;
                 UpdateSerialsDisplay();
@@ -168,6 +170,12 @@ namespace Rogers_Toolbox_v3._0
                 MessageBox.Show($"Failed to load serials: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+        private void ReverseSerials(List<string> Serials)
+        {
+            Serials.Reverse();
+            serialsList = Serials;
+        }
+        // For CTR Update
         public void CombineExcels()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog
@@ -438,6 +446,7 @@ namespace Rogers_Toolbox_v3._0
         {
             return string.Join(Environment.NewLine, deviceOrder.Select(device => totals.ContainsKey(device) ? totals[device].ToString() : "0"));
         }
+        // For Printing
         public void CreatePurolatorSheet()
         {
             string device = DetermineDevice(serialsList[0]);
