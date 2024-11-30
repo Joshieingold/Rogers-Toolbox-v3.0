@@ -7,7 +7,7 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-using System;
+
 namespace Rogers_Toolbox_v3._0.Properties {
     
     
@@ -30,15 +30,11 @@ namespace Rogers_Toolbox_v3._0.Properties {
             get {
                 return ((string)(this["Username"]));
             }
-            set
-            {
-                this["Username"] = value;
-            }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
         public int BlitzImportSpeed {
             get {
                 return ((int)(this["BlitzImportSpeed"]));
@@ -98,7 +94,7 @@ namespace Rogers_Toolbox_v3._0.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
         public int TypingSpeed {
             get {
                 return ((int)(this["TypingSpeed"]));
@@ -106,10 +102,6 @@ namespace Rogers_Toolbox_v3._0.Properties {
             set {
                 this["TypingSpeed"] = value;
             }
-        }
-        public Settings()
-        {
-         this.Username = Environment.UserName;
         }
     }
 }

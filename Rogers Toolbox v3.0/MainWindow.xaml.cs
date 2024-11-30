@@ -22,7 +22,13 @@ namespace Rogers_Toolbox_v3._0
     {
 
         // Global Variables
-        static string bartenderNotepad = "C:\\path\\to\\your\\notepad.txt";
+        string username = "No User Assigned";
+        string bartenderNotepad = "not set";
+        int blitzImportSpeed = 0;
+        int flexiImportSpeed = 0;
+        int wmsImportSpeed = 0;
+        bool reverseImport = false;
+        int typingSpeed = 0;
         static List<string> allContractors = new List<string> { "8017", "8037", "8038", "8041", "8047", "8080", "8093", "8052", "8067", "8975", "8986", "8990", "8994", "8997", "8993 and 8982", "NB1", "NF1", "Cleaning Up" };
         // Useful Functions
         private InputSimulator inputSimulator = new InputSimulator();  // Initialize InputSimulator
@@ -37,8 +43,14 @@ namespace Rogers_Toolbox_v3._0
         // Processing what happens on button Click
         private void LoadSettings()
         {
-            string username = Properties.Settings.Default.Username;
+            username = Properties.Settings.Default.Username;
             InfoBox.Content = ($"Welcome to Rogers Toolbox v3.0, {username}");
+            bartenderNotepad = Properties.Settings.Default.BartenderNotepadPath;
+            blitzImportSpeed = Properties.Settings.Default.BlitzImportSpeed;
+            flexiImportSpeed = Properties.Settings.Default.FlexiImportSpeed;
+            wmsImportSpeed = Properties.Settings.Default.WmsImportSpeed;
+            reverseImport = Properties.Settings.Default.ReverseImport;
+            typingSpeed = Properties.Settings.Default.TypingSpeed;
         }
         
         
@@ -73,7 +85,7 @@ namespace Rogers_Toolbox_v3._0
                     UpdateSerialsDisplay();
 
                     // Short Delay after finishing a serial
-                    await Task.Delay(10);  // Adjust delay as needed
+                    await Task.Delay(blitzImportSpeed);  // Adjust delay as needed
                 }
             }
             // If sender is the open excel button 
@@ -93,7 +105,7 @@ namespace Rogers_Toolbox_v3._0
             {
                 // Use InputSimulator to simulate key press
                 inputSimulator.Keyboard.TextEntry(c);  // Simulates typing the character
-                await Task.Delay(5);  // Adjust speed (lower is faster)
+                await Task.Delay(typingSpeed);  // Adjust speed (lower is faster)
             }
         }
         private void SimulateTabKey() // Presses Tab
