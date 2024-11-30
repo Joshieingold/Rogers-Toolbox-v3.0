@@ -23,6 +23,7 @@ namespace Rogers_Toolbox_v3._0
     {
 
         // Global Variables
+
         string username = "No User Assigned";
         static string bartenderNotepad = "not set";
         int blitzImportSpeed = 0;
@@ -36,6 +37,7 @@ namespace Rogers_Toolbox_v3._0
         private int remainingSerials; // Stores the count of remaining serials
 
         // Base Functions
+
         public MainWindow()
         {
             InitializeComponent();
@@ -176,7 +178,9 @@ namespace Rogers_Toolbox_v3._0
             Serials.Reverse();
             serialsList = Serials;
         }
+        
         // For CTR Update
+
         public void CombineExcels()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog
@@ -447,7 +451,9 @@ namespace Rogers_Toolbox_v3._0
         {
             return string.Join(Environment.NewLine, deviceOrder.Select(device => totals.ContainsKey(device) ? totals[device].ToString() : "0"));
         }
+        
         // For Printing
+
         public void CreatePurolatorSheet()
         {
             string device = DetermineDevice(serialsList[0]);
@@ -558,6 +564,20 @@ namespace Rogers_Toolbox_v3._0
                                     set ""target_printer=55EXP_2""
                                     powershell -Command ""Get-WmiObject -Query 'SELECT * FROM Win32_Printer WHERE ShareName=''%target_printer%'' ' | Invoke-WmiMethod -Name SetDefaultPrinter""
                                     ""C:\Seagull\BarTender 7.10\Standard\bartend.exe"" /f=C:\BTAutomation\NewPrintertest.btw /p /x
+                                    ";
+            ExecuteBatchScript(cmdScript);
+
+        }
+        public static void CreateBarcodes()
+        {
+            string serialString = String.Join(Environment.NewLine, serialsList);
+            File.WriteAllText(bartenderNotepad, serialString + Environment.NewLine);
+
+            // Create and execute batch file
+            string cmdScript = @" @echo off
+                                    set ""target_printer=55EXP_Barcode""
+                                    powershell -Command ""Get-WmiObject -Query 'SELECT * FROM Win32_Printer WHERE ShareName=''%target_printer%'' ' | Invoke-WmiMethod -Name SetDefaultPrinter""
+                                    ""C:\Seagull\BarTender 7.10\Standard\bartend.exe"" /f=C:\BTAutomation\singlebar.btw /p /x
                                     ";
             ExecuteBatchScript(cmdScript);
 
