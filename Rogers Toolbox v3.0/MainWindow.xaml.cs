@@ -16,9 +16,6 @@ using System.Text;
 
 namespace Rogers_Toolbox_v3._0
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
 
@@ -126,7 +123,9 @@ namespace Rogers_Toolbox_v3._0
                 InfoBox.Content = ($"{remainingSerials} Serials Loaded");
             }
         }
+        
         // For Importing Serials from Excel
+
         private void OpenExcel()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog
