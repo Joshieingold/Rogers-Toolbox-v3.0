@@ -24,7 +24,7 @@ namespace Rogers_Toolbox_v3._0
 
         // Global Variables
         string username = "No User Assigned";
-        string bartenderNotepad = "not set";
+        static string bartenderNotepad = "not set";
         int blitzImportSpeed = 0;
         int flexiImportSpeed = 0;
         int wmsImportSpeed = 0;
@@ -34,7 +34,7 @@ namespace Rogers_Toolbox_v3._0
         private InputSimulator inputSimulator = new InputSimulator();  // Initialize InputSimulator
         private static List<string> serialsList = new List<string>(); // Stores the serials
         private int remainingSerials; // Stores the count of remaining serials
-        
+
         // Base Functions
         public MainWindow()
         {
@@ -120,7 +120,7 @@ namespace Rogers_Toolbox_v3._0
                 TextBox.Clear();
                 TextBox.Text = string.Join(Environment.NewLine, serialsList);
                 remainingSerials = serialsList.Count; // Update remaining se
-                                             
+
                 InfoBox.Content = ($"{remainingSerials} Serials Loaded");
             }
         }
@@ -275,11 +275,11 @@ namespace Rogers_Toolbox_v3._0
         {
             // Probably Want to add a freeze here
             Clipboard.SetText(contractorData);
-    
+
             var sim = new InputSimulator();
             sim.Keyboard.ModifiedKeyStroke(WindowsInput.Native.VirtualKeyCode.CONTROL, WindowsInput.Native.VirtualKeyCode.VK_V);
-            
-            
+
+
             // For Testing
             inputSimulator.Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.RIGHT);
 
@@ -321,7 +321,7 @@ namespace Rogers_Toolbox_v3._0
             var robitailleList = new HashSet<string> { "8017", "8037", "8038", "8041", "8047", "8080", "8093" };
             var combinedCTRS = new List<string> { "8993", "8982" };
             var warehouseList = new HashSet<string> { "NB1", "NF1" };
-            
+
             var deviceMapping = new Dictionary<string, string>
             {
                 {"CGM4981COM", "XB8"},
@@ -369,7 +369,7 @@ namespace Rogers_Toolbox_v3._0
             }
 
             // Processing normal CTRS
- 
+
             foreach (var contractor in CTRList)
             {
                 var contractorTotals = contractorDevices.ToDictionary(device => device, device => 0);
@@ -527,7 +527,7 @@ namespace Rogers_Toolbox_v3._0
             // Clean up temporary file
             File.Delete(tempFilePath);
         }
-        public static string FormatSheet( int numSplit)
+        public static string FormatSheet(int numSplit)
         {
             if (serialsList == null || serialsList.Count == 0)
             {
@@ -547,6 +547,20 @@ namespace Rogers_Toolbox_v3._0
                 formattedList.AppendLine(string.Join(Environment.NewLine, chunk));
             }
             return formattedList.ToString();
+        }
+        public static void CreateLotSheet()
+        {
+            string serialString = String.Join(Environment.NewLine, serialsList);
+            File.WriteAllText(bartenderNotepad, serialString + Environment.NewLine);
+
+            // Create and execute batch file
+            string cmdScript = @" @echo off
+                                    set ""target_printer=55EXP_2""
+                                    powershell -Command ""Get-WmiObject -Query 'SELECT * FROM Win32_Printer WHERE ShareName=''%target_printer%'' ' | Invoke-WmiMethod -Name SetDefaultPrinter""
+                                    ""C:\Seagull\BarTender 7.10\Standard\bartend.exe"" /f=C:\BTAutomation\NewPrintertest.btw /p /x
+                                    ";
+            ExecuteBatchScript(cmdScript);
+
         }
     }
 }
