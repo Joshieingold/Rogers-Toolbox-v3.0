@@ -11,6 +11,7 @@ using System.Diagnostics.Contracts;
 using System.Diagnostics;
 using System.IO;
 using DocumentFormat.OpenXml.Packaging;
+using System.Text;
 
 
 namespace Rogers_Toolbox_v3._0
@@ -31,7 +32,7 @@ namespace Rogers_Toolbox_v3._0
         int typingSpeed = 0;
         static List<string> allContractors = new List<string> { "8017", "8037", "8038", "8041", "8047", "8080", "8093", "8052", "8067", "8975", "8986", "8990", "8994", "8997", "8993 and 8982", "NB1", "NF1", "Cleaning Up" };
         private InputSimulator inputSimulator = new InputSimulator();  // Initialize InputSimulator
-        private List<string> serialsList = new List<string>(); // Stores the serials
+        private static List<string> serialsList = new List<string>(); // Stores the serials
         private int remainingSerials; // Stores the count of remaining serials
         
         // Base Functions
@@ -453,7 +454,8 @@ namespace Rogers_Toolbox_v3._0
 
             if (device == "IPTVARXI6HD" || device == "IPTVTCXI6HD" || device == "SCXI11BEI")
             {
-                string puroSheet = MakeTVSheet(device);
+                int formatBy = 10;
+                string puroSheet = FormatSheet(formatBy);
 
                 // Write Purolator sheet to notepad
                 File.WriteAllText(bartenderNotepad, puroSheet + Environment.NewLine);
@@ -468,7 +470,8 @@ namespace Rogers_Toolbox_v3._0
             }
             else
             {
-                string puroSheet = MakeModemSheet(device);
+                int formatBy = 8;
+                string puroSheet = FormatSheet(formatBy);
 
                 // Write Purolator sheet to notepad
                 File.WriteAllText(bartenderNotepad, puroSheet + Environment.NewLine);
@@ -483,7 +486,7 @@ namespace Rogers_Toolbox_v3._0
                 ExecuteBatchScript(cmdScript);
             }
         }
-        public string DetermineDevice(string serial)
+        public static string DetermineDevice(string serial)
         {
             if (serial.StartsWith("TM"))
                 return "IPTVTCXI6HD";
@@ -497,16 +500,6 @@ namespace Rogers_Toolbox_v3._0
                 return "CGM4331COM";
             else
                 return "TG4482A";
-        }
-        static string MakeTVSheet(string device)
-        {
-            // Placeholder for creating TV Purolator sheet logic
-            return $"TV Purolator Sheet for {device}";
-        }
-        static string MakeModemSheet(string device)
-        {
-            // Placeholder for creating Modem Purolator sheet logic
-            return $"Modem Purolator Sheet for {device}";
         }
         static void ExecuteBatchScript(string scriptContent)
         {
@@ -533,6 +526,27 @@ namespace Rogers_Toolbox_v3._0
 
             // Clean up temporary file
             File.Delete(tempFilePath);
+        }
+        public static string FormatSheet( int numSplit)
+        {
+            if (serialsList == null || serialsList.Count == 0)
+            {
+                return "No serials available.";
+            }
+            int totalStrings = serialsList.Count;
+            StringBuilder formattedList = new StringBuilder();
+
+            for (int i = 0; i < totalStrings; i += numSplit)
+            {
+                List<string> chunk = serialsList.GetRange(i, Math.Min(numSplit, totalStrings - i));
+
+                chunk.Reverse();
+
+                formattedList.AppendLine(DetermineDevice(chunk[0]));
+
+                formattedList.AppendLine(string.Join(Environment.NewLine, chunk));
+            }
+            return formattedList.ToString();
         }
     }
 }
