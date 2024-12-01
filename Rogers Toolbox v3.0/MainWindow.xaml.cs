@@ -12,6 +12,10 @@ using System.Diagnostics;
 using System.IO;
 using DocumentFormat.OpenXml.Packaging;
 using System.Text;
+using System.Drawing;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
+
 
 
 namespace Rogers_Toolbox_v3._0
@@ -72,16 +76,16 @@ namespace Rogers_Toolbox_v3._0
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             // If Sender is Blitz Import
-            if (((Button)sender).Content.ToString() == "Blitz")
+            if (((System.Windows.Controls.Button)sender).Content.ToString() == "Blitz")
             {
                 BlitzImport();
             }
             // If sender is the open excel button 
-            else if (((Button)sender).Content.ToString() == "Import")
+            else if (((System.Windows.Controls.Button)sender).Content.ToString() == "Import")
             {
                 OpenExcel();
             }
-            else if (((Button)sender).Content.ToString() == "CTR")
+            else if (((System.Windows.Controls.Button)sender).Content.ToString() == "CTR")
             {
                 CTRUpdate();
             }
@@ -123,7 +127,7 @@ namespace Rogers_Toolbox_v3._0
                 InfoBox.Content = ($"{remainingSerials} Serials Loaded");
             }
         }
-        
+
         // For Pasting Serials
         private async void BlitzImport()
         {
@@ -145,18 +149,54 @@ namespace Rogers_Toolbox_v3._0
         }
         private void FlexiProImport()
         {
-            return;
+
         }
         private void WMSImport()
         {
             return;
         }
-        
+        private bool CheckPixel(string colorWanted, string colorFound)
+        {
+            if (colorWanted == colorFound)
+            {
+                return true; // Returns True if they match
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private string GetCurrentPixel()
+        {
+            string[] cords = flexiProCheckPixel.Split(',');
+            int xCord = Convert.ToInt32(cords[0]);
+            int yCord = Convert.ToInt32(cords[1]);
+            System.Drawing.Point flexiCords = new System.Drawing.Point(xCord, yCord);
+
+            // Capture the screen
+            Bitmap screenshot = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
+            using (Graphics graphics = Graphics.FromImage(screenshot))
+            {
+                graphics.CopyFromScreen(new System.Drawing.Point(0, 0), new System.Drawing.Point(0, 0), screenshot.Size);
+            }
+
+            // Get the color of the pixel at the specified coordinates
+            Color pixelColor = screenshot.GetPixel(xCord, yCord);
+
+            // Format the color as "(R, G, B)"
+            string colorFound = $"({pixelColor.R}, {pixelColor.G}, {pixelColor.B})";
+
+            return colorFound;
+        }
+
+
+
         // For Importing Serials from Excel
 
         private void OpenExcel()
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog
+            Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog
             {
                 Title = "Open an Excel file for use",
                 Filter = "Excel files (*.xlsx)|*.xlsx|All files (*.*)|*.*"
@@ -197,7 +237,7 @@ namespace Rogers_Toolbox_v3._0
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Failed to load serials: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                System.Windows.MessageBox.Show($"Failed to load serials: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         private void ReverseSerials(List<string> Serials)
@@ -205,12 +245,12 @@ namespace Rogers_Toolbox_v3._0
             Serials.Reverse();
             serialsList = Serials;
         }
-        
+
         // For CTR Update
 
         public void CombineExcels()
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog
+            Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog
             {
                 Title = "Select Excel Files to Combine",
                 Filter = "Excel files (*.xlsx)|*.xlsx|All files (*.*)|*.*",
@@ -226,7 +266,7 @@ namespace Rogers_Toolbox_v3._0
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Failed to combine files: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    System.Windows.MessageBox.Show($"Failed to combine files: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
@@ -259,7 +299,7 @@ namespace Rogers_Toolbox_v3._0
         }
         private void SaveCombinedExcelFile(XLWorkbook combinedWorkbook)
         {
-            var saveFileDialog = new SaveFileDialog
+            var saveFileDialog = new Microsoft.Win32.SaveFileDialog
             {
                 Title = "Save Combined Excel File",
                 Filter = "Excel files (*.xlsx)|*.xlsx",
@@ -274,7 +314,7 @@ namespace Rogers_Toolbox_v3._0
         }
         public void CTRUpdate()
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog
+            Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog
             {
                 Title = "Select Excel File for CTR Update",
                 Filter = "Excel files (*.xlsx)|*.xlsx|All files (*.*)|*.*"
@@ -289,7 +329,7 @@ namespace Rogers_Toolbox_v3._0
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Failed to process CTR update: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    System.Windows.MessageBox.Show($"Failed to process CTR update: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
@@ -305,7 +345,7 @@ namespace Rogers_Toolbox_v3._0
         public async Task CtrAutomation(string contractorData)
         {
             // Probably Want to add a freeze here
-            Clipboard.SetText(contractorData);
+            System.Windows.Clipboard.SetText(contractorData);
 
             var sim = new InputSimulator();
             sim.Keyboard.ModifiedKeyStroke(WindowsInput.Native.VirtualKeyCode.CONTROL, WindowsInput.Native.VirtualKeyCode.VK_V);
@@ -478,7 +518,7 @@ namespace Rogers_Toolbox_v3._0
         {
             return string.Join(Environment.NewLine, deviceOrder.Select(device => totals.ContainsKey(device) ? totals[device].ToString() : "0"));
         }
-        
+
         // For Printing
 
         public void CreatePurolatorSheet()
@@ -609,6 +649,7 @@ namespace Rogers_Toolbox_v3._0
             ExecuteBatchScript(cmdScript);
 
         }
+
+
     }
-    
 }
