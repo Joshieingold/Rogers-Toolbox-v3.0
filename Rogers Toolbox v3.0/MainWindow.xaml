@@ -3,17 +3,15 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Rogers_Toolbox_v3._0"
         mc:Ignorable="d"
         Title="Rogers Toolbox v3.0" Height="456" Width="800">
-    <Grid Margin="0,0,0,26" RenderTransformOrigin="0.51,0.603">
+    <Grid Margin="0,0,0,26">
         <Grid.Resources>
             <!-- Define a Style for Buttons -->
             <Style TargetType="Button">
                 <Setter Property="Foreground" Value="White" />
                 <Setter Property="Background" Value="Transparent" />
                 <Setter Property="BorderBrush" Value="Black" />
-                <Setter Property="Cursor" Value="Arrow" />
                 <Setter Property="FontFamily" Value="Mongolian Baiti" />
                 <Setter Property="OverridesDefaultStyle" Value="True"/>
                 <Setter Property="Template">
@@ -29,66 +27,68 @@
                 <Setter Property="FocusVisualStyle" Value="{x:Null}" />
                 <Style.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Background" Value="BlueViolet"></Setter>
-                    </Trigger>
-                    <Trigger Property="IsMouseOver" Value="False">
-                        <Setter Property="Background" Value="Yellow" />
+                        <Setter Property="Background" Value="BlueViolet" />
                     </Trigger>
                 </Style.Triggers>
             </Style>
         </Grid.Resources>
 
-        <Rectangle x:Name="navBar" Height="56" Stroke="#FF282828" VerticalAlignment="Top" Fill="#FF282828"/>
-        <Button Content="Import" x:Name="ImportButton" HorizontalAlignment="Left" Height="50" Margin="3,3,0,0" VerticalAlignment="Top" Width="50" Click="Button_Click" Foreground="{x:Null}" BorderBrush="{x:Null}">
-            <Button.Background>
-                <ImageBrush ImageSource="/button_6.png" Stretch="Fill"/>
-            </Button.Background>
-        </Button>
-        <Button Content="WMS" x:Name="WMS" HorizontalAlignment="Left" Height="50" Margin="168,3,0,0" VerticalAlignment="Top" Width="50" Click="Button_Click" Foreground="{x:Null}" BorderBrush="{x:Null}">
-            <Button.Background>
-                <ImageBrush ImageSource="/button_7.png"/>
-            </Button.Background>
-        </Button>
-        <Button Content="Flexi" x:Name="Flexi" HorizontalAlignment="Left" Height="50" Margin="113,4,0,0" VerticalAlignment="Top" Width="50" Click="Button_Click" Foreground="{x:Null}" BorderBrush="{x:Null}">
-            <Button.Background>
-                <ImageBrush ImageSource="/button_8.png" Stretch="None"/>
-            </Button.Background>
-        </Button>
-        <Button Content="Blitz" x:Name="BlitzButton" HorizontalAlignment="Left" Height="50" Margin="58,2,0,0" VerticalAlignment="Top" Width="50" Click="Button_Click" Foreground="{x:Null}" BorderBrush="{x:Null}">
-            <Button.Background>
-                <ImageBrush ImageSource="/button_9.png" Stretch="None" TileMode="None"/>
-            </Button.Background>
-        </Button>
-        <Button Content="CTR" x:Name="CTR" HorizontalAlignment="Left" Height="50" VerticalAlignment="Top" Width="50" Click="Button_Click" Foreground="{x:Null}" BorderBrush="{x:Null}" Margin="223,2,0,0">
-            <Button.Background>
-                <ImageBrush ImageSource="/button_2.png" Stretch="None"/>
-            </Button.Background>
-        </Button>
-        <Button Content="Settings" x:Name="SettingsButton" HorizontalAlignment="Left" Height="50" Margin="698,58,0,0" VerticalAlignment="Top" Width="75" Click="SettingsButton_Click" Background="{x:Null}" Foreground="Black" FontSize="18"/>
-        <Button Content="Compare Lists" x:Name="CompareListButton" HorizontalAlignment="Left" Height="50" Margin="0,57,0,0" VerticalAlignment="Top" Width="130" Click="CompareListButton_Click" Background="{x:Null}" Foreground="Black" FontSize="18"/>
-        <RadioButton Content="Bom-Wip" HorizontalAlignment="Right" Margin="0,21,33,0" Width="69" Foreground="White" Height="14" VerticalAlignment="Top"/>
-        <Label x:Name="InfoBox" Content="Welcome to The Rogers Toolbox v3.0" HorizontalAlignment="Center" Height="34" Margin="0,66,0,0" VerticalAlignment="Top" Width="500" Foreground="White" FontSize="15" FontFamily="Sitka Text" Background="#FF282828" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+        <!-- Navigation Bar -->
+        <Rectangle x:Name="navBar" Height="56" Fill="#FF282828" VerticalAlignment="Top" />
 
-        <!-- Outer ScrollViewer to scroll both number and TextBox -->
+        <StackPanel Orientation="Horizontal" Height="56" VerticalAlignment="Top" HorizontalAlignment="Left">
+            <Button Content="Import" x:Name="ImportButton" Width="50" Click="Button_Click" Foreground="{x:Null}">
+                <Button.Background>
+                    <ImageBrush ImageSource="/button_6.png" Stretch="None" />
+                </Button.Background>
+            </Button>
+            <Button Content="Blitz" x:Name="BlitzButton" Width="50" Click="Button_Click" Foreground="{x:Null}">
+                <Button.Background>
+                    <ImageBrush ImageSource="/button_9.png" Stretch="None" />
+                </Button.Background>
+            </Button>
+            <Button Content="Flexi" x:Name="FlexiButton" Width="50" Click="Button_Click" Foreground="{x:Null}">
+                <Button.Background>
+                    <ImageBrush ImageSource="/button_8.png" Stretch="None" />
+                </Button.Background>
+            </Button>
+            <Button Content="WMS" x:Name="WMSButton" Width="50" Click="Button_Click" Foreground="{x:Null}">
+                <Button.Background>
+                    <ImageBrush ImageSource="/button_7.png" Stretch="None" />
+                </Button.Background>
+            </Button>
+            <Button Content="CTR" x:Name="CTRButton" Width="50" Click="Button_Click" Foreground="{x:Null}">
+                <Button.Background>
+                    <ImageBrush ImageSource="/button_2.png" Stretch="None" />
+                </Button.Background>
+            </Button>
+            <Button Content="Purolator" x:Name="PurolatorButton" Width="50" Click="Button_Click" Background="{x:Null}"/>
+            <Button Content="Barcode" x:Name="BarcodeButton" Width="50" Click="Button_Click" Background="{x:Null}"/>
+            <Button Content="LotSheet" x:Name="LotSheetButton" Width="50" Click="Button_Click" Background="{x:Null}"/>
+            <Button Content="Settings" x:Name="SettingsButton" Width="50" Click="SettingsButton_Click" Background="Transparent" Foreground="White" FontSize="14" />
+            <Button Content="Compare Lists" x:Name="CompareListButton" Width="50" Click="CompareListButton_Click" Background="Transparent" Foreground="White" FontSize="11" />
+        </StackPanel>
+
+        <Label x:Name="InfoBox" Content="Welcome to The Rogers Toolbox v3.0" 
+               HorizontalAlignment="Center" Height="34" Margin="0,66,0,0" 
+               VerticalAlignment="Top" Width="500" Foreground="White" 
+               FontSize="15" FontFamily="Sitka Text" Background="#FF282828" 
+               HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+
+        <!-- Scrollable Content Area -->
         <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="10,115,0,0" HorizontalAlignment="Left" Width="780">
             <StackPanel Orientation="Horizontal">
-                <!-- StackPanel for displaying line numbers and TextBox -->
+                <!-- Line Numbers -->
                 <StackPanel Orientation="Vertical" Margin="10,0,10,0" Background="#FF3D3D3D">
-                    <!-- Grid to center the line number text -->
                     <Grid>
-                        <TextBlock x:Name="LineNumberLabel" 
-                           Foreground="White" 
-                           Background="#FF3D3D3D" 
-                           Width="30" 
-                           HorizontalAlignment="Center" 
-                           VerticalAlignment="Center" ><Run Language="en-ca" Text=""/></TextBlock>
+                        <TextBlock x:Name="LineNumberLabel" Foreground="White" Background="#FF3D3D3D" Width="30" HorizontalAlignment="Center" VerticalAlignment="Center" />
                     </Grid>
                 </StackPanel>
 
-                <!-- TextBox for input with scrolling enabled -->
+                <!-- Input TextBox -->
                 <TextBox x:Name="TextBox" Width="714" TextWrapping="Wrap" 
-                 Foreground="White" Background="#FF3D3D3D" AcceptsReturn="True" TextChanged="TextBox_TextChanged" 
-                 BorderBrush="{x:Null}" />
+                         Foreground="White" Background="#FF3D3D3D" AcceptsReturn="True" 
+                         TextChanged="TextBox_TextChanged" BorderBrush="{x:Null}" />
             </StackPanel>
         </ScrollViewer>
     </Grid>
