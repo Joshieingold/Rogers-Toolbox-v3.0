@@ -99,6 +99,18 @@ namespace Rogers_Toolbox_v3._0
             {
                 WMSImport();
             }
+            else if (((System.Windows.Controls.Button)sender).Content.ToString() == "Purolator")
+            {
+                CreatePurolatorSheet();
+            }
+            else if (((System.Windows.Controls.Button)sender).Content.ToString() == "Barcode")
+            {
+                CreateBarcodes();
+            }
+            else if (((System.Windows.Controls.Button)sender).Content.ToString() == "LotSheet")
+            {
+                CreateLotSheet();
+            }
         }
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
