@@ -417,7 +417,7 @@ namespace Rogers_Toolbox_v3._0
             {
                 var sheet = workbook.Worksheet(1); // Process the first sheet
                 var results = AnalyzeSheet(sheet);
-                SaveCTRResults(results);
+                _ = SaveCTRResults(results);
             }
         }
         public void CtrAutomation(string contractorData)
@@ -430,16 +430,18 @@ namespace Rogers_Toolbox_v3._0
 
 
             // For Testing
-            inputSimulator.Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.RIGHT);
+             // inputSimulator.Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.RIGHT);
 
 
 
-            // Simulate Ctrl+Alt+PageDown
-            //sim.Keyboard.ModifiedKeyStroke(
-            //new[] { WindowsInput.Native.VirtualKeyCode.CONTROL, WindowsInput.Native.VirtualKeyCode.MENU }, WindowsInput.Native.VirtualKeyCode.NEXT);
+            //Simulate Ctrl+Alt+PageDown
+            sim.Keyboard.ModifiedKeyStroke(
+            new[] { WindowsInput.Native.VirtualKeyCode.CONTROL, WindowsInput.Native.VirtualKeyCode.MENU }, WindowsInput.Native.VirtualKeyCode.NEXT);
 
             // Simulate Ctrl+Left
-            //sim.Keyboard.ModifiedKeyStroke(WindowsInput.Native.VirtualKeyCode.CONTROL, WindowsInput.Native.VirtualKeyCode.LEFT);
+            sim.Keyboard.ModifiedKeyStroke(WindowsInput.Native.VirtualKeyCode.CONTROL, WindowsInput.Native.VirtualKeyCode.LEFT);
+
+            _ = Task.Delay(7000);
         }
         private void UpdateTotals(Dictionary<string, int> totals, string itemCode, List<string> allowedDevices, Dictionary<string, string> deviceMapping)
         {
