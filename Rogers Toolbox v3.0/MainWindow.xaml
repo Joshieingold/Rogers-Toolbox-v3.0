@@ -49,7 +49,7 @@
                 <ImageBrush ImageSource="/button_7.png"/>
             </Button.Background>
         </Button>
-        <Button Content="Flexi" HorizontalAlignment="Left" Height="50" Margin="113,4,0,0" VerticalAlignment="Top" Width="50" Click="Button_Click" Foreground="{x:Null}" BorderBrush="{x:Null}">
+        <Button Content="Flexi" x:Name="Flexi" HorizontalAlignment="Left" Height="50" Margin="113,4,0,0" VerticalAlignment="Top" Width="50" Click="Button_Click" Foreground="{x:Null}" BorderBrush="{x:Null}">
             <Button.Background>
                 <ImageBrush ImageSource="/button_8.png" Stretch="None"/>
             </Button.Background>

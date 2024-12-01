@@ -89,6 +89,10 @@ namespace Rogers_Toolbox_v3._0
             {
                 CTRUpdate();
             }
+            else if (((System.Windows.Controls.Button)sender).Content.ToString() == "Flexi")
+            {
+                FlexiProImport();
+            }
         }
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
@@ -147,9 +151,31 @@ namespace Rogers_Toolbox_v3._0
                 await Task.Delay(blitzImportSpeed);  // Adjust delay as needed
             }
         }
-        private void FlexiProImport()
+        private async void FlexiProImport()
         {
+            string[] lines = TextBox.Text.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
 
+            await Task.Delay(10000);  // Allows user to focus on the screen they want to import to
+
+            foreach (string line in lines)
+            {
+                bool isPixelGood = CheckPixel("(250, 250, 250)", GetCurrentPixel());
+                while (isPixelGood == false) {
+                    await Task.Delay(700);
+                    isPixelGood = CheckPixel("(250, 250, 250)", GetCurrentPixel());
+                }
+                if (isPixelGood == true) {
+                    
+                    await SimulateTyping(line);
+                    await Task.Delay(100);
+                    SimulateTabKey();
+                    serialsList.Remove(line);
+                    UpdateSerialsDisplay();
+
+                    // Short Delay after finishing a serial
+                    await Task.Delay(blitzImportSpeed); 
+            }
+            }
         }
         private void WMSImport()
         {
@@ -166,7 +192,6 @@ namespace Rogers_Toolbox_v3._0
                 return false;
             }
         }
-
         private string GetCurrentPixel()
         {
             string[] cords = flexiProCheckPixel.Split(',');
