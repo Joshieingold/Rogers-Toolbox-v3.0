@@ -206,6 +206,7 @@ namespace Rogers_Toolbox_v3._0
                 else
                 {
                     failedList.Add(line);
+                    WMSFailAutomation();
                 }
                 serialsList.Remove(line);
                 UpdateSerialsDisplay();
@@ -215,6 +216,11 @@ namespace Rogers_Toolbox_v3._0
             resultsWindow.Show();
 
 
+        }
+        private void WMSFailAutomation()
+        {
+            var sim = new InputSimulator();
+            sim.Keyboard.ModifiedKeyStroke(WindowsInput.Native.VirtualKeyCode.CONTROL, WindowsInput.Native.VirtualKeyCode.VK_X);
         }
         private bool CheckPixel(string colorWanted, string colorFound)
         {
