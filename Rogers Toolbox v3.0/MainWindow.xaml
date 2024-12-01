@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Rogers_Toolbox_v3._0"
         mc:Ignorable="d"
         Title="Rogers Toolbox v3.0" Height="456" Width="800">
-    <Grid Margin="0,0,0,26">
+    <Grid Margin="0,0,0,26" RenderTransformOrigin="0.51,0.603">
         <Grid.Resources>
             <!-- Define a Style for Buttons -->
             <Style TargetType="Button">
@@ -64,11 +64,13 @@
                 <ImageBrush ImageSource="/button_2.png" Stretch="None"/>
             </Button.Background>
         </Button>
+        <Button Content="Settings" x:Name="SettingsButton" HorizontalAlignment="Left" Height="50" Margin="698,58,0,0" VerticalAlignment="Top" Width="75" Click="SettingsButton_Click" Background="{x:Null}" Foreground="Black" FontSize="18"/>
+        <Button Content="Compare Lists" x:Name="CompareListButton" HorizontalAlignment="Left" Height="50" Margin="0,57,0,0" VerticalAlignment="Top" Width="130" Click="CompareListButton_Click" Background="{x:Null}" Foreground="Black" FontSize="18"/>
         <RadioButton Content="Bom-Wip" HorizontalAlignment="Right" Margin="0,21,33,0" Width="69" Foreground="White" Height="14" VerticalAlignment="Top"/>
         <Label x:Name="InfoBox" Content="Welcome to The Rogers Toolbox v3.0" HorizontalAlignment="Center" Height="34" Margin="0,66,0,0" VerticalAlignment="Top" Width="500" Foreground="White" FontSize="15" FontFamily="Sitka Text" Background="#FF282828" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
 
         <!-- Outer ScrollViewer to scroll both number and TextBox -->
-        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalAlignment="Center" Width="780" Margin="0,115,0,0">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="10,115,0,0" HorizontalAlignment="Left" Width="780">
             <StackPanel Orientation="Horizontal">
                 <!-- StackPanel for displaying line numbers and TextBox -->
                 <StackPanel Orientation="Vertical" Margin="10,0,10,0" Background="#FF3D3D3D">

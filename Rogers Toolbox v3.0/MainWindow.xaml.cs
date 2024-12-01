@@ -28,6 +28,8 @@ namespace Rogers_Toolbox_v3._0
         int wmsImportSpeed = 0;
         bool reverseImport = false;
         int typingSpeed = 0;
+        string flexiProCheckPixel = "not,set";
+        string wmsCheckPixel = "not,set";
         static List<string> allContractors = new List<string> { "8017", "8037", "8038", "8041", "8047", "8080", "8093", "8052", "8067", "8975", "8986", "8990", "8994", "8997", "8993 and 8982", "NB1", "NF1", "Cleaning Up" };
         private InputSimulator inputSimulator = new InputSimulator();  // Initialize InputSimulator
         private static List<string> serialsList = new List<string>(); // Stores the serials
@@ -44,13 +46,15 @@ namespace Rogers_Toolbox_v3._0
         private void LoadSettings()
         {
             username = Properties.Settings.Default.Username;
-            InfoBox.Content = ($"Welcome to Rogers Toolbox v3.0, {username}");
+            InfoBox.Content = ($"Welcome to Rogers Toolbox v3.0 {username}");
             bartenderNotepad = Properties.Settings.Default.BartenderNotepadPath;
             blitzImportSpeed = Properties.Settings.Default.BlitzImportSpeed;
             flexiImportSpeed = Properties.Settings.Default.FlexiImportSpeed;
             wmsImportSpeed = Properties.Settings.Default.WmsImportSpeed;
             reverseImport = Properties.Settings.Default.ReverseImport;
             typingSpeed = Properties.Settings.Default.TypingSpeed;
+            flexiProCheckPixel = Properties.Settings.Default.FlexiproCheckPixel;
+            wmsCheckPixel = Properties.Settings.Default.WMSCheckPixel;
         }
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -65,26 +69,12 @@ namespace Rogers_Toolbox_v3._0
 
 
         }
-        private async void Button_Click(object sender, RoutedEventArgs e)
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
             // If Sender is Blitz Import
             if (((Button)sender).Content.ToString() == "Blitz")
             {
-                // Process the TextBox line by line
-                string[] lines = TextBox.Text.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
-
-                await Task.Delay(10000);  // Allows user to focus on the screen they want to import to
-
-                foreach (string line in lines)
-                {
-                    await SimulateTyping(line);
-                    SimulateTabKey();
-                    serialsList.Remove(line);
-                    UpdateSerialsDisplay();
-
-                    // Short Delay after finishing a serial
-                    await Task.Delay(blitzImportSpeed);  // Adjust delay as needed
-                }
+                BlitzImport();
             }
             // If sender is the open excel button 
             else if (((Button)sender).Content.ToString() == "Import")
@@ -95,6 +85,16 @@ namespace Rogers_Toolbox_v3._0
             {
                 CTRUpdate();
             }
+        }
+        private void SettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            SettingsWindow settingsWindow = new SettingsWindow();
+            settingsWindow.ShowDialog(); // Opens the settings window as a modal dialog
+        }
+        private void CompareListButton_Click(object sender, RoutedEventArgs e)
+        {
+            CompareLists compareLists = new CompareLists();
+            compareLists.ShowDialog();
         }
         private async Task SimulateTyping(string text)
         {
@@ -122,6 +122,34 @@ namespace Rogers_Toolbox_v3._0
 
                 InfoBox.Content = ($"{remainingSerials} Serials Loaded");
             }
+        }
+        
+        // For Pasting Serials
+        private async void BlitzImport()
+        {
+            // Process the TextBox line by line
+            string[] lines = TextBox.Text.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+
+            await Task.Delay(10000);  // Allows user to focus on the screen they want to import to
+
+            foreach (string line in lines)
+            {
+                await SimulateTyping(line);
+                SimulateTabKey();
+                serialsList.Remove(line);
+                UpdateSerialsDisplay();
+
+                // Short Delay after finishing a serial
+                await Task.Delay(blitzImportSpeed);  // Adjust delay as needed
+            }
+        }
+        private void FlexiProImport()
+        {
+            return;
+        }
+        private void WMSImport()
+        {
+            return;
         }
         
         // For Importing Serials from Excel
@@ -582,4 +610,5 @@ namespace Rogers_Toolbox_v3._0
 
         }
     }
+    
 }

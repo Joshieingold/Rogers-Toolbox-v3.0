@@ -2,7 +2,7 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Rogers_Toolbox_v3._0.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="Username" Type="System.String" Scope="Application">
+    <Setting Name="Username" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="BlitzImportSpeed" Type="System.Int32" Scope="User">
@@ -22,6 +22,12 @@
     </Setting>
     <Setting Name="TypingSpeed" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="FlexiproCheckPixel" Type="System.String" Scope="User">
+      <Value Profile="(Default)">961,1016</Value>
+    </Setting>
+    <Setting Name="WMSCheckPixel" Type="System.String" Scope="User">
+      <Value Profile="(Default)">30,149</Value>
     </Setting>
   </Settings>
 </SettingsFile>

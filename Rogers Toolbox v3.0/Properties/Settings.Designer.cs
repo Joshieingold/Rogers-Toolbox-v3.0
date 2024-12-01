@@ -23,12 +23,15 @@ namespace Rogers_Toolbox_v3._0.Properties {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string Username {
             get {
                 return ((string)(this["Username"]));
+            }
+            set {
+                this["Username"] = value;
             }
         }
         
@@ -101,6 +104,30 @@ namespace Rogers_Toolbox_v3._0.Properties {
             }
             set {
                 this["TypingSpeed"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("961,1016")]
+        public string FlexiproCheckPixel {
+            get {
+                return ((string)(this["FlexiproCheckPixel"]));
+            }
+            set {
+                this["FlexiproCheckPixel"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("30,149")]
+        public string WMSCheckPixel {
+            get {
+                return ((string)(this["WMSCheckPixel"]));
+            }
+            set {
+                this["WMSCheckPixel"] = value;
             }
         }
     }
