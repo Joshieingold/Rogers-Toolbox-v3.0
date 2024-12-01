@@ -37,6 +37,8 @@ namespace Rogers_Toolbox_v3._0
         static List<string> allContractors = new List<string> { "8017", "8037", "8038", "8041", "8047", "8080", "8093", "8052", "8067", "8975", "8986", "8990", "8994", "8997", "8993 and 8982", "NB1", "NF1", "Cleaning Up" };
         private InputSimulator inputSimulator = new InputSimulator();  // Initialize InputSimulator
         private static List<string> serialsList = new List<string>(); // Stores the serials
+        private static List<string> passedList = new List<string>();
+        private static List<string> failedList = new List<string>();
         private int remainingSerials; // Stores the count of remaining serials
 
         // Base Functions
@@ -92,6 +94,10 @@ namespace Rogers_Toolbox_v3._0
             else if (((System.Windows.Controls.Button)sender).Content.ToString() == "Flexi")
             {
                 FlexiProImport();
+            }
+            else if (((System.Windows.Controls.Button)sender).Content.ToString() == "WMS")
+            {
+                WMSImport();
             }
         }
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
@@ -159,10 +165,10 @@ namespace Rogers_Toolbox_v3._0
 
             foreach (string line in lines)
             {
-                bool isPixelGood = CheckPixel("(250, 250, 250)", GetCurrentPixel());
+                bool isPixelGood = CheckPixel("(250, 250, 250)", GetCurrentPixel(flexiProCheckPixel));
                 while (isPixelGood == false) {
                     await Task.Delay(700);
-                    isPixelGood = CheckPixel("(250, 250, 250)", GetCurrentPixel());
+                    isPixelGood = CheckPixel("(250, 250, 250)", GetCurrentPixel(flexiProCheckPixel));
                 }
                 if (isPixelGood == true) {
                     
@@ -173,13 +179,42 @@ namespace Rogers_Toolbox_v3._0
                     UpdateSerialsDisplay();
 
                     // Short Delay after finishing a serial
-                    await Task.Delay(blitzImportSpeed); 
+                    await Task.Delay(flexiImportSpeed); 
             }
             }
         }
-        private void WMSImport()
+        private async void WMSImport()
         {
-            return;
+            passedList.Clear();
+            failedList.Clear();
+            string[] lines = TextBox.Text.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+
+            await Task.Delay(10000);  // Allows user to focus on the screen they want to import to
+
+            foreach (string line in lines)
+            {
+                await SimulateTyping(line);
+                await Task.Delay(100);
+                SimulateTabKey();
+                
+                
+                bool isPixelGood = CheckPixel("(0, 0, 0)", GetCurrentPixel(wmsCheckPixel));
+                if (isPixelGood == true) 
+                {
+                    passedList.Add(line);
+                }
+                else
+                {
+                    failedList.Add(line);
+                }
+                serialsList.Remove(line);
+                UpdateSerialsDisplay();
+                await Task.Delay(wmsImportSpeed);
+            }
+            ResultsWindow resultsWindow = new ResultsWindow(passedList, failedList);
+            resultsWindow.Show();
+
+
         }
         private bool CheckPixel(string colorWanted, string colorFound)
         {
@@ -192,12 +227,12 @@ namespace Rogers_Toolbox_v3._0
                 return false;
             }
         }
-        private string GetCurrentPixel()
+        private string GetCurrentPixel(string pixelSource)
         {
-            string[] cords = flexiProCheckPixel.Split(',');
+            string[] cords = pixelSource.Split(',');
             int xCord = Convert.ToInt32(cords[0]);
             int yCord = Convert.ToInt32(cords[1]);
-            System.Drawing.Point flexiCords = new System.Drawing.Point(xCord, yCord);
+            System.Drawing.Point ixelCords = new System.Drawing.Point(xCord, yCord);
 
             // Capture the screen
             Bitmap screenshot = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
@@ -367,7 +402,7 @@ namespace Rogers_Toolbox_v3._0
                 SaveCTRResults(results);
             }
         }
-        public async Task CtrAutomation(string contractorData)
+        public void CtrAutomation(string contractorData)
         {
             // Probably Want to add a freeze here
             System.Windows.Clipboard.SetText(contractorData);
@@ -533,7 +568,7 @@ namespace Rogers_Toolbox_v3._0
                 await Task.Delay(500);
 
                 // Ensure we await the CtrAutomation method
-                await CtrAutomation(data); // This will now wait for the CtrAutomation to complete before moving on
+                CtrAutomation(data); // This will now wait for the CtrAutomation to complete before moving on
 
                 count++;
             }

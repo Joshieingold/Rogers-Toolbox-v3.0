@@ -44,7 +44,7 @@
                 <ImageBrush ImageSource="/button_6.png" Stretch="Fill"/>
             </Button.Background>
         </Button>
-        <Button Content="WMS" HorizontalAlignment="Left" Height="50" Margin="168,3,0,0" VerticalAlignment="Top" Width="50" Click="Button_Click" Foreground="{x:Null}" BorderBrush="{x:Null}">
+        <Button Content="WMS" x:Name="WMS" HorizontalAlignment="Left" Height="50" Margin="168,3,0,0" VerticalAlignment="Top" Width="50" Click="Button_Click" Foreground="{x:Null}" BorderBrush="{x:Null}">
             <Button.Background>
                 <ImageBrush ImageSource="/button_7.png"/>
             </Button.Background>
