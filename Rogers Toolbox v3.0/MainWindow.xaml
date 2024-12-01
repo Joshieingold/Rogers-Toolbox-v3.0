@@ -4,8 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Rogers Toolbox v3.0" Height="456" Width="800">
-    <Grid Margin="0,0,0,26">
+        Title="Rogers Toolbox v3.0" Height="456" Width="800" Background="#FF2E2E2E">
+    <Grid Margin="0,0,0,-6" Background="#FF2E2E2E">
         <Grid.Resources>
             <!-- Define a Style for Buttons -->
             <Style TargetType="Button">
@@ -32,11 +32,16 @@
                 </Style.Triggers>
             </Style>
         </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="118*"/>
+            <RowDefinition Height="89*"/>
+            <RowDefinition Height="0*"/>
+        </Grid.RowDefinitions>
 
         <!-- Navigation Bar -->
-        <Rectangle x:Name="navBar" Height="56" Fill="#FF282828" VerticalAlignment="Top" />
+        <Rectangle x:Name="navBar" Height="56" Fill="#FF1F1F1F" VerticalAlignment="Top" />
 
-        <StackPanel Orientation="Horizontal" Height="56" VerticalAlignment="Top" HorizontalAlignment="Left">
+        <StackPanel Orientation="Horizontal" Height="56" VerticalAlignment="Top" HorizontalAlignment="Left" Width="556">
             <Button Content="Import" x:Name="ImportButton" Width="50" Click="Button_Click" Foreground="{x:Null}">
                 <Button.Background>
                     <ImageBrush ImageSource="/button_6.png" Stretch="None" />
@@ -67,27 +72,28 @@
             <Button Content="LotSheet" x:Name="LotSheetButton" Width="50" Click="Button_Click" Background="{x:Null}"/>
             <Button Content="Settings" x:Name="SettingsButton" Width="50" Click="SettingsButton_Click" Background="Transparent" Foreground="White" FontSize="14" />
             <Button Content="Compare Lists" x:Name="CompareListButton" Width="50" Click="CompareListButton_Click" Background="Transparent" Foreground="White" FontSize="11" />
+            <Button Content="FormatSerials" x:Name="FormatSerials" Width="50" Click="InputButton_Click" Background="Transparent" Foreground="White" FontSize="11" />
         </StackPanel>
 
         <Label x:Name="InfoBox" Content="Welcome to The Rogers Toolbox v3.0" 
                HorizontalAlignment="Center" Height="34" Margin="0,66,0,0" 
                VerticalAlignment="Top" Width="500" Foreground="White" 
-               FontSize="15" FontFamily="Sitka Text" Background="#FF282828" 
+               FontSize="15" FontFamily="Sitka Text" Background="#FF1F1F1F" 
                HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
 
         <!-- Scrollable Content Area -->
-        <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="10,115,0,0" HorizontalAlignment="Left" Width="780">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,115,0,0" HorizontalAlignment="Center" Width="780" Height="289" VerticalAlignment="Top" Grid.RowSpan="2">
             <StackPanel Orientation="Horizontal">
                 <!-- Line Numbers -->
-                <StackPanel Orientation="Vertical" Margin="10,0,10,0" Background="#FF3D3D3D">
+                <StackPanel Orientation="Vertical" Margin="10,0,10,0" Background="#FF383838">
                     <Grid>
-                        <TextBlock x:Name="LineNumberLabel" Foreground="White" Background="#FF3D3D3D" Width="30" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        <TextBlock x:Name="LineNumberLabel" Foreground="White" Background="#FF383838" Width="30" HorizontalAlignment="Center" VerticalAlignment="Center" />
                     </Grid>
                 </StackPanel>
 
                 <!-- Input TextBox -->
-                <TextBox x:Name="TextBox" Width="714" TextWrapping="Wrap" 
-                         Foreground="White" Background="#FF3D3D3D" AcceptsReturn="True" 
+                <TextBox x:Name="TextBox" Width="700" TextWrapping="Wrap" 
+                         Foreground="White" Background="#FF383838" AcceptsReturn="True" 
                          TextChanged="TextBox_TextChanged" BorderBrush="{x:Null}" />
             </StackPanel>
         </ScrollViewer>

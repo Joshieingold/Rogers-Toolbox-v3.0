@@ -122,6 +122,10 @@ namespace Rogers_Toolbox_v3._0
             CompareLists compareLists = new CompareLists();
             compareLists.ShowDialog();
         }
+        private void InputButton_Click(object sender, RoutedEventArgs e)
+        {
+            ShowInputDialog();
+        }
         private async Task SimulateTyping(string text)
         {
             foreach (char c in text)
@@ -730,6 +734,22 @@ namespace Rogers_Toolbox_v3._0
 
         }
 
+        // For XML Scraping
+
+        // For Serial Formatter
+        private void ShowInputDialog()
+        {
+            var inputWindow = new InputWindow();
+            inputWindow.Owner = this; // Set the owner to the main window
+            if (inputWindow.ShowDialog() == true)
+            {
+                string userInput = inputWindow.InputValue;
+                string[] lines = TextBox.Text.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+                string outputText = String.Join(userInput, lines);
+                System.Windows.Clipboard.SetText(outputText);
+                InfoBox.Content = ($"Okay {username}, all serials copied with '{userInput}' between them!");
+            }
+        }
 
     }
 }
