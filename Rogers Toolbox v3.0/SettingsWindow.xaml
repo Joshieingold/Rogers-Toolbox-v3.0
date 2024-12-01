@@ -25,6 +25,7 @@
             <TextBox Text="{Binding Source={x:Static Properties:Settings.Default}, Path=WMSCheckPixel, UpdateSourceTrigger=PropertyChanged}" Foreground="White" BorderBrush="Black" Background="#FF2E2E2E" />
             <Button Content="Save" Click="SaveButton_Click" Width="60" Margin="0,20,0,0" Background="#FF23311D" BorderBrush="Black" Foreground="White"/>
             
+
         </StackPanel>
     </Grid>
 </Window>

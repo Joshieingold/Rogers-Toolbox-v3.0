@@ -15,6 +15,7 @@ using System.Text;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using Google.Cloud.Firestore;
 
 
 
@@ -152,6 +153,10 @@ namespace Rogers_Toolbox_v3._0
 
                 InfoBox.Content = ($"{remainingSerials} Serials Loaded");
             }
+        }
+        private void UpdateMessage(string text)
+        {
+            InfoBox.Content = (text);
         }
 
         // For Pasting Serials
@@ -734,9 +739,8 @@ namespace Rogers_Toolbox_v3._0
 
         }
 
-        // For XML Scraping
-
         // For Serial Formatter
+
         private void ShowInputDialog()
         {
             var inputWindow = new InputWindow();
@@ -748,6 +752,47 @@ namespace Rogers_Toolbox_v3._0
                 string outputText = String.Join(userInput, lines);
                 System.Windows.Clipboard.SetText(outputText);
                 InfoBox.Content = ($"Okay {username}, all serials copied with '{userInput}' between them!");
+            }
+        }
+        // For Database 
+        public class FirestoreService
+        {
+            private static FirestoreDb _firestoreDb;
+
+            public static FirestoreDb GetFirestoreDb()
+            {
+                if (_firestoreDb == null)
+                {
+                    string projectId = "bomwipstore"; // Replace with your Firestore Project ID
+                    _firestoreDb = FirestoreDb.Create(projectId);
+                }
+                return _firestoreDb;
+            }
+        }
+        public class FirestoreHandler
+        {
+            private FirestoreDb _db;
+
+            public FirestoreHandler()
+            {
+                _db = FirestoreService.GetFirestoreDb();
+            }
+
+            public async Task PushToDatabase(string device, string name, int quantity, DateTime date)
+            {
+                if (device == null || name == null || quantity <= 0)
+                    throw new ArgumentException("Invalid data provided.");
+
+                DocumentReference docRef = _db.Collection("bom-wip").Document();
+                var data = new
+                {
+                    Device = device,
+                    Name = name,
+                    Quantity = quantity,
+                    Date = date.ToString("yyyy-MM-dd HH:mm:ss") // Store date as string
+                };
+
+                await docRef.SetAsync(data);
             }
         }
 
