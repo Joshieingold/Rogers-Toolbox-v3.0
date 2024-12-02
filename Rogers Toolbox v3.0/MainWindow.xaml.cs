@@ -16,6 +16,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Google.Cloud.Firestore;
+using static Rogers_Toolbox_v3._0.MainWindow;
 
 
 
@@ -35,6 +36,7 @@ namespace Rogers_Toolbox_v3._0
         int typingSpeed = 0;
         string flexiProCheckPixel = "not,set";
         string wmsCheckPixel = "not,set";
+        private bool isBomWip = true;
         static List<string> allContractors = new List<string> { "8017", "8037", "8038", "8041", "8047", "8080", "8093", "8052", "8067", "8975", "8986", "8990", "8994", "8997", "8993 and 8982", "NB1", "NF1", "Cleaning Up" };
         private InputSimulator inputSimulator = new InputSimulator();  // Initialize InputSimulator
         private static List<string> serialsList = new List<string>(); // Stores the serials
@@ -62,6 +64,17 @@ namespace Rogers_Toolbox_v3._0
             typingSpeed = Properties.Settings.Default.TypingSpeed;
             flexiProCheckPixel = Properties.Settings.Default.FlexiproCheckPixel;
             wmsCheckPixel = Properties.Settings.Default.WMSCheckPixel;
+        }
+        private void BomWipRadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+            isBomWip = true; // Set isBomWip to true when the radio button is checked
+            UpdateMessage($"Good luck on Bom-Wip {username}!");
+        }
+
+        private void BomWipRadioButton_Unchecked(object sender, RoutedEventArgs e)
+        {
+            isBomWip = false; // Set isBomWip to false when the radio button is unchecked
+            UpdateMessage($"Done Bom-Wip for now {username}!");
         }
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -117,6 +130,11 @@ namespace Rogers_Toolbox_v3._0
         {
             SettingsWindow settingsWindow = new SettingsWindow();
             settingsWindow.ShowDialog(); // Opens the settings window as a modal dialog
+        }
+        private void DatabaseButton_Click(object sender, RoutedEventArgs e)
+        {
+            DataShowcaseForm databaseForm = new DataShowcaseForm();
+            databaseForm.ShowDialog();
         }
         private void CompareListButton_Click(object sender, RoutedEventArgs e)
         {
@@ -180,6 +198,10 @@ namespace Rogers_Toolbox_v3._0
         }
         private async void FlexiProImport()
         {
+            string currentDevice = DetermineDevice(serialsList[0]); // Declare outside the block
+            int quantityOfLoad = serialsList.Count(); // Declare outside the block
+            DateTime date = DateTime.Now;
+
             string[] lines = TextBox.Text.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
 
             await Task.Delay(10000);  // Allows user to focus on the screen they want to import to
@@ -202,6 +224,11 @@ namespace Rogers_Toolbox_v3._0
                     // Short Delay after finishing a serial
                     await Task.Delay(flexiImportSpeed); 
             }
+            }
+            if (isBomWip == true)
+            {
+                FirestoreHandler firestoreHandler = new FirestoreHandler();
+                await firestoreHandler.PushToDatabase(currentDevice, username, quantityOfLoad, date);
             }
         }
         private async void WMSImport()
@@ -789,7 +816,7 @@ namespace Rogers_Toolbox_v3._0
                     Device = device,
                     Name = name,
                     Quantity = quantity,
-                    Date = date.ToString("yyyy-MM-dd HH:mm:ss") // Store date as string
+                    Date = Timestamp.FromDateTime(date.ToUniversalTime()) // Store date as string
                 };
 
                 await docRef.SetAsync(data);

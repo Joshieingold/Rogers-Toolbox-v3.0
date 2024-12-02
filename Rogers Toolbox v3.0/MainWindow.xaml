@@ -41,7 +41,7 @@
         <!-- Navigation Bar -->
         <Rectangle x:Name="navBar" Height="56" Fill="#FF1F1F1F" VerticalAlignment="Top" />
 
-        <StackPanel Orientation="Horizontal" Height="56" VerticalAlignment="Top" HorizontalAlignment="Left" Width="556">
+        <StackPanel Orientation="Horizontal" Height="56" VerticalAlignment="Top" HorizontalAlignment="Left" Width="731">
             <Button Content="Import" x:Name="ImportButton" Width="50" Click="Button_Click" Foreground="{x:Null}">
                 <Button.Background>
                     <ImageBrush ImageSource="/button_6.png" Stretch="None" />
@@ -73,6 +73,14 @@
             <Button Content="Settings" x:Name="SettingsButton" Width="50" Click="SettingsButton_Click" Background="Transparent" Foreground="White" FontSize="14" />
             <Button Content="Compare Lists" x:Name="CompareListButton" Width="50" Click="CompareListButton_Click" Background="Transparent" Foreground="White" FontSize="11" />
             <Button Content="FormatSerials" x:Name="FormatSerials" Width="50" Click="InputButton_Click" Background="Transparent" Foreground="White" FontSize="11" />
+            <Button Content="Database" x:Name="Database" Width="50" Click="DatabaseButton_Click" Background="Transparent" Foreground="White" FontSize="11" />
+            <RadioButton x:Name="bomWipRadioButton" 
+             Content="Bom-Wip" 
+             Checked="BomWipRadioButton_Checked" 
+             Unchecked="BomWipRadioButton_Unchecked" 
+             Background="#FF3C3C3C" 
+             Foreground="White" 
+             Margin="10"/>        
         </StackPanel>
 
         <Label x:Name="InfoBox" Content="Welcome to The Rogers Toolbox v3.0" 
