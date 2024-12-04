@@ -12,7 +12,7 @@ namespace Rogers_Toolbox_v3._0.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.10.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.11.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -49,7 +49,7 @@ namespace Rogers_Toolbox_v3._0.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("700")]
         public int FlexiImportSpeed {
             get {
                 return ((int)(this["FlexiImportSpeed"]));
@@ -73,7 +73,7 @@ namespace Rogers_Toolbox_v3._0.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\\\BTAutomation\\\\barcodes.txt")]
         public string BartenderNotepadPath {
             get {
                 return ((string)(this["BartenderNotepadPath"]));
@@ -128,6 +128,18 @@ namespace Rogers_Toolbox_v3._0.Properties {
             }
             set {
                 this["WMSCheckPixel"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("7000")]
+        public int CTRUpdateSpeed {
+            get {
+                return ((int)(this["CTRUpdateSpeed"]));
+            }
+            set {
+                this["CTRUpdateSpeed"] = value;
             }
         }
     }

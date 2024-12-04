@@ -9,13 +9,13 @@
       <Value Profile="(Default)">5</Value>
     </Setting>
     <Setting Name="FlexiImportSpeed" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
+      <Value Profile="(Default)">700</Value>
     </Setting>
     <Setting Name="WmsImportSpeed" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="BartenderNotepadPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">C:\\BTAutomation\\barcodes.txt</Value>
     </Setting>
     <Setting Name="ReverseImport" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
@@ -28,6 +28,9 @@
     </Setting>
     <Setting Name="WMSCheckPixel" Type="System.String" Scope="User">
       <Value Profile="(Default)">30,149</Value>
+    </Setting>
+    <Setting Name="CTRUpdateSpeed" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">7000</Value>
     </Setting>
   </Settings>
 </SettingsFile>

@@ -41,46 +41,83 @@
         <!-- Navigation Bar -->
         <Rectangle x:Name="navBar" Height="56" Fill="#FF1F1F1F" VerticalAlignment="Top" />
 
-        <StackPanel Orientation="Horizontal" Height="56" VerticalAlignment="Top" HorizontalAlignment="Left" Width="731">
-            <Button Content="Import" x:Name="ImportButton" Width="50" Click="Button_Click" Foreground="{x:Null}">
+        <StackPanel Orientation="Horizontal" Height="56" VerticalAlignment="Top" HorizontalAlignment="Center" Width="760">
+            <Button Content="Import" x:Name="ImportButton" Width="45" Click="Button_Click" Foreground="{x:Null}" Height="44">
                 <Button.Background>
-                    <ImageBrush ImageSource="/button_6.png" Stretch="None" />
+                    <ImageBrush ImageSource="/button_6.png" Stretch="Fill" />
                 </Button.Background>
             </Button>
-            <Button Content="Blitz" x:Name="BlitzButton" Width="50" Click="Button_Click" Foreground="{x:Null}">
+            <Button Content="Blitz" x:Name="BlitzButton" Width="45" Click="Button_Click" Foreground="{x:Null}" Height="44">
                 <Button.Background>
-                    <ImageBrush ImageSource="/button_9.png" Stretch="None" />
+                    <ImageBrush ImageSource="/blitz_import_icon.png" Stretch="Fill" />
                 </Button.Background>
             </Button>
-            <Button Content="Flexi" x:Name="FlexiButton" Width="50" Click="Button_Click" Foreground="{x:Null}">
+            <Button Content="Flexi" x:Name="FlexiButton" Width="50" Click="Button_Click" Foreground="{x:Null}" Height="45">
                 <Button.Background>
-                    <ImageBrush ImageSource="/button_8.png" Stretch="None" />
+                    <ImageBrush ImageSource="/button_8.png" Stretch="Fill" />
                 </Button.Background>
             </Button>
-            <Button Content="WMS" x:Name="WMSButton" Width="50" Click="Button_Click" Foreground="{x:Null}">
+            <Button Content="WMS" x:Name="WMSButton" Width="48" Click="Button_Click" Foreground="{x:Null}" Height="48">
                 <Button.Background>
-                    <ImageBrush ImageSource="/button_7.png" Stretch="None" />
+                    <ImageBrush ImageSource="/button_7.png" Stretch="Fill" />
                 </Button.Background>
             </Button>
-            <Button Content="CTR" x:Name="CTRButton" Width="50" Click="Button_Click" Foreground="{x:Null}">
+            <Button Content="CTR" x:Name="CTRButton" Width="46" Click="Button_Click" Foreground="{x:Null}" RenderTransformOrigin="0.5,0.5" Height="44">
+                <Button.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform AngleX="0.494"/>
+                        <RotateTransform/>
+                        <TranslateTransform X="0.241"/>
+                    </TransformGroup>
+                </Button.RenderTransform>
                 <Button.Background>
-                    <ImageBrush ImageSource="/button_2.png" Stretch="None" />
+                    <ImageBrush ImageSource="/contractor_update_icon.png" Stretch="Fill" TileMode="None" />
                 </Button.Background>
             </Button>
-            <Button Content="Purolator" x:Name="PurolatorButton" Width="50" Click="Button_Click" Background="{x:Null}"/>
-            <Button Content="Barcode" x:Name="BarcodeButton" Width="50" Click="Button_Click" Background="{x:Null}"/>
-            <Button Content="LotSheet" x:Name="LotSheetButton" Width="50" Click="Button_Click" Background="{x:Null}"/>
-            <Button Content="Settings" x:Name="SettingsButton" Width="50" Click="SettingsButton_Click" Background="Transparent" Foreground="White" FontSize="14" />
-            <Button Content="Compare Lists" x:Name="CompareListButton" Width="50" Click="CompareListButton_Click" Background="Transparent" Foreground="White" FontSize="11" />
-            <Button Content="FormatSerials" x:Name="FormatSerials" Width="50" Click="InputButton_Click" Background="Transparent" Foreground="White" FontSize="11" />
-            <Button Content="Database" x:Name="Database" Width="50" Click="DatabaseButton_Click" Background="Transparent" Foreground="White" FontSize="11" />
+            <Button Content="Purolator" x:Name="PurolatorButton" Width="45" Click="Button_Click" Foreground="{x:Null}" Height="44">
+                <Button.Background>
+                    <ImageBrush ImageSource="/button_4.png"/>
+                </Button.Background>
+            </Button>
+            <Button Content="Barcode" x:Name="BarcodeButton" Width="50" Click="Button_Click" Height="50" Foreground="{x:Null}">
+                <Button.Background>
+                    <ImageBrush ImageSource="/button_5.png"/>
+                </Button.Background>
+            </Button>
+            <Button Content="LotSheet" x:Name="LotSheetButton" Width="50" Click="Button_Click" Foreground="{x:Null}">
+                <Button.Background>
+                    <ImageBrush ImageSource="/button_1.png" Stretch="None"/>
+                </Button.Background>
+            </Button>
+
+            <Button Content="Compare Lists" x:Name="CompareListButton" Width="50" Click="CompareListButton_Click" Foreground="{x:Null}" FontSize="11" Height="50" >
+                <Button.Background>
+                    <ImageBrush ImageSource="/compare_lst_icon.png"/>
+                </Button.Background>
+            </Button>
+            <Button Content="FormatSerials" x:Name="FormatSerials" Width="50" Click="InputButton_Click" Foreground="{x:Null}" FontSize="11" Height="45" >
+                <Button.Background>
+                    <ImageBrush ImageSource="/format_serials_icon.png"/>
+                </Button.Background>
+            </Button>
+            <Button Content="Database" x:Name="Database" Width="50" Click="DatabaseButton_Click" Foreground="{x:Null}" FontSize="11" Height="47" >
+                <Button.Background>
+                    <ImageBrush ImageSource="/database_icon.png"/>
+                </Button.Background>
+            </Button>
+            <Button Content="Settings" x:Name="SettingsButton" Width="50" Click="SettingsButton_Click" Foreground="{x:Null}" FontSize="14" Height="47" >
+                <Button.Background>
+                    <ImageBrush ImageSource="/settings_icon.png" Stretch="Uniform" TileMode="None"/>
+                </Button.Background>
+            </Button>
             <RadioButton x:Name="bomWipRadioButton" 
              Content="Bom-Wip" 
              Checked="BomWipRadioButton_Checked" 
              Unchecked="BomWipRadioButton_Unchecked" 
-             Background="#FF3C3C3C" 
+             Background="White" 
              Foreground="White" 
-             Margin="10"/>        
+             Margin="10" VerticalAlignment="Center" Width="73" IsChecked="True" BorderBrush="White"/>
         </StackPanel>
 
         <Label x:Name="InfoBox" Content="Welcome to The Rogers Toolbox v3.0" 
@@ -90,7 +127,7 @@
                HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
 
         <!-- Scrollable Content Area -->
-        <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,115,0,0" HorizontalAlignment="Center" Width="780" Height="289" VerticalAlignment="Top" Grid.RowSpan="2">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="10,115,0,42" Grid.RowSpan="2" HorizontalAlignment="Left" Width="780">
             <StackPanel Orientation="Horizontal">
                 <!-- Line Numbers -->
                 <StackPanel Orientation="Vertical" Margin="10,0,10,0" Background="#FF383838">

@@ -42,6 +42,7 @@ namespace Rogers_Toolbox_v3._0
         private static List<string> serialsList = new List<string>(); // Stores the serials
         private static List<string> passedList = new List<string>();
         private static List<string> failedList = new List<string>();
+        private static int ctrImportSpeed = 0;
         private int remainingSerials; // Stores the count of remaining serials
 
         // Base Functions
@@ -64,6 +65,7 @@ namespace Rogers_Toolbox_v3._0
             typingSpeed = Properties.Settings.Default.TypingSpeed;
             flexiProCheckPixel = Properties.Settings.Default.FlexiproCheckPixel;
             wmsCheckPixel = Properties.Settings.Default.WMSCheckPixel;
+            ctrImportSpeed = Properties.Settings.Default.CTRUpdateSpeed;
         }
         private void BomWipRadioButton_Checked(object sender, RoutedEventArgs e)
         {
@@ -103,7 +105,7 @@ namespace Rogers_Toolbox_v3._0
             }
             else if (((System.Windows.Controls.Button)sender).Content.ToString() == "CTR")
             {
-                CTRUpdate();
+                CombineExcels();
             }
             else if (((System.Windows.Controls.Button)sender).Content.ToString() == "Flexi")
             {
@@ -180,32 +182,42 @@ namespace Rogers_Toolbox_v3._0
         // For Pasting Serials
         private async void BlitzImport()
         {
+            Stopwatch stopwatch = new Stopwatch();
             // Process the TextBox line by line
             string[] lines = TextBox.Text.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
 
             await Task.Delay(10000);  // Allows user to focus on the screen they want to import to
-
+            stopwatch.Start();
             foreach (string line in lines)
             {
                 await SimulateTyping(line);
                 SimulateTabKey();
                 serialsList.Remove(line);
                 UpdateSerialsDisplay();
+                UpdateMessage($"Working on serial {line}");
 
                 // Short Delay after finishing a serial
                 await Task.Delay(blitzImportSpeed);  // Adjust delay as needed
             }
+            stopwatch.Stop();
+            TimeSpan ts = stopwatch.Elapsed;
+            string elapsedTime = String.Format("{0:00}h : {1:00}m : {2:00}s : {3:00} ms",
+            ts.Hours, ts.Minutes, ts.Seconds,
+            ts.Milliseconds / 10);
+            UpdateMessage($"Import Completed in {elapsedTime}");
         }
         private async void FlexiProImport()
         {
             string currentDevice = DetermineDevice(serialsList[0]); // Declare outside the block
             int quantityOfLoad = serialsList.Count(); // Declare outside the block
-            DateTime date = DateTime.Now;
+            DateTime i = DateTime.Now;
+            string date = i.ToString("yyyyMMdd");
 
             string[] lines = TextBox.Text.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
 
             await Task.Delay(10000);  // Allows user to focus on the screen they want to import to
-
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
             foreach (string line in lines)
             {
                 bool isPixelGood = CheckPixel("(250, 250, 250)", GetCurrentPixel(flexiProCheckPixel));
@@ -220,6 +232,7 @@ namespace Rogers_Toolbox_v3._0
                     SimulateTabKey();
                     serialsList.Remove(line);
                     UpdateSerialsDisplay();
+                    UpdateMessage($"Working on serial {line}");
 
                     // Short Delay after finishing a serial
                     await Task.Delay(flexiImportSpeed); 
@@ -229,7 +242,15 @@ namespace Rogers_Toolbox_v3._0
             {
                 FirestoreHandler firestoreHandler = new FirestoreHandler();
                 await firestoreHandler.PushToDatabase(currentDevice, username, quantityOfLoad, date);
+                UpdateMessage("Sending data to database");
             }
+            stopwatch.Stop();
+            TimeSpan ts = stopwatch.Elapsed;
+            string elapsedTime = String.Format("{0:00}h : {1:00}m : {2:00}s : {3:00} ms",
+            ts.Hours, ts.Minutes, ts.Seconds,
+            ts.Milliseconds / 10);
+            UpdateMessage($"Import Completed in {elapsedTime}");
+
         }
         private async void WMSImport()
         {
@@ -238,11 +259,12 @@ namespace Rogers_Toolbox_v3._0
             string[] lines = TextBox.Text.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
 
             await Task.Delay(10000);  // Allows user to focus on the screen they want to import to
-
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
             foreach (string line in lines)
             {
                 await SimulateTyping(line);
-                await Task.Delay(100);
+                await Task.Delay(500);// changed here to possibly address sorting bug
                 SimulateTabKey();
                 
                 
@@ -258,8 +280,16 @@ namespace Rogers_Toolbox_v3._0
                 }
                 serialsList.Remove(line);
                 UpdateSerialsDisplay();
+                UpdateMessage($"Working on serial {line}");
                 await Task.Delay(wmsImportSpeed);
             }
+            stopwatch.Stop();
+            TimeSpan ts = stopwatch.Elapsed;
+            string elapsedTime = String.Format("{0:00}h : {1:00}m : {2:00}s : {3:00} ms",
+            ts.Hours, ts.Minutes, ts.Seconds,
+            ts.Milliseconds / 10);
+            UpdateMessage($"Import Completed in {elapsedTime}");
+            
             ResultsWindow resultsWindow = new ResultsWindow(passedList, failedList);
             resultsWindow.Show();
 
@@ -303,8 +333,6 @@ namespace Rogers_Toolbox_v3._0
 
             return colorFound;
         }
-
-
 
         // For Importing Serials from Excel
 
@@ -621,7 +649,7 @@ namespace Rogers_Toolbox_v3._0
                 InfoBox.Content = $"Updating {allContractors[count]}";
 
                 // Add a delay for visual feedback
-                await Task.Delay(500);
+                await Task.Delay(ctrImportSpeed); // hopefully this is enough time between ctrs?
 
                 // Ensure we await the CtrAutomation method
                 CtrAutomation(data); // This will now wait for the CtrAutomation to complete before moving on
@@ -718,6 +746,7 @@ namespace Rogers_Toolbox_v3._0
         }
         public static string FormatSheet(int numSplit)
         {
+
             if (serialsList == null || serialsList.Count == 0)
             {
                 return "No serials available.";
@@ -805,7 +834,7 @@ namespace Rogers_Toolbox_v3._0
                 _db = FirestoreService.GetFirestoreDb();
             }
 
-            public async Task PushToDatabase(string device, string name, int quantity, DateTime date)
+            public async Task PushToDatabase(string device, string name, int quantity, string date)
             {
                 if (device == null || name == null || quantity <= 0)
                     throw new ArgumentException("Invalid data provided.");
@@ -816,7 +845,7 @@ namespace Rogers_Toolbox_v3._0
                     Device = device,
                     Name = name,
                     Quantity = quantity,
-                    Date = Timestamp.FromDateTime(date.ToUniversalTime()) // Store date as string
+                    Date = date
                 };
 
                 await docRef.SetAsync(data);

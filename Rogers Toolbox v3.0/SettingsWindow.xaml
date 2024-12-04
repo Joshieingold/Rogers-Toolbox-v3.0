@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:Properties="clr-namespace:Rogers_Toolbox_v3._0.Properties"
-        Title="Settings" Height="510" Width="400">
+        Title="Settings" Height="541" Width="400">
     <Grid Background="#FF1E1E1E">
         <StackPanel Margin="10">
             <Label Content="Username:" Foreground="White"/>
@@ -23,8 +23,11 @@
             <TextBox Text="{Binding Source={x:Static Properties:Settings.Default}, Path=FlexiproCheckPixel, UpdateSourceTrigger=PropertyChanged}" Foreground="White" BorderBrush="Black" Background="#FF2E2E2E" />
             <Label Content="Pixel for Checking WMS:" Foreground="White"/>
             <TextBox Text="{Binding Source={x:Static Properties:Settings.Default}, Path=WMSCheckPixel, UpdateSourceTrigger=PropertyChanged}" Foreground="White" BorderBrush="Black" Background="#FF2E2E2E" />
+            <Label Content="CTR Import Speed:" Foreground="White"/>
+            <TextBox Text="{Binding Source={x:Static Properties:Settings.Default}, Path=CTRUpdateSpeed, UpdateSourceTrigger=PropertyChanged}" Foreground="White" BorderBrush="Black" Background="#FF2E2E2E" />
             <Button Content="Save" Click="SaveButton_Click" Width="60" Margin="0,20,0,0" Background="#FF23311D" BorderBrush="Black" Foreground="White"/>
-            
+
+
 
         </StackPanel>
     </Grid>
