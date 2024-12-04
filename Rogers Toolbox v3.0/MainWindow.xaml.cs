@@ -36,7 +36,7 @@ namespace Rogers_Toolbox_v3._0
         int typingSpeed = 0;
         string flexiProCheckPixel = "not,set";
         string wmsCheckPixel = "not,set";
-        private bool isBomWip = true;
+        bool isBomWip = true;
         static List<string> allContractors = new List<string> { "8017", "8037", "8038", "8041", "8047", "8080", "8093", "8052", "8067", "8975", "8986", "8990", "8994", "8997", "8993 and 8982", "NB1", "NF1", "Cleaning Up" };
         private InputSimulator inputSimulator = new InputSimulator();  // Initialize InputSimulator
         private static List<string> serialsList = new List<string>(); // Stores the serials
@@ -51,12 +51,12 @@ namespace Rogers_Toolbox_v3._0
         {
             InitializeComponent();
             LoadSettings();
-
+            InfoBox.Content = ($"Welcome to Rogers Toolbox v3.0 {username}");
         }
         private void LoadSettings()
         {
             username = Properties.Settings.Default.Username;
-            InfoBox.Content = ($"Welcome to Rogers Toolbox v3.0 {username}");
+            
             bartenderNotepad = Properties.Settings.Default.BartenderNotepadPath;
             blitzImportSpeed = Properties.Settings.Default.BlitzImportSpeed;
             flexiImportSpeed = Properties.Settings.Default.FlexiImportSpeed;
@@ -66,17 +66,7 @@ namespace Rogers_Toolbox_v3._0
             flexiProCheckPixel = Properties.Settings.Default.FlexiproCheckPixel;
             wmsCheckPixel = Properties.Settings.Default.WMSCheckPixel;
             ctrImportSpeed = Properties.Settings.Default.CTRUpdateSpeed;
-        }
-        private void BomWipRadioButton_Checked(object sender, RoutedEventArgs e)
-        {
-            isBomWip = true; // Set isBomWip to true when the radio button is checked
-            UpdateMessage($"Good luck on Bom-Wip {username}!");
-        }
-
-        private void BomWipRadioButton_Unchecked(object sender, RoutedEventArgs e)
-        {
-            isBomWip = false; // Set isBomWip to false when the radio button is unchecked
-            UpdateMessage($"Done Bom-Wip for now {username}!");
+            isBomWip = Properties.Settings.Default.IsBomWip;
         }
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -182,6 +172,7 @@ namespace Rogers_Toolbox_v3._0
         // For Pasting Serials
         private async void BlitzImport()
         {
+            UpdateMessage("Starting Blitz Import! Please click input location");
             Stopwatch stopwatch = new Stopwatch();
             // Process the TextBox line by line
             string[] lines = TextBox.Text.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
@@ -211,22 +202,24 @@ namespace Rogers_Toolbox_v3._0
             string currentDevice = DetermineDevice(serialsList[0]); // Declare outside the block
             int quantityOfLoad = serialsList.Count(); // Declare outside the block
             DateTime i = DateTime.Now;
-            string date = i.ToString("yyyyMMdd");
+            DateTime utcDateTime = i.ToUniversalTime();
 
             string[] lines = TextBox.Text.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
-
+            UpdateMessage("Starting FlexiPro Import! Please click input location");
             await Task.Delay(10000);  // Allows user to focus on the screen they want to import to
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
             foreach (string line in lines)
             {
                 bool isPixelGood = CheckPixel("(250, 250, 250)", GetCurrentPixel(flexiProCheckPixel));
-                while (isPixelGood == false) {
+                while (isPixelGood == false)
+                {
                     await Task.Delay(700);
                     isPixelGood = CheckPixel("(250, 250, 250)", GetCurrentPixel(flexiProCheckPixel));
                 }
-                if (isPixelGood == true) {
-                    
+                if (isPixelGood == true)
+                {
+
                     await SimulateTyping(line);
                     await Task.Delay(100);
                     SimulateTabKey();
@@ -235,13 +228,13 @@ namespace Rogers_Toolbox_v3._0
                     UpdateMessage($"Working on serial {line}");
 
                     // Short Delay after finishing a serial
-                    await Task.Delay(flexiImportSpeed); 
-            }
+                    await Task.Delay(flexiImportSpeed);
+                }
             }
             if (isBomWip == true)
             {
                 FirestoreHandler firestoreHandler = new FirestoreHandler();
-                await firestoreHandler.PushToDatabase(currentDevice, username, quantityOfLoad, date);
+                await firestoreHandler.PushToDatabase(currentDevice, username, quantityOfLoad, utcDateTime); // Pass DateTime directly
                 UpdateMessage("Sending data to database");
             }
             stopwatch.Stop();
@@ -257,7 +250,7 @@ namespace Rogers_Toolbox_v3._0
             passedList.Clear();
             failedList.Clear();
             string[] lines = TextBox.Text.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
-
+            UpdateMessage("Starting WMS Import! Please click input location");
             await Task.Delay(10000);  // Allows user to focus on the screen they want to import to
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -266,10 +259,10 @@ namespace Rogers_Toolbox_v3._0
                 await SimulateTyping(line);
                 await Task.Delay(500);// changed here to possibly address sorting bug
                 SimulateTabKey();
-                
-                
+
+
                 bool isPixelGood = CheckPixel("(0, 0, 0)", GetCurrentPixel(wmsCheckPixel));
-                if (isPixelGood == true) 
+                if (isPixelGood == true)
                 {
                     passedList.Add(line);
                 }
@@ -289,7 +282,7 @@ namespace Rogers_Toolbox_v3._0
             ts.Hours, ts.Minutes, ts.Seconds,
             ts.Milliseconds / 10);
             UpdateMessage($"Import Completed in {elapsedTime}");
-            
+
             ResultsWindow resultsWindow = new ResultsWindow(passedList, failedList);
             resultsWindow.Show();
 
@@ -376,6 +369,7 @@ namespace Rogers_Toolbox_v3._0
                 // Update remaining serials and display
                 remainingSerials = serialsList.Count;
                 UpdateSerialsDisplay();
+                LoadSettings();
             }
             catch (Exception ex)
             {
@@ -494,7 +488,7 @@ namespace Rogers_Toolbox_v3._0
 
 
             // For Testing
-             // inputSimulator.Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.RIGHT);
+            // inputSimulator.Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.RIGHT);
 
 
 
@@ -668,7 +662,7 @@ namespace Rogers_Toolbox_v3._0
         public void CreatePurolatorSheet()
         {
             string device = DetermineDevice(serialsList[0]);
-
+            UpdateMessage($"Creating Purolator sheets for {device}");
             if (device == "IPTVARXI6HD" || device == "IPTVTCXI6HD" || device == "SCXI11BEI")
             {
                 int formatBy = 10;
@@ -766,8 +760,9 @@ namespace Rogers_Toolbox_v3._0
             }
             return formattedList.ToString();
         }
-        public static void CreateLotSheet()
+        public void CreateLotSheet()
         {
+            UpdateMessage("Creating your lot sheets");
             string serialString = String.Join(Environment.NewLine, serialsList);
             File.WriteAllText(bartenderNotepad, serialString + Environment.NewLine);
 
@@ -780,8 +775,9 @@ namespace Rogers_Toolbox_v3._0
             ExecuteBatchScript(cmdScript);
 
         }
-        public static void CreateBarcodes()
+        public void CreateBarcodes()
         {
+            UpdateMessage("Creating your barcodes");
             string serialString = String.Join(Environment.NewLine, serialsList);
             File.WriteAllText(bartenderNotepad, serialString + Environment.NewLine);
 
@@ -814,17 +810,39 @@ namespace Rogers_Toolbox_v3._0
         public class FirestoreService
         {
             private static FirestoreDb _firestoreDb;
+            private static readonly object _lock = new object();
 
             public static FirestoreDb GetFirestoreDb()
             {
                 if (_firestoreDb == null)
                 {
-                    string projectId = "bomwipstore"; // Replace with your Firestore Project ID
-                    _firestoreDb = FirestoreDb.Create(projectId);
+                    lock (_lock) // Ensure thread safety
+                    {
+                        if (_firestoreDb == null) // Double-check locking
+                        {
+                            try
+                            {
+                                // Set the path to your service account key
+                                string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Keys", "bomwipstore-firebase-adminsdk-jhqev-acb5705838.json");
+                                Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", filePath);
+
+                                // Create FirestoreDb instance
+                                string projectId = "bomwipstore"; // Replace with your Firestore Project ID
+                                _firestoreDb = FirestoreDb.Create(projectId);
+                            }
+                            catch (Exception ex)
+                            {
+                                // Handle initialization error (e.g., log it)
+                                Console.WriteLine($"Error initializing Firestore: {ex.Message}");
+                                throw; // Optionally rethrow the exception
+                            }
+                        }
+                    }
                 }
                 return _firestoreDb;
             }
         }
+
         public class FirestoreHandler
         {
             private FirestoreDb _db;
@@ -834,10 +852,13 @@ namespace Rogers_Toolbox_v3._0
                 _db = FirestoreService.GetFirestoreDb();
             }
 
-            public async Task PushToDatabase(string device, string name, int quantity, string date)
+            public async Task PushToDatabase(string device, string name, int quantity, DateTime date)
             {
-                if (device == null || name == null || quantity <= 0)
+                if (string.IsNullOrEmpty(device) || string.IsNullOrEmpty(name) || quantity <= 0)
                     throw new ArgumentException("Invalid data provided.");
+
+                // Convert DateTime to UTC
+                DateTime utcDateTime = date.ToUniversalTime();
 
                 DocumentReference docRef = _db.Collection("bom-wip").Document();
                 var data = new
@@ -845,10 +866,19 @@ namespace Rogers_Toolbox_v3._0
                     Device = device,
                     Name = name,
                     Quantity = quantity,
-                    Date = date
+                    Date = Timestamp.FromDateTime(utcDateTime) // Convert DateTime to Firestore Timestamp
                 };
 
-                await docRef.SetAsync(data);
+                try
+                {
+                    await docRef.SetAsync(data);
+                }
+                catch (Exception ex)
+                {
+                    // Log the exception or handle it as needed
+                    Console.WriteLine($"Error pushing data to Firestore: {ex.Message}");
+                    throw; // Optionally rethrow the exception
+                }
             }
         }
 

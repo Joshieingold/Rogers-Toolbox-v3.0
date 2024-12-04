@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Bom-Wip Database" Height="600" Width="800"
         Background="#FF2A2A2A" FontFamily="Segoe UI" FontSize="14">
-    <Grid>
+    <Grid Background="#FF1A1A1A">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <!-- Date Selection Section -->
@@ -14,7 +14,7 @@
         </Grid.RowDefinitions>
 
         <!-- Date Selection Section -->
-        <GroupBox Header="Select Date Range" Background="#FF3C3C3C" Foreground="White" Margin="20" Padding="10">
+        <GroupBox Header="Select Date Range" Background="#FF1F1F1F" Foreground="White" Margin="20" Padding="10" BorderBrush="{x:Null}">
             <StackPanel Orientation="Vertical" Margin="0,0,398,0">
                 <StackPanel Orientation="Horizontal" Margin="0,5">
                     <Label Content="Start Date:" Width="100" Foreground="White"/>
@@ -25,14 +25,14 @@
                     <DatePicker x:Name="endDatePicker" Width="200" Margin="5,0"/>
                 </StackPanel>
                 <Button Name="fetchDataButton" Content="Fetch Data" Width="121" Margin="130,10,0,0"
-                        Background="#FF007ACC" Foreground="White" BorderThickness="0" Padding="10" Cursor="Hand"
-                        Click="fetchDataButton_Click" HorizontalAlignment="Left"/>
+                        Background="#FF2E2E2E" Foreground="White" BorderThickness="0" Padding="10" Cursor="Hand"
+                        Click="fetchDataButton_Click" HorizontalAlignment="Left" BorderBrush="#FFA70202"/>
             </StackPanel>
         </GroupBox>
 
         <!-- DataGrid Section -->
         <DataGrid Name="dataGrid" Grid.Row="1" Margin="20" AutoGenerateColumns="False" 
-                  Background="#FF3C3C3C" Foreground="#FF020202" 
+                  Background="#FF1F1F1F" Foreground="#FF020202" 
                   HeadersVisibility="Column" BorderBrush="#FF007ACC" BorderThickness="1">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Device" Binding="{Binding Device}" />

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -19,7 +20,8 @@ namespace Rogers_Toolbox_v3._0
 
         private void InitializeFirestore()
         {
-            string pathToKey = @"C:\Users\edily\source\repos\Rogers Toolbox v3.0\Rogers Toolbox v3.0\Keys\bomwipstore-firebase-adminsdk-jhqev-acb5705838.json"; // Update with your key's path
+            string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Keys", "bomwipstore-firebase-adminsdk-jhqev-acb5705838.json");
+            string pathToKey = filePath; // Update with your key's path
             Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", pathToKey);
             firestoreDb = FirestoreDb.Create("bomwipstore"); // Replace with your project ID
         }
@@ -28,9 +30,34 @@ namespace Rogers_Toolbox_v3._0
         {
             try
             {
-                Console.WriteLine("Fetching all data from the bom-wip collection.");
+                Console.WriteLine("Fetching data from the bom-wip collection within the selected date range.");
 
-                Query query = firestoreDb.Collection("bom-wip"); // Fetch all documents
+                // Get the selected start and end dates
+                DateTime? startDate = startDatePicker.SelectedDate;
+                DateTime? endDate = endDatePicker.SelectedDate;
+
+                // Check if both dates are selected
+                if (startDate == null || endDate == null)
+                {
+                    MessageBox.Show("Please select both start and end dates.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                // Ensure the end date is after the start date
+                if (endDate < startDate)
+                {
+                    MessageBox.Show("End date must be after start date.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                // Convert to UTC
+                DateTime startDateUtc = startDate.Value.ToUniversalTime();
+                DateTime endDateUtc = endDate.Value.ToUniversalTime();
+
+                // Create a query with date range filtering
+                Query query = firestoreDb.Collection("bom-wip")
+                    .WhereGreaterThanOrEqualTo("Date", Timestamp.FromDateTime(startDateUtc))
+                    .WhereLessThanOrEqualTo("Date", Timestamp.FromDateTime(endDateUtc));
 
                 QuerySnapshot snapshot = await query.GetSnapshotAsync();
                 Console.WriteLine($"Documents fetched: {snapshot.Documents.Count}");
@@ -45,26 +72,17 @@ namespace Rogers_Toolbox_v3._0
                     var data = document.ToDictionary();
                     DateTime dateValue;
 
-                    // Safely try to get the Date field as a string
-                    if (data.TryGetValue("Date", out object dateObj) && dateObj is string dateString)
+                    // Safely try to get the Date field as a Firestore Timestamp
+                    if (data.TryGetValue("Date", out object dateObj) && dateObj is Timestamp timestamp)
                     {
-                        // Try to parse the date string to DateTime
-                        if (DateTime.TryParse(dateString, out dateValue))
-                        {
-                            // Successfully parsed the date
-                        }
-                        else
-                        {
-                            // Handle the case where the date string is not valid
-                            dateValue = DateTime.MinValue; // or set to a default value
-                            Console.WriteLine($"Invalid date format: {dateString}");
-                        }
+                        // Convert Firestore Timestamp to DateTime
+                        dateValue = timestamp.ToDateTime();
                     }
                     else
                     {
-                        // Handle the case where the Date is missing
+                        // Handle the case where the Date is missing or not a Timestamp
                         dateValue = DateTime.MinValue; // or set to a default value
-                        Console.WriteLine("Date field is missing or not a string.");
+                        Console.WriteLine("Date field is missing or not a Timestamp.");
                     }
 
                     return new DataRecord

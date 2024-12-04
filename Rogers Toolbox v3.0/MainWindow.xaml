@@ -33,15 +33,15 @@
             </Style>
         </Grid.Resources>
         <Grid.RowDefinitions>
-            <RowDefinition Height="118*"/>
-            <RowDefinition Height="89*"/>
+            <RowDefinition/>
+            <RowDefinition/>
             <RowDefinition Height="0*"/>
         </Grid.RowDefinitions>
 
         <!-- Navigation Bar -->
         <Rectangle x:Name="navBar" Height="56" Fill="#FF1F1F1F" VerticalAlignment="Top" />
 
-        <StackPanel Orientation="Horizontal" Height="56" VerticalAlignment="Top" HorizontalAlignment="Center" Width="760">
+        <StackPanel Orientation="Horizontal" Height="56" VerticalAlignment="Top" HorizontalAlignment="Center" Width="580">
             <Button Content="Import" x:Name="ImportButton" Width="45" Click="Button_Click" Foreground="{x:Null}" Height="44">
                 <Button.Background>
                     <ImageBrush ImageSource="/button_6.png" Stretch="Fill" />
@@ -111,13 +111,6 @@
                     <ImageBrush ImageSource="/settings_icon.png" Stretch="Uniform" TileMode="None"/>
                 </Button.Background>
             </Button>
-            <RadioButton x:Name="bomWipRadioButton" 
-             Content="Bom-Wip" 
-             Checked="BomWipRadioButton_Checked" 
-             Unchecked="BomWipRadioButton_Unchecked" 
-             Background="White" 
-             Foreground="White" 
-             Margin="10" VerticalAlignment="Center" Width="73" IsChecked="True" BorderBrush="White"/>
         </StackPanel>
 
         <Label x:Name="InfoBox" Content="Welcome to The Rogers Toolbox v3.0" 
@@ -127,7 +120,7 @@
                HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
 
         <!-- Scrollable Content Area -->
-        <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="10,115,0,42" Grid.RowSpan="2" HorizontalAlignment="Left" Width="780">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,127,0,30" Grid.RowSpan="2" HorizontalAlignment="Center" Width="752">
             <StackPanel Orientation="Horizontal">
                 <!-- Line Numbers -->
                 <StackPanel Orientation="Vertical" Margin="10,0,10,0" Background="#FF383838">
@@ -137,9 +130,9 @@
                 </StackPanel>
 
                 <!-- Input TextBox -->
-                <TextBox x:Name="TextBox" Width="700" TextWrapping="Wrap" 
+                <TextBox x:Name="TextBox" Width="692" TextWrapping="Wrap" 
                          Foreground="White" Background="#FF383838" AcceptsReturn="True" 
-                         TextChanged="TextBox_TextChanged" BorderBrush="{x:Null}" />
+                         TextChanged="TextBox_TextChanged" BorderBrush="{x:Null}" VerticalAlignment="Stretch"/>
             </StackPanel>
         </ScrollViewer>
     </Grid>

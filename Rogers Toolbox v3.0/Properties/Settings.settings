@@ -32,5 +32,8 @@
     <Setting Name="CTRUpdateSpeed" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">7000</Value>
     </Setting>
+    <Setting Name="IsBomWip" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

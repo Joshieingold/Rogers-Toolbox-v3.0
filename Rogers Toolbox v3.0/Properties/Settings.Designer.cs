@@ -142,5 +142,17 @@ namespace Rogers_Toolbox_v3._0.Properties {
                 this["CTRUpdateSpeed"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool IsBomWip {
+            get {
+                return ((bool)(this["IsBomWip"]));
+            }
+            set {
+                this["IsBomWip"] = value;
+            }
+        }
     }
 }
