@@ -176,16 +176,16 @@ namespace Rogers_Toolbox_v3._0
             Stopwatch stopwatch = new Stopwatch();
             // Process the TextBox line by line
             string[] lines = TextBox.Text.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
-
-            await Task.Delay(10000);  // Allows user to focus on the screen they want to import to
+            await Task.Delay(6000);  // Allows user to focus on the screen they want to import to
             stopwatch.Start();
             foreach (string line in lines)
             {
+                UpdateMessage($"Working on serial {line}, {serialsList.Count()} Serials Remaining");
                 await SimulateTyping(line);
                 SimulateTabKey();
                 serialsList.Remove(line);
                 UpdateSerialsDisplay();
-                UpdateMessage($"Working on serial {line}");
+                
 
                 // Short Delay after finishing a serial
                 await Task.Delay(blitzImportSpeed);  // Adjust delay as needed
@@ -206,11 +206,12 @@ namespace Rogers_Toolbox_v3._0
 
             string[] lines = TextBox.Text.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
             UpdateMessage("Starting FlexiPro Import! Please click input location");
-            await Task.Delay(10000);  // Allows user to focus on the screen they want to import to
+            await Task.Delay(6000);  // Allows user to focus on the screen they want to import to
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
             foreach (string line in lines)
             {
+                UpdateMessage($"Working on serial {line}, {serialsList.Count()} Serials Remaining");
                 bool isPixelGood = CheckPixel("(250, 250, 250)", GetCurrentPixel(flexiProCheckPixel));
                 while (isPixelGood == false)
                 {
@@ -225,7 +226,7 @@ namespace Rogers_Toolbox_v3._0
                     SimulateTabKey();
                     serialsList.Remove(line);
                     UpdateSerialsDisplay();
-                    UpdateMessage($"Working on serial {line}");
+                    
 
                     // Short Delay after finishing a serial
                     await Task.Delay(flexiImportSpeed);
@@ -251,15 +252,16 @@ namespace Rogers_Toolbox_v3._0
             failedList.Clear();
             string[] lines = TextBox.Text.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
             UpdateMessage("Starting WMS Import! Please click input location");
-            await Task.Delay(10000);  // Allows user to focus on the screen they want to import to
+            await Task.Delay(6000);  // Allows user to focus on the screen they want to import to
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
             foreach (string line in lines)
             {
+                UpdateMessage($"Working on serial {line}, {serialsList.Count()} Serials Remaining");
                 await SimulateTyping(line);
-                await Task.Delay(500);// changed here to possibly address sorting bug
+                await Task.Delay(200);// changed here to possibly address sorting bug
                 SimulateTabKey();
-
+                await Task.Delay(1000);
 
                 bool isPixelGood = CheckPixel("(0, 0, 0)", GetCurrentPixel(wmsCheckPixel));
                 if (isPixelGood == true)
@@ -273,7 +275,7 @@ namespace Rogers_Toolbox_v3._0
                 }
                 serialsList.Remove(line);
                 UpdateSerialsDisplay();
-                UpdateMessage($"Working on serial {line}");
+                
                 await Task.Delay(wmsImportSpeed);
             }
             stopwatch.Stop();
