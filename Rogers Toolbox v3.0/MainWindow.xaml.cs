@@ -709,6 +709,8 @@ namespace Rogers_Toolbox_v3._0
                 return "SCXI11BEI";
             else if (serial.StartsWith("336"))
                 return "CGM4331COM";
+            else if (serial.StartsWith("AS97"))
+                return "XE2SGROG1";
             else
                 return "TG4482A";
         }
