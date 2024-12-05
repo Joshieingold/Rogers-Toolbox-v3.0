@@ -46,11 +46,11 @@
         <StackPanel Orientation="Horizontal" Margin="400,48,32,38">
             <StackPanel Orientation="Vertical" Width="168" Height="232">
                 <Label Content="Device Totals:" Foreground="White" FontSize="16" Width="167"/>
-                <TextBlock x:Name="deviceSumLabel" Foreground="White" FontWeight="Bold" Height="200" Width="156"/>
+                <TextBlock x:Name="deviceSumLabel" Foreground="White" FontWeight="Bold" Height="154" Width="156"/>
             </StackPanel>
             <StackPanel Orientation="Vertical" Margin="20,0,0,0" Width="178" Height="232">
                 <Label Content="Person Totals:" Foreground="White" FontSize="16" Height="28" Width="175"/>
-                <TextBlock x:Name="personTotalLabel" Foreground="White" FontWeight="Bold" Height="204" Width="160"/>
+                <TextBlock x:Name="personTotalLabel" Foreground="White" FontWeight="Bold" Height="155" Width="160"/>
             </StackPanel>
         </StackPanel>
     </Grid>

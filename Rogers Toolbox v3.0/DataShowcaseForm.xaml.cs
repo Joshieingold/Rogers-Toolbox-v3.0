@@ -66,7 +66,7 @@ namespace Rogers_Toolbox_v3._0
                 {
                     Console.WriteLine("No documents found.");
                 }
-
+                TimeZoneInfo astTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Atlantic Standard Time");
                 List<DataRecord> records = snapshot.Documents.Select(document =>
                 {
                     var data = document.ToDictionary();
@@ -77,6 +77,9 @@ namespace Rogers_Toolbox_v3._0
                     {
                         // Convert Firestore Timestamp to DateTime
                         dateValue = timestamp.ToDateTime();
+
+                        // Convert the DateTime to UTC-4 (AST)
+                        dateValue = TimeZoneInfo.ConvertTimeFromUtc(dateValue, astTimeZone);
                     }
                     else
                     {
