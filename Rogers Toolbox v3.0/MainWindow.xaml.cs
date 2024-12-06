@@ -351,7 +351,7 @@ namespace Rogers_Toolbox_v3._0
             {
                 LoadSerials(openFileDialog.FileName);
             }
-        }
+        } // Establishes a path to the target excel for importing serials.
         private void LoadSerials(string filePath)
         {
             try
@@ -385,12 +385,12 @@ namespace Rogers_Toolbox_v3._0
             {
                 System.Windows.MessageBox.Show($"Failed to load serials: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-        }
+        } // Gets all data form the first column of the loaded excel file/
         private void ReverseSerials(List<string> Serials)
         {
             Serials.Reverse();
             serialsList = Serials;
-        }
+        } // Reverses the serial list if the option == true.
 
         // For CTR Update
 
@@ -415,7 +415,7 @@ namespace Rogers_Toolbox_v3._0
                     System.Windows.MessageBox.Show($"Failed to combine files: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
-        }
+        } // Opens file dialog asking for paths to multiple excel files.
         private void CombineExcelFiles(string[] filePaths)
         {
             var combinedWorkbook = new XLWorkbook();
@@ -442,7 +442,7 @@ namespace Rogers_Toolbox_v3._0
             }
 
             SaveCombinedExcelFile(combinedWorkbook);
-        }
+        } // Takes the paths to excel files and combines them into one excel file.
         private void SaveCombinedExcelFile(XLWorkbook combinedWorkbook)
         {
             var saveFileDialog = new Microsoft.Win32.SaveFileDialog
@@ -457,7 +457,7 @@ namespace Rogers_Toolbox_v3._0
                 combinedWorkbook.SaveAs(saveFileDialog.FileName);
                 CTRUpdate();
             }
-        }
+        } // Allows the user to save the combined file somewhere on their pc
         public void CTRUpdate()
         {
             Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog
@@ -478,7 +478,7 @@ namespace Rogers_Toolbox_v3._0
                     System.Windows.MessageBox.Show($"Failed to process CTR update: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
-        }
+        } // Asks the user to open a combined file in order to continue the update.
         private void ProcessCTRUpdate(string filePath)
         {
             using (var workbook = new XLWorkbook(filePath))
@@ -487,7 +487,7 @@ namespace Rogers_Toolbox_v3._0
                 var results = AnalyzeSheet(sheet);
                 _ = SaveCTRResults(results);
             }
-        }
+        } // executes the main process by grabbing all neccesary data.
         public async Task CtrAutomation(string contractorData)
         {
             // Copy contractorData to clipboard
@@ -516,7 +516,7 @@ namespace Rogers_Toolbox_v3._0
 
             // Pause for the specified import speed
             await Task.Delay(ctrImportSpeed);
-        }
+        } //  Pastes the data for the ctr that is called.
         private void UpdateTotals(Dictionary<string, int> totals, string itemCode, List<string> allowedDevices, Dictionary<string, string> deviceMapping)
         {
             if (deviceMapping.ContainsKey(itemCode))
@@ -537,8 +537,8 @@ namespace Rogers_Toolbox_v3._0
                     }
                 }
             }
-        }
-        private List<string> AnalyzeSheet(IXLWorksheet sheet)
+        } // Uses a dictionary to get data totals.
+        private List<string> AnalyzeSheet(IXLWorksheet sheet) // loops through each contractor (many times) and stores the data for them given their list of devices.
         {
             var results = new List<string>();
 
@@ -649,7 +649,7 @@ namespace Rogers_Toolbox_v3._0
 
             return results;
         }
-        private async Task SaveCTRResults(List<string> results)
+        private async Task SaveCTRResults(List<string> results) // loops through all stored data and uses the ctr automation for it.
         {
             int count = 0;
 
@@ -671,11 +671,11 @@ namespace Rogers_Toolbox_v3._0
         public string FormatTotals(Dictionary<string, int> totals, List<string> deviceOrder)
         {
             return string.Join(Environment.NewLine, deviceOrder.Select(device => totals.ContainsKey(device) ? totals[device].ToString() : "0"));
-        }
+        } // uses dictionary of devices to format them into a single string seperated by new lines.
 
         // For Printing
 
-        public void CreatePurolatorSheet()
+        public void CreatePurolatorSheet() // Prints purolator sheet based on device information gathered globally using a cmd script.
         {
             string[] lines = TextBox.Text.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
             string device = DetermineDevice(lines[0]);
@@ -730,7 +730,7 @@ namespace Rogers_Toolbox_v3._0
                 return "XE2SGROG1";
             else
                 return "TG4482A";
-        }
+        } //  Determines the device model based on the serial number.
         static void ExecuteBatchScript(string scriptContent)
         {
             string tempFilePath = "temp_cmd.bat";
@@ -756,7 +756,7 @@ namespace Rogers_Toolbox_v3._0
 
             // Clean up temporary file
             File.Delete(tempFilePath);
-        }
+        } // exectures a cmd script given to it.
         public static string FormatSheet(int numSplit)
         {
 
@@ -778,7 +778,7 @@ namespace Rogers_Toolbox_v3._0
                 formattedList.AppendLine(string.Join(Environment.NewLine, chunk));
             }
             return formattedList.ToString();
-        }
+        } // generates a formatted list of the serials based on the number the user wants to split them by.
         public void CreateLotSheet()
         {
             UpdateMessage("Creating your lot sheets");
@@ -793,7 +793,7 @@ namespace Rogers_Toolbox_v3._0
                                     ";
             ExecuteBatchScript(cmdScript);
 
-        }
+        } // prints all serials to a lot sheet.
         public void CreateBarcodes()
         {
             UpdateMessage("Creating your barcodes");
@@ -808,7 +808,7 @@ namespace Rogers_Toolbox_v3._0
                                     ";
             ExecuteBatchScript(cmdScript);
 
-        }
+        } // prints all serials to the barcode printer.
 
         // For Serial Formatter
 
@@ -824,7 +824,7 @@ namespace Rogers_Toolbox_v3._0
                 System.Windows.Clipboard.SetText(outputText);
                 InfoBox.Content = ($"Okay {username}, all serials copied with '{userInput}' between them!");
             }
-        }
+        } // Opens the format serials box.
         
         // For Database 
         public class FirestoreService
@@ -861,7 +861,7 @@ namespace Rogers_Toolbox_v3._0
                 }
                 return _firestoreDb;
             }
-        }
+        } // initialize firestore.
 
         public class FirestoreHandler
         {
@@ -872,7 +872,7 @@ namespace Rogers_Toolbox_v3._0
                 _db = FirestoreService.GetFirestoreDb();
             }
 
-            public async Task PushToDatabase(string device, string name, int quantity, DateTime date)
+            public async Task PushToDatabase(string device, string name, int quantity, DateTime date) // pushes data to database
             {
                 if (string.IsNullOrEmpty(device) || string.IsNullOrEmpty(name) || quantity <= 0)
                     throw new ArgumentException("Invalid data provided.");
@@ -895,12 +895,11 @@ namespace Rogers_Toolbox_v3._0
                 }
                 catch (Exception ex)
                 {
-                    // Log the exception or handle it as needed
                     Console.WriteLine($"Error pushing data to Firestore: {ex.Message}");
-                    throw; // Optionally rethrow the exception
+                    throw; 
                 }
             }
-        }
+        } // formats how to push the data to firestore
 
     }
 }
