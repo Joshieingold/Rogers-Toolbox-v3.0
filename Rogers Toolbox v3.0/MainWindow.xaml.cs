@@ -95,7 +95,7 @@ namespace Rogers_Toolbox_v3._0
             }
             else if (((System.Windows.Controls.Button)sender).Content.ToString() == "CTR")
             {
-                CombineExcels();
+                CTRUpdate();
             }
             else if (((System.Windows.Controls.Button)sender).Content.ToString() == "Flexi")
             {
@@ -480,28 +480,34 @@ namespace Rogers_Toolbox_v3._0
                 _ = SaveCTRResults(results);
             }
         }
-        public void CtrAutomation(string contractorData)
+        public async Task CtrAutomation(string contractorData)
         {
-            // Probably Want to add a freeze here
+            // Copy contractorData to clipboard
             System.Windows.Clipboard.SetText(contractorData);
 
+            // Pause for 3 seconds to ensure clipboard operation completes
+            await Task.Delay(3000);
+
             var sim = new InputSimulator();
+
+            // Simulate Ctrl+V (Paste)
             sim.Keyboard.ModifiedKeyStroke(WindowsInput.Native.VirtualKeyCode.CONTROL, WindowsInput.Native.VirtualKeyCode.VK_V);
 
+            // Pause for 3 seconds after pasting
+            await Task.Delay(3000);
 
-            // For Testing
-            // inputSimulator.Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.RIGHT);
-
-
-
-            //Simulate Ctrl+Alt+PageDown
+            // Simulate Ctrl+Alt+PageDown
             sim.Keyboard.ModifiedKeyStroke(
-            new[] { WindowsInput.Native.VirtualKeyCode.CONTROL, WindowsInput.Native.VirtualKeyCode.MENU }, WindowsInput.Native.VirtualKeyCode.NEXT);
+                new[] { WindowsInput.Native.VirtualKeyCode.CONTROL, WindowsInput.Native.VirtualKeyCode.MENU },
+                WindowsInput.Native.VirtualKeyCode.NEXT);
 
             // Simulate Ctrl+Left
-            sim.Keyboard.ModifiedKeyStroke(WindowsInput.Native.VirtualKeyCode.CONTROL, WindowsInput.Native.VirtualKeyCode.LEFT);
+            sim.Keyboard.ModifiedKeyStroke(
+                WindowsInput.Native.VirtualKeyCode.CONTROL,
+                WindowsInput.Native.VirtualKeyCode.LEFT);
 
-            _ = Task.Delay(7000);
+            // Pause for the specified import speed
+            await Task.Delay(ctrImportSpeed);
         }
         private void UpdateTotals(Dictionary<string, int> totals, string itemCode, List<string> allowedDevices, Dictionary<string, string> deviceMapping)
         {
@@ -648,7 +654,7 @@ namespace Rogers_Toolbox_v3._0
                 await Task.Delay(ctrImportSpeed); // hopefully this is enough time between ctrs?
 
                 // Ensure we await the CtrAutomation method
-                CtrAutomation(data); // This will now wait for the CtrAutomation to complete before moving on
+                await CtrAutomation(data); // This will now wait for the CtrAutomation to complete before moving on
 
                 count++;
             }
