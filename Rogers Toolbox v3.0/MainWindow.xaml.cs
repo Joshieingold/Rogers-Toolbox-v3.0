@@ -27,23 +27,23 @@ namespace Rogers_Toolbox_v3._0
 
         // Global Variables
 
-        string username = "No User Assigned";
-        static string bartenderNotepad = "not set";
-        int blitzImportSpeed = 0;
-        int flexiImportSpeed = 0;
-        int wmsImportSpeed = 0;
-        bool reverseImport = false;
-        int typingSpeed = 0;
-        string flexiProCheckPixel = "not,set";
-        string wmsCheckPixel = "not,set";
-        bool isBomWip = true;
-        static List<string> allContractors = new List<string> { "8017", "8037", "8038", "8041", "8047", "8080", "8093", "8052", "8067", "8975", "8986", "8990", "8994", "8997", "8993 and 8982", "NB1", "NF1", "Cleaning Up" };
-        private InputSimulator inputSimulator = new InputSimulator();  // Initialize InputSimulator
-        private static List<string> serialsList = new List<string>(); // Stores the serials
-        private static List<string> passedList = new List<string>();
-        private static List<string> failedList = new List<string>();
-        private static int ctrImportSpeed = 0;
-        private int remainingSerials; // Stores the count of remaining serials
+        string username = "No User Assigned"; // Holds Data for username, primarily for textbox and database.
+        static string bartenderNotepad = "not set"; // For printing labels, need to set path in settings.
+        int blitzImportSpeed = 0; // The speed at which the blitz import will put between pasting serials. Informed by settings.
+        int flexiImportSpeed = 0; // The speed at which the flexi import will put between checking if loading is done. Informed by settings.
+        int wmsImportSpeed = 0; // The speed at which the wms import will put between pasting serials. Informed by settings.
+        bool reverseImport = false; // Informs whether of not the list imported from exel will be flipper or not.
+        int typingSpeed = 0; // The speed at which every individual serial is typed at.
+        string flexiProCheckPixel = "not,set"; // The pixel that FlexiPro Import will check in order to know to proceed or not.
+        string wmsCheckPixel = "not,set"; // The pixel that WMS Import will check in order to know if the serial passed or failed.
+        bool isBomWip = true; // If true, when flexipro import is finished the data will be sent to database.
+        static List<string> allContractors = new List<string> { "8017", "8037", "8038", "8041", "8047", "8080", "8093", "8052", "8067", "8975", "8986", "8990", "8994", "8997", "8993 and 8982", "NB1", "NF1", "Cleaning Up" }; //  List of all contractors to be updated.
+        private InputSimulator inputSimulator = new InputSimulator();  // Initializes InputSimulator
+        private static List<string> serialsList = new List<string>(); // Stores the serials once imported.
+        private static List<string> passedList = new List<string>(); // For WMS import storing the passed serials.
+        private static List<string> failedList = new List<string>(); // For WMS import storing the failed serials.
+        private static int ctrImportSpeed = 0; // The speed that the user will get to click input locations between CTRS.
+        private int remainingSerials; // Stores the count of remaining serials.
 
         // Base Functions
 
@@ -53,10 +53,9 @@ namespace Rogers_Toolbox_v3._0
             LoadSettings();
             InfoBox.Content = ($"Welcome to Rogers Toolbox v3.0 {username}");
         }
-        private void LoadSettings()
+        private void LoadSettings() // Applies the users settings to the global variables.
         {
             username = Properties.Settings.Default.Username;
-            
             bartenderNotepad = Properties.Settings.Default.BartenderNotepadPath;
             blitzImportSpeed = Properties.Settings.Default.BlitzImportSpeed;
             flexiImportSpeed = Properties.Settings.Default.FlexiImportSpeed;
@@ -68,7 +67,7 @@ namespace Rogers_Toolbox_v3._0
             ctrImportSpeed = Properties.Settings.Default.CTRUpdateSpeed;
             isBomWip = Properties.Settings.Default.IsBomWip;
         }
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e) // Counts the new lines in the textbox to allow for a serial count next to the serials.
         {
             // Split the text of the TextBox into lines based on newline characters
             var lines = TextBox.Text.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
@@ -83,42 +82,48 @@ namespace Rogers_Toolbox_v3._0
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            // If Sender is Blitz Import
+            // Blitz Import
             if (((System.Windows.Controls.Button)sender).Content.ToString() == "Blitz")
             {
                 BlitzImport();
             }
-            // If sender is the open excel button 
+            // Import Excel
             else if (((System.Windows.Controls.Button)sender).Content.ToString() == "Import")
             {
                 OpenExcel();
             }
+            // CTR Update
             else if (((System.Windows.Controls.Button)sender).Content.ToString() == "CTR")
             {
-                CTRUpdate();
+                CombineExcels();
             }
+            // Flexipro Import
             else if (((System.Windows.Controls.Button)sender).Content.ToString() == "Flexi")
             {
                 FlexiProImport();
             }
+            // WMS Import
             else if (((System.Windows.Controls.Button)sender).Content.ToString() == "WMS")
             {
                 WMSImport();
             }
+            // Print Purolator
             else if (((System.Windows.Controls.Button)sender).Content.ToString() == "Purolator")
             {
                 CreatePurolatorSheet();
             }
+            // Print Barcodes
             else if (((System.Windows.Controls.Button)sender).Content.ToString() == "Barcode")
             {
                 CreateBarcodes();
             }
+            // Print Lotsheet
             else if (((System.Windows.Controls.Button)sender).Content.ToString() == "LotSheet")
             {
                 CreateLotSheet();
             }
-        }
-        private void SettingsButton_Click(object sender, RoutedEventArgs e)
+        } // Executes functions based on GUI buttons.
+        private void SettingsButton_Click(object sender, RoutedEventArgs e) // Opens the settings menu.
         {
             SettingsWindow settingsWindow = new SettingsWindow();
             settingsWindow.ShowDialog(); // Opens the settings window as a modal dialog
@@ -127,16 +132,16 @@ namespace Rogers_Toolbox_v3._0
         {
             DataShowcaseForm databaseForm = new DataShowcaseForm();
             databaseForm.ShowDialog();
-        }
+        } // Opens the Database Pannel.
         private void CompareListButton_Click(object sender, RoutedEventArgs e)
         {
             CompareLists compareLists = new CompareLists();
             compareLists.ShowDialog();
-        }
+        } // Opens the Compare List Pannel.
         private void InputButton_Click(object sender, RoutedEventArgs e)
         {
             ShowInputDialog();
-        }
+        } // Opens the Format serials pannel.
         private async Task SimulateTyping(string text)
         {
             foreach (char c in text)
@@ -145,15 +150,15 @@ namespace Rogers_Toolbox_v3._0
                 inputSimulator.Keyboard.TextEntry(c);  // Simulates typing the character
                 await Task.Delay(typingSpeed);  // Adjust speed (lower is faster)
             }
-        }
+        } // Types whatever string it is presented with.
         private void SimulateTabKey()
         {
             inputSimulator.Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.RETURN);
-        }
+        } // presses tab.
         private void SimulateKey(string key)
         {
             inputSimulator.Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.RETURN);
-        }
+        } // More universal function that allows ease in programming which key is pressed.
         private void UpdateSerialsDisplay()
         {
             {
@@ -163,20 +168,25 @@ namespace Rogers_Toolbox_v3._0
 
                 InfoBox.Content = ($"{remainingSerials} Serials Loaded");
             }
-        }
+        } // Makes the textbox in main pannel update with the serials remaining.
         private void UpdateMessage(string text)
         {
             InfoBox.Content = (text);
-        }
+        } // Updates the display box for the user to see what process is in action.
 
         // For Pasting Serials
+
         private async void BlitzImport()
         {
-            UpdateMessage("Starting Blitz Import! Please click input location");
+            // Lets the user know the import will begin soon and initializes the stopwatch.
+            UpdateMessage("Starting Blitz Import! Please click input location"); 
             Stopwatch stopwatch = new Stopwatch();
-            // Process the TextBox line by line
-            string[] lines = TextBox.Text.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
-            await Task.Delay(6000);  // Allows user to focus on the screen they want to import to
+            
+            
+            string[] lines = TextBox.Text.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries); // Gets the data from the textbox and splits it by new lines.
+            await Task.Delay(6000);  // focus time for input location
+            
+            // Starts stopwatch, prints all serials, and updates display accordingly.
             stopwatch.Start();
             foreach (string line in lines)
             {
@@ -185,18 +195,16 @@ namespace Rogers_Toolbox_v3._0
                 SimulateTabKey();
                 serialsList.Remove(line);
                 UpdateSerialsDisplay();
-                
-
-                // Short Delay after finishing a serial
-                await Task.Delay(blitzImportSpeed);  // Adjust delay as needed
+                await Task.Delay(blitzImportSpeed);  // Allows user to control the speed in settings.
             }
-            stopwatch.Stop();
+            stopwatch.Stop(); // TIME!
+            
             TimeSpan ts = stopwatch.Elapsed;
             string elapsedTime = String.Format("{0:00}h : {1:00}m : {2:00}s : {3:00} ms",
             ts.Hours, ts.Minutes, ts.Seconds,
             ts.Milliseconds / 10);
             UpdateMessage($"Import Completed in {elapsedTime}");
-        }
+        } // Prints the serials as quickly as possible.
         private async void FlexiProImport()
         {
             string currentDevice = DetermineDevice(serialsList[0]); // Declare outside the block
@@ -245,7 +253,7 @@ namespace Rogers_Toolbox_v3._0
             ts.Milliseconds / 10);
             UpdateMessage($"Import Completed in {elapsedTime}");
 
-        }
+        } // Prints the serials Whenever it finds the loading bar has changes.
         private async void WMSImport()
         {
             passedList.Clear();
@@ -289,12 +297,12 @@ namespace Rogers_Toolbox_v3._0
             resultsWindow.Show();
 
 
-        }
+        } // Prints the serials as quickly as the display will allow splitting them into the passed and failed list.
         private void WMSFailAutomation()
         {
             var sim = new InputSimulator();
             sim.Keyboard.ModifiedKeyStroke(WindowsInput.Native.VirtualKeyCode.CONTROL, WindowsInput.Native.VirtualKeyCode.VK_X);
-        }
+        } // Preforms specific keys in the case a serial fails.
         private bool CheckPixel(string colorWanted, string colorFound)
         {
             if (colorWanted == colorFound)
@@ -305,7 +313,7 @@ namespace Rogers_Toolbox_v3._0
             {
                 return false;
             }
-        }
+        } // Checks between the color the programmer wants and the color found at the pixel on the screen stipulated. 
         private string GetCurrentPixel(string pixelSource)
         {
             string[] cords = pixelSource.Split(',');
@@ -327,7 +335,7 @@ namespace Rogers_Toolbox_v3._0
             string colorFound = $"({pixelColor.R}, {pixelColor.G}, {pixelColor.B})";
 
             return colorFound;
-        }
+        } // Finds the color of a pixel on the screen.
 
         // For Importing Serials from Excel
 
@@ -669,7 +677,8 @@ namespace Rogers_Toolbox_v3._0
 
         public void CreatePurolatorSheet()
         {
-            string device = DetermineDevice(serialsList[0]);
+            string[] lines = TextBox.Text.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+            string device = DetermineDevice(lines[0]);
             UpdateMessage($"Creating Purolator sheets for {device}");
             if (device == "IPTVARXI6HD" || device == "IPTVTCXI6HD" || device == "SCXI11BEI")
             {
@@ -816,6 +825,7 @@ namespace Rogers_Toolbox_v3._0
                 InfoBox.Content = ($"Okay {username}, all serials copied with '{userInput}' between them!");
             }
         }
+        
         // For Database 
         public class FirestoreService
         {
