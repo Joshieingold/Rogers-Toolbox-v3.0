@@ -359,9 +359,9 @@ namespace Rogers_Toolbox_v3._0
                 using (var workbook = new XLWorkbook(filePath))
                 {
                     var worksheet = workbook.Worksheet(1); // Load the first sheet
-                    serialsList.Clear();
+                    serialsList.Clear(); // clears old serial list
 
-                    // Iterate through rows in the first column
+                    // Iterate through rows in the first column and get their values.
                     foreach (var row in worksheet.RowsUsed())
                     {
                         var cellValue = row.Cell(1).GetValue<string>();
@@ -371,6 +371,7 @@ namespace Rogers_Toolbox_v3._0
                         }
                     }
                 }
+                // reverses serials if the use wishes.
                 if (reverseImport == true)
                 {
                     ReverseSerials(serialsList);
@@ -418,6 +419,7 @@ namespace Rogers_Toolbox_v3._0
         } // Opens file dialog asking for paths to multiple excel files.
         private void CombineExcelFiles(string[] filePaths)
         {
+            // creates a new workbook
             var combinedWorkbook = new XLWorkbook();
             var combinedWorksheet = combinedWorkbook.Worksheets.Add("Combined");
 
@@ -429,7 +431,7 @@ namespace Rogers_Toolbox_v3._0
                 {
                     var worksheet = workbook.Worksheet(1); // Use the first worksheet
                     var rows = worksheet.RowsUsed();
-
+                    // gets all data from all rows and columns of selected files and adds them to the combined sheet.
                     foreach (var row in rows)
                     {
                         for (int col = 1; col <= row.LastCellUsed().Address.ColumnNumber; col++)
