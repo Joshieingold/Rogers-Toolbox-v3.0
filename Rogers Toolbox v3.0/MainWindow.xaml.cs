@@ -735,6 +735,7 @@ namespace Rogers_Toolbox_v3._0
         } //  Determines the device model based on the serial number.
         static void ExecuteBatchScript(string scriptContent)
         {
+            UpdateMessage("Executing the Batch File");
             string tempFilePath = "temp_cmd.bat";
 
             // Write script content to a temporary file
@@ -759,19 +760,19 @@ namespace Rogers_Toolbox_v3._0
             // Clean up temporary file
             File.Delete(tempFilePath);
         } // exectures a cmd script given to it.
-        public static string FormatSheet(int numSplit)
+        public static string FormatSheet(int numSplit,) // THIS NEEDS TO BE FORMATTING BY TEXT IN THE TEXT BOX!
         {
-
-            if (serialsList == null || serialsList.Count == 0)
+            UpdateMessage("Formatting Strings"); // NEW
+            if (serialsList == null || serialsList.Count == 0) // !
             {
                 return "No serials available.";
             }
-            int totalStrings = serialsList.Count;
+            int totalStrings = serialsList.Count; // !!
             StringBuilder formattedList = new StringBuilder();
 
             for (int i = 0; i < totalStrings; i += numSplit)
             {
-                List<string> chunk = serialsList.GetRange(i, Math.Min(numSplit, totalStrings - i));
+                List<string> chunk = serialsList.GetRange(i, Math.Min(numSplit, totalStrings - i)); // !!
 
                 chunk.Reverse();
 
@@ -783,8 +784,10 @@ namespace Rogers_Toolbox_v3._0
         } // generates a formatted list of the serials based on the number the user wants to split them by.
         public void CreateLotSheet()
         {
-            UpdateMessage("Creating your lot sheets");
-            string serialString = String.Join(Environment.NewLine, serialsList);
+            UpdateMessage("Printing your lot sheets");
+            string[] lines = TextBox.Text.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries); // NEW
+            // string serialString = String.Join(Environment.NewLine, serialsList);
+            string serialString = String.Join(Environment.NewLine, lines) // Maybe this gets the serial list and puts it for the lot sheet?
             File.WriteAllText(bartenderNotepad, serialString + Environment.NewLine);
 
             // Create and execute batch file
@@ -799,7 +802,9 @@ namespace Rogers_Toolbox_v3._0
         public void CreateBarcodes()
         {
             UpdateMessage("Creating your barcodes");
-            string serialString = String.Join(Environment.NewLine, serialsList);
+            string[] lines = TextBox.Text.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries); // NEW
+            // string serialString = String.Join(Environment.NewLine, serialsList);
+            string serialString = String.Join(Environment.NewLine, lines) // Maybe this gets the serial list and puts it for the barcodes?
             File.WriteAllText(bartenderNotepad, serialString + Environment.NewLine);
 
             // Create and execute batch file
@@ -905,3 +910,20 @@ namespace Rogers_Toolbox_v3._0
 
     }
 }
+
+
+// TO DO      
+// 1. The print lots sheets should open a dialog box that will also make the outside papers for you if you select yes. 
+// 2. The database UI still needs to sclae to full screen view.
+// 3. Make printing things use the textbox not the serial list. - Tried? Not sure if it worked though.
+    // 3.1. The actual FormatSheet function needs to be getting its data from the textbox.
+// 4. Make a way to easily edit data in the database to account for errors.
+// 5. Printing should have progress updates based on the process being done, not just once it is finished.
+// 6. Make the buttons have some highlight on mouse over.
+// 7. Make the CTR's in the CTR sheet customizable in settings.
+// 8. Option to remove duplicates in the textbox.
+// 9. Option to capitalize your serials in the textbox.
+// 10. Have a static link to an excel file in settings that will allow for comparing with ERP data, similar to the existing comparison tool.
+// 11. Have a splitter that allows for you to split serials of a list into different lists that all have their own import options.
+// 12. Make the CTR Import speed actually control the speed at which imports happen.
+// 13. Optimize the speed of the CTR import a bit more.
