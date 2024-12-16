@@ -975,3 +975,4 @@ namespace Rogers_Toolbox_v3._0
 // 12. Make the CTR Import speed actually control the speed at which imports happen.
     // - Identified some issues but not confident to change them without being able to test.
 // 13. Optimize the speed of the CTR import a bit more.
+// 14. Maybe someday I can add an option to push to database based on yur company. This is not so neccesary but yk it will be nice to implement in case.
