@@ -517,7 +517,7 @@ namespace Rogers_Toolbox_v3._0
                 WindowsInput.Native.VirtualKeyCode.LEFT);
 
             // Pause for the specified import speed
-            await Task.Delay(ctrImportSpeed);
+            await Task.Delay(ctrImportSpeed); // MAYBE WE DONT NEED TWO????
         } //  Pastes the data for the ctr that is called.
         private void UpdateTotals(Dictionary<string, int> totals, string itemCode, List<string> allowedDevices, Dictionary<string, string> deviceMapping)
         {
@@ -661,7 +661,7 @@ namespace Rogers_Toolbox_v3._0
                 InfoBox.Content = $"Updating {allContractors[count]}";
 
                 // Add a delay for visual feedback
-                await Task.Delay(ctrImportSpeed); // hopefully this is enough time between ctrs?
+                await Task.Delay(ctrImportSpeed); // hopefully this is enough time between ctrs? MAYBE WE DONT NEED TWO????
 
                 // Ensure we await the CtrAutomation method
                 await CtrAutomation(data); // This will now wait for the CtrAutomation to complete before moving on
@@ -759,7 +759,8 @@ namespace Rogers_Toolbox_v3._0
 
             // Clean up temporary file
             File.Delete(tempFilePath);
-        } // exectures a cmd script given to it.
+            UpdateMessage("Finishing up")
+        } // executes a cmd script given to it.
         public static string FormatSheet(int numSplit,) // THIS NEEDS TO BE FORMATTING BY TEXT IN THE TEXT BOX!
         {
             UpdateMessage("Formatting Strings"); // NEW
@@ -804,7 +805,7 @@ namespace Rogers_Toolbox_v3._0
             UpdateMessage("Creating your barcodes");
             string[] lines = TextBox.Text.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries); // NEW
             // string serialString = String.Join(Environment.NewLine, serialsList);
-            string serialString = String.Join(Environment.NewLine, lines) // Maybe this gets the serial list and puts it for the barcodes?
+            string serialString = String.Join(Environment.NewLine, lines); // Maybe this gets the serial list and puts it for the barcodes?
             File.WriteAllText(bartenderNotepad, serialString + Environment.NewLine);
 
             // Create and execute batch file
@@ -832,7 +833,46 @@ namespace Rogers_Toolbox_v3._0
                 InfoBox.Content = ($"Okay {username}, all serials copied with '{userInput}' between them!");
             }
         } // Opens the format serials box.
-        
+
+        private string MakeSerialsUppercase() 
+        {
+            string[] lines = TextBox.Text.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+            List<string> formattedList = new List<string>();
+
+            foreach (string line in lines) 
+            {
+                string uppercaseString = line.ToUpper();
+                formattedList.Add(uppercaseString);
+            }
+            
+            return string.Join(Environment.NewLine, formattedList);
+        }
+        private string RemoveDuplicates()
+        {
+            string[] lines = TextBox.Text.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+            HashSet<string> uniqueSerials = new HashSet<string>();
+            List<string> duplicates = new List<string>();
+
+            foreach (string line in lines)
+            {
+                if (!uniqueSerials.Add(line))
+                {
+                    duplicates.Add(line); // Track duplicates
+                }
+            }
+
+            // Show a dialog box with removed serials
+            if (duplicates.Count > 0)
+            {
+                string removedMessage = $"Removed {duplicates.Count} serials:\n\n" + string.Join(Environment.NewLine, duplicates);
+                MessageBox.Show(removedMessage, "Duplicates Removed", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+
+            // Return the cleaned list of serials as a single string
+            return string.Join(Environment.NewLine, uniqueSerials);
+        }
+
+
         // For Database 
         public class FirestoreService
         {
@@ -915,15 +955,23 @@ namespace Rogers_Toolbox_v3._0
 // TO DO      
 // 1. The print lots sheets should open a dialog box that will also make the outside papers for you if you select yes. 
 // 2. The database UI still needs to sclae to full screen view.
-// 3. Make printing things use the textbox not the serial list. - Tried? Not sure if it worked though.
+// 3. Make printing things use the textbox not the serial list. 
     // 3.1. The actual FormatSheet function needs to be getting its data from the textbox.
 // 4. Make a way to easily edit data in the database to account for errors.
-// 5. Printing should have progress updates based on the process being done, not just once it is finished.
+// X. Printing should have progress updates based on the process being done, not just once it is finished. 
 // 6. Make the buttons have some highlight on mouse over.
 // 7. Make the CTR's in the CTR sheet customizable in settings.
 // 8. Option to remove duplicates in the textbox.
+    // Created a function for this now just need to add it to the UI.
 // 9. Option to capitalize your serials in the textbox.
+    // X Add function to make all serials in textbox capital.
+    // 9.2. Make processing function that will update the display for the user.
+    // 9.3. Make this option appear in the Format Serials window. 
 // 10. Have a static link to an excel file in settings that will allow for comparing with ERP data, similar to the existing comparison tool.
 // 11. Have a splitter that allows for you to split serials of a list into different lists that all have their own import options.
+    // 11.1. Have a function that allows for the serials to be split based on the devices determined.
+    // 11.2. Have a window dedicated to showing the results.
+    // 11.3. Have this window have 3 small import buttons below each list.
 // 12. Make the CTR Import speed actually control the speed at which imports happen.
+    // - Identified some issues but not confident to change them without being able to test.
 // 13. Optimize the speed of the CTR import a bit more.
