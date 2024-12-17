@@ -51,7 +51,7 @@ namespace Rogers_Toolbox_v3._0
         {
             InitializeComponent();
             LoadSettings();
-            InfoBox.Content = ($"Welcome to Rogers Toolbox v3.0 {username}");
+            InfoBox.Content = ($"Welcome to Rogers Toolbox v3.1 {username}");
         }
         private void LoadSettings() // Applies the users settings to the global variables.
         {
@@ -517,7 +517,7 @@ namespace Rogers_Toolbox_v3._0
                 WindowsInput.Native.VirtualKeyCode.LEFT);
 
             // Pause for the specified import speed
-            await Task.Delay(ctrImportSpeed);
+            await Task.Delay(ctrImportSpeed); // MAYBE WE DONT NEED TWO????
         } //  Pastes the data for the ctr that is called.
         private void UpdateTotals(Dictionary<string, int> totals, string itemCode, List<string> allowedDevices, Dictionary<string, string> deviceMapping)
         {
@@ -661,7 +661,7 @@ namespace Rogers_Toolbox_v3._0
                 InfoBox.Content = $"Updating {allContractors[count]}";
 
                 // Add a delay for visual feedback
-                await Task.Delay(ctrImportSpeed); // hopefully this is enough time between ctrs?
+                await Task.Delay(ctrImportSpeed); // hopefully this is enough time between ctrs? MAYBE WE DONT NEED TWO????
 
                 // Ensure we await the CtrAutomation method
                 await CtrAutomation(data); // This will now wait for the CtrAutomation to complete before moving on
@@ -686,7 +686,7 @@ namespace Rogers_Toolbox_v3._0
             {
                 int formatBy = 10;
                 string puroSheet = FormatSheet(formatBy);
-
+                
                 // Write Purolator sheet to notepad
                 File.WriteAllText(bartenderNotepad, puroSheet + Environment.NewLine);
 
@@ -733,8 +733,9 @@ namespace Rogers_Toolbox_v3._0
             else
                 return "TG4482A";
         } //  Determines the device model based on the serial number.
-        static void ExecuteBatchScript(string scriptContent)
+        public void ExecuteBatchScript(string scriptContent)
         {
+            UpdateMessage("Executing the Batch File");
             string tempFilePath = "temp_cmd.bat";
 
             // Write script content to a temporary file
@@ -758,33 +759,44 @@ namespace Rogers_Toolbox_v3._0
 
             // Clean up temporary file
             File.Delete(tempFilePath);
-        } // exectures a cmd script given to it.
-        public static string FormatSheet(int numSplit)
-        {
+            UpdateMessage("Finished Printing!");
 
-            if (serialsList == null || serialsList.Count == 0)
+        } // executes a cmd script given to it.
+        public string FormatSheet(int numSplit)
+        {
+            UpdateMessage("Formatting the Serials");
+            // Split TextBox content into lines, removing empty entries
+            string[] lines = TextBox.Text.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+
+            if (lines == null || lines.Length == 0)
             {
                 return "No serials available.";
             }
-            int totalStrings = serialsList.Count;
+
+            int totalStrings = lines.Length;
             StringBuilder formattedList = new StringBuilder();
 
             for (int i = 0; i < totalStrings; i += numSplit)
             {
-                List<string> chunk = serialsList.GetRange(i, Math.Min(numSplit, totalStrings - i));
-
+                // Split into chunks and reverse each chunk
+                List<string> chunk = lines.Skip(i).Take(numSplit).ToList();
                 chunk.Reverse();
 
+                // Example placeholder for device determination
                 formattedList.AppendLine(DetermineDevice(chunk[0]));
 
+                // Append the reversed chunk to the formatted list
                 formattedList.AppendLine(string.Join(Environment.NewLine, chunk));
             }
+
             return formattedList.ToString();
-        } // generates a formatted list of the serials based on the number the user wants to split them by.
+        }
         public void CreateLotSheet()
         {
-            UpdateMessage("Creating your lot sheets");
-            string serialString = String.Join(Environment.NewLine, serialsList);
+            UpdateMessage("Printing your lot sheets");
+            string[] lines = TextBox.Text.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries); // NEW
+            // string serialString = String.Join(Environment.NewLine, serialsList);
+            string serialString = String.Join(Environment.NewLine, lines); // Maybe this gets the serial list and puts it for the lot sheet?
             File.WriteAllText(bartenderNotepad, serialString + Environment.NewLine);
 
             // Create and execute batch file
@@ -799,7 +811,9 @@ namespace Rogers_Toolbox_v3._0
         public void CreateBarcodes()
         {
             UpdateMessage("Creating your barcodes");
-            string serialString = String.Join(Environment.NewLine, serialsList);
+            string[] lines = TextBox.Text.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries); // NEW
+            // string serialString = String.Join(Environment.NewLine, serialsList);
+            string serialString = String.Join(Environment.NewLine, lines); // Maybe this gets the serial list and puts it for the barcodes?
             File.WriteAllText(bartenderNotepad, serialString + Environment.NewLine);
 
             // Create and execute batch file
@@ -826,8 +840,62 @@ namespace Rogers_Toolbox_v3._0
                 System.Windows.Clipboard.SetText(outputText);
                 InfoBox.Content = ($"Okay {username}, all serials copied with '{userInput}' between them!");
             }
+            if (inputWindow.UpperCaseClick == true)
+            {
+                serialsList = MakeSerialsUppercase();
+                UpdateSerialsDisplay();
+                LoadSettings();
+            }
+            if (inputWindow.DuplicateFind == true)
+            {
+                serialsList = RemoveDuplicates();
+                UpdateSerialsDisplay();
+                LoadSettings();
+            }
         } // Opens the format serials box.
-        
+        private List<string> MakeSerialsUppercase() 
+        {
+            string[] lines = TextBox.Text.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+            List<string> formattedList = new List<string>();
+
+            foreach (string line in lines) 
+            {
+                string uppercaseString = line.ToUpper();
+                formattedList.Add(uppercaseString);
+            }
+            
+            return formattedList;
+        }
+        private List<string> RemoveDuplicates()
+        {
+            string[] lines = TextBox.Text.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+            HashSet<string> uniqueSerials = new HashSet<string>();
+            List<string> duplicates = new List<string>();
+
+            foreach (string line in lines)
+            {
+                if (!uniqueSerials.Add(line))
+                {
+                    duplicates.Add(line); // Track duplicates
+                }
+            }
+
+            List<string> result = new List<string>();
+
+            // Add duplicates section
+            result.Add($"Found {duplicates.Count} duplicates:");
+            result.AddRange(duplicates);
+            result.Add("\n");
+
+            // Add separator and unique serials section
+            result.Add("Unique Serials:");
+            result.AddRange(uniqueSerials);
+
+            return result;
+        }
+
+
+
         // For Database 
         public class FirestoreService
         {
@@ -905,3 +973,30 @@ namespace Rogers_Toolbox_v3._0
 
     }
 }
+
+
+// TO DO:
+// 1. The print lots sheets should open a dialog box that will also make the outside papers for you if you select yes. 
+// 2. The database UI still needs to sclae to full screen view.
+// 4. Make a way to easily edit data in the database to account for errors.
+// 6. Make the buttons have some highlight on mouse over.
+// 7. Make the CTR's in the CTR sheet customizable in settings.
+// 10. Have a static link to an excel file in settings that will allow for comparing with ERP data, similar to the existing comparison tool.
+// 11. Have a splitter that allows for you to split serials of a list into different lists that all have their own import options.
+    // 11.1. Have a function that allows for the serials to be split based on the devices determined.
+    // 11.2. Have a window dedicated to showing the results.
+    // 11.3. Have this window have 3 small import buttons below each list.
+// 12. Make the CTR Import speed actually control the speed at which imports happen.
+    // - Identified some issues but not confident to change them without being able to test.
+// 13. Optimize the speed of the CTR import a bit more.
+// 14. Maybe someday I can add an option to push to database based on your company. This is not so neccesary but yk it will be nice to implement in case.
+
+// COMPLETED:
+// x. Make printing things use the textbox not the serial list. 
+// x. The actual FormatSheet function needs to be getting its data from the textbox.
+// x. Printing should have progress updates based on the process being done, not just once it is finished. 
+// x Add function to make all serials in textbox capital.
+// x. Option to capitalize your serials in the textbox.
+// x. Make processing function that will update the display for the user.
+// x. Make this option appear in the Format Serials window. 
+// x. Option to remove duplicates in the textbox.
