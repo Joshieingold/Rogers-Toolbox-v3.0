@@ -51,7 +51,7 @@ namespace Rogers_Toolbox_v3._0
         {
             InitializeComponent();
             LoadSettings();
-            InfoBox.Content = ($"Welcome to Rogers Toolbox v3.0 {username}");
+            InfoBox.Content = ($"Welcome to Rogers Toolbox v3.1 {username}");
         }
         private void LoadSettings() // Applies the users settings to the global variables.
         {
@@ -791,7 +791,6 @@ namespace Rogers_Toolbox_v3._0
 
             return formattedList.ToString();
         }
-
         public void CreateLotSheet()
         {
             UpdateMessage("Printing your lot sheets");
