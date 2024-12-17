@@ -20,5 +20,7 @@
             <Button Content="OK" Width="75" Margin="5" Click="OkButton_Click" Background="#FF424242" BorderBrush="#FF3F4A33" Foreground="White" />
             <Button Content="Cancel" Width="75" Margin="5" Click="CancelButton_Click" Foreground="White" Background="#FF424242" BorderBrush="#FF4D3232" />
         </StackPanel>
+        <Button Content="Make Uppercase" Click ="MakeUppercase_Click" HorizontalAlignment="Left" Height="23" Margin="5,30,0,0" Grid.Row="2" VerticalAlignment="Top" Width="169" Background="#FF424242" Foreground="White" Grid.RowSpan="2"/>
+        <Button Content="Remove Duplicates" Click="DuplicateFind_Click" Height="23" Margin="189,30,10,0" Grid.Row="2" VerticalAlignment="Top" Background="#FF424242" Foreground="White" Grid.RowSpan="2"/>
     </Grid>
 </Window>

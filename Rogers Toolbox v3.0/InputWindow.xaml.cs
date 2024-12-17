@@ -24,6 +24,8 @@ namespace Rogers_Toolbox_v3._0
             InitializeComponent();
         }
         public string InputValue { get; private set; }
+        public bool UpperCaseClick = false;
+        public bool DuplicateFind = false;
         private void OkButton_Click(object sender, RoutedEventArgs e)
         {
             InputValue = InputTextBox.Text; // Get the value from the TextBox
@@ -35,6 +37,14 @@ namespace Rogers_Toolbox_v3._0
         {
             DialogResult = false; // Indicate cancellation
             Close(); // Close the window
+        }
+        private void MakeUppercase_Click(object sender, RoutedEventArgs e)
+        {
+            UpperCaseClick ^= true;
+        }
+        private void DuplicateFind_Click(object sender, RoutedEventArgs e)
+        {
+            DuplicateFind ^= true;
         }
     }
 }
