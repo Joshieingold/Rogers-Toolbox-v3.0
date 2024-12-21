@@ -41,9 +41,6 @@
     <Setting Name="CTRString" Type="System.String" Scope="User">
       <Value Profile="(Default)">8052 8067 8975 8986 8990 8994 8997</Value>
     </Setting>
-    <Setting Name="Setting" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
     <Setting Name="CombinedCTRsBool" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
