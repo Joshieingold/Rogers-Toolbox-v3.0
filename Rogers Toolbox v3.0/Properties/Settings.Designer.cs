@@ -154,5 +154,41 @@ namespace Rogers_Toolbox_v3._0.Properties {
                 this["IsBomWip"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("8017 8037 8038 8041 8047 8080 8093")]
+        public string RobitailleString {
+            get {
+                return ((string)(this["RobitailleString"]));
+            }
+            set {
+                this["RobitailleString"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("8052 8067 8975 8986 8990 8994 8997")]
+        public string CTRString {
+            get {
+                return ((string)(this["CTRString"]));
+            }
+            set {
+                this["CTRString"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool CombinedCTRsBool {
+            get {
+                return ((bool)(this["CombinedCTRsBool"]));
+            }
+            set {
+                this["CombinedCTRsBool"] = value;
+            }
+        }
     }
 }
