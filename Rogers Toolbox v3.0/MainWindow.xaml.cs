@@ -44,6 +44,7 @@ namespace Rogers_Toolbox_v3._0
         private static List<string> failedList = new List<string>(); // For WMS import storing the failed serials.
         private static int ctrImportSpeed = 0; // The speed that the user will get to click input locations between CTRS.
         private int remainingSerials; // Stores the count of remaining serials.
+        
 
         // Base Functions
 
@@ -66,6 +67,10 @@ namespace Rogers_Toolbox_v3._0
             wmsCheckPixel = Properties.Settings.Default.WMSCheckPixel;
             ctrImportSpeed = Properties.Settings.Default.CTRUpdateSpeed;
             isBomWip = Properties.Settings.Default.IsBomWip;
+
+
+
+
         }
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e) // Counts the new lines in the textbox to allow for a serial count next to the serials.
         {
@@ -540,9 +545,22 @@ namespace Rogers_Toolbox_v3._0
                 }
             }
         } // Uses a dictionary to get data totals.
+
+        private List<string> ConvertStringstoCTR(string SettingsList)
+        {
+
+            string[] items = SettingsList.Split(' ');
+
+            // Create a List to maintain order and uniqueness
+            List<string> orderedUniqueList = new List<string>();
+            return orderedUniqueList;
+        }
         private List<string> AnalyzeSheet(IXLWorksheet sheet) // loops through each contractor (many times) and stores the data for them given their list of devices.
         {
             var results = new List<string>();
+
+
+
 
             var CTRList = new HashSet<string> { "8052", "8067", "8975", "8986", "8990", "8994", "8997" };
             var robitailleList = new HashSet<string> { "8017", "8037", "8038", "8041", "8047", "8080", "8093" };
