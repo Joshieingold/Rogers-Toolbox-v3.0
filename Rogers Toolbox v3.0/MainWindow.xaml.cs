@@ -1040,17 +1040,13 @@ namespace Rogers_Toolbox_v3._0
 
 // TO DO:
 // 1. The print lots sheets should open a dialog box that will also make the outside papers for you if you select yes. 
-// 2. The database UI still needs to sclae to full screen view.
 // 4. Make a way to easily edit data in the database to account for errors.
 // 6. Make the buttons have some highlight on mouse over.
-// 7. Make the CTR's in the CTR sheet customizable in settings.
 // 10. Have a static link to an excel file in settings that will allow for comparing with ERP data, similar to the existing comparison tool.
 // 11. Have a splitter that allows for you to split serials of a list into different lists that all have their own import options.
-    // 11.1. Have a function that allows for the serials to be split based on the devices determined.
-    // 11.2. Have a window dedicated to showing the results.
-    // 11.3. Have this window have 3 small import buttons below each list.
-// 12. Make the CTR Import speed actually control the speed at which imports happen.
-    // - Identified some issues but not confident to change them without being able to test.
+// 11.1. Have a function that allows for the serials to be split based on the devices determined.
+// 11.2. Have a window dedicated to showing the results.
+// 11.3. Have this window have 3 small import buttons below each list.
 // 13. Optimize the speed of the CTR import a bit more.
 // 14. Maybe someday I can add an option to push to database based on your company. This is not so neccesary but yk it will be nice to implement in case.
 
@@ -1063,3 +1059,6 @@ namespace Rogers_Toolbox_v3._0
 // x. Make processing function that will update the display for the user.
 // x. Make this option appear in the Format Serials window. 
 // x. Option to remove duplicates in the textbox.
+// x. Make the CTR's in the CTR sheet customizable in settings.
+// x. The database UI still needs to scale to full screen view.
+// x. Make the CTR Import speed actually control the speed at which imports happen.

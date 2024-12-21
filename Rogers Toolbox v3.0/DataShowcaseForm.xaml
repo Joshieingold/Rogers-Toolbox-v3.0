@@ -15,7 +15,7 @@
 
         <!-- Date Selection Section -->
         <GroupBox Header="Select Date Range" Background="#FF1F1F1F" Foreground="White" Margin="20,20,20,80" Padding="10" BorderBrush="{x:Null}">
-            <StackPanel Orientation="Vertical" Margin="0,0,398,0" HorizontalAlignment="Center" VerticalAlignment="Top">
+            <StackPanel Orientation="Vertical" Margin="10,0,408,0" VerticalAlignment="Top">
                 <StackPanel Orientation="Horizontal" Margin="0,5">
                     <Label Content="Start Date:" Width="100" Foreground="White"/>
                     <DatePicker x:Name="startDatePicker" Width="200" Margin="5,0"/>
@@ -43,7 +43,7 @@
         </DataGrid>
 
         <!-- Summary Section -->
-        <StackPanel Orientation="Horizontal" Margin="400,48,32,38">
+        <StackPanel Orientation="Horizontal" Margin="0,48,32,38" HorizontalAlignment="Right" Width="368">
             <StackPanel Orientation="Vertical" Width="168" Height="232">
                 <Label Content="Device Totals:" Foreground="White" FontSize="16" Width="167"/>
                 <TextBlock x:Name="deviceSumLabel" Foreground="White" FontWeight="Bold" Height="154" Width="156"/>
