@@ -45,6 +45,12 @@ namespace Rogers_Toolbox_v3._0
         private static int ctrImportSpeed = 0; // The speed that the user will get to click input locations between CTRS.
         private int remainingSerials; // Stores the count of remaining serials.
 
+        private string CtrString = null;
+        private string RobString = null;
+        private bool CombineCTR = true;
+
+
+
         // Base Functions
 
         public MainWindow()
@@ -66,6 +72,14 @@ namespace Rogers_Toolbox_v3._0
             wmsCheckPixel = Properties.Settings.Default.WMSCheckPixel;
             ctrImportSpeed = Properties.Settings.Default.CTRUpdateSpeed;
             isBomWip = Properties.Settings.Default.IsBomWip;
+
+            CtrString = Properties.Settings.Default.CTRString;
+            RobString = Properties.Settings.Default.RobitailleString;
+            CombineCTR = Properties.Settings.Default.CombinedCTRsBool;
+
+
+
+
         }
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e) // Counts the new lines in the textbox to allow for a serial count next to the serials.
         {
@@ -540,12 +554,37 @@ namespace Rogers_Toolbox_v3._0
                 }
             }
         } // Uses a dictionary to get data totals.
+
+        private List<string> ConvertStringsToCTR(string SettingsList)
+        {
+            // Split the input string into an array of strings
+            string[] items = SettingsList.Split(' ');
+
+            // Create a List to maintain order and uniqueness
+            List<string> orderedUniqueList = new List<string>();
+
+            // Iterate over each item
+            foreach (string item in items)
+            {
+                // Add the item to the list only if it is not already present
+                if (!orderedUniqueList.Contains(item))
+                {
+                    orderedUniqueList.Add(item);
+                }
+            }
+
+            // Return the unique and ordered list
+            return orderedUniqueList;
+        }
         private List<string> AnalyzeSheet(IXLWorksheet sheet) // loops through each contractor (many times) and stores the data for them given their list of devices.
         {
             var results = new List<string>();
 
-            var CTRList = new HashSet<string> { "8052", "8067", "8975", "8986", "8990", "8994", "8997" };
-            var robitailleList = new HashSet<string> { "8017", "8037", "8038", "8041", "8047", "8080", "8093" };
+
+
+
+            var CTRList = ConvertStringsToCTR(CtrString);
+            var robitailleList = ConvertStringsToCTR(RobString);
             var combinedCTRS = new List<string> { "8993", "8982" };
             var warehouseList = new HashSet<string> { "NB1", "NF1" };
 
@@ -575,6 +614,26 @@ namespace Rogers_Toolbox_v3._0
             {
                 "XB8", "XB7", "XI6", "XIONE", "PODS", "ONTS","CAM1", "CAM2", "CAM3", "ENTOS", "CODA"
             };
+
+            allContractors = new List<string>();
+            foreach (string robctr in robitailleList )
+            {
+                allContractors.Add(robctr);
+            }
+            foreach (string ctr in CTRList)
+            {
+                allContractors.Add(ctr);
+            }
+            if (CombineCTR) 
+            {
+                allContractors.Add("8993 & 8982");
+            }
+            foreach (string house in warehouseList)
+            {
+                allContractors.Add(house);
+            }
+            allContractors.Add("Cleaning Up");
+
 
 
             // Processing robitaille
@@ -615,20 +674,24 @@ namespace Rogers_Toolbox_v3._0
             // Processing Combined CTRS
 
             // Placing this outside in the hope that it will combine the numbers oganically
-            var combinedContractorTotals = contractorDevices.ToDictionary(device => device, device => 0);
-            foreach (var row in sheet.RowsUsed().Skip(2))
+            if (CombineCTR)
             {
-                var contractorId = row.Cell(8).GetValue<string>().Trim(); // Column H
-                var itemCode = row.Cell(6).GetValue<string>();           // Column F
-                var inventoryType = row.Cell(10).GetValue<string>();      // Column J
-
-                if ((contractorId == "8993" || contractorId == "8982") && inventoryType.StartsWith("CTR.Subready."))
+                var combinedContractorTotals = contractorDevices.ToDictionary(device => device, device => 0);
+                foreach (var row in sheet.RowsUsed().Skip(2))
                 {
-                    UpdateTotals(combinedContractorTotals, itemCode, contractorDevices, deviceMapping);
+                    var contractorId = row.Cell(8).GetValue<string>().Trim(); // Column H
+                    var itemCode = row.Cell(6).GetValue<string>();           // Column F
+                    var inventoryType = row.Cell(10).GetValue<string>();      // Column J
+
+                    if ((contractorId == "8993" || contractorId == "8982") && inventoryType.StartsWith("CTR.Subready."))
+                    {
+                        UpdateTotals(combinedContractorTotals, itemCode, contractorDevices, deviceMapping);
+                    }
                 }
+                var formattedTotals = FormatTotals(combinedContractorTotals, contractorDevices);
+                results.Add(formattedTotals);
             }
-            var formattedTotals = FormatTotals(combinedContractorTotals, contractorDevices);
-            results.Add(formattedTotals);
+            
 
 
             // Processing Warehouses.
