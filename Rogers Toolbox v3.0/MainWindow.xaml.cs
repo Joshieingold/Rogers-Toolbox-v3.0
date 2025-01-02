@@ -96,47 +96,43 @@ namespace Rogers_Toolbox_v3._0
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            // Blitz Import
-            if (((System.Windows.Controls.Button)sender).Content.ToString() == "Blitz")
+            var button = sender as System.Windows.Controls.Button;
+
+            if (button == null)
+                return;
+
+            switch (button.Name)
             {
-                BlitzImport();
+                case "BlitzButton":
+                    BlitzImport();
+                    break;
+                case "ImportButton":
+                    OpenExcel();
+                    break;
+                case "CTRButton":
+                    CombineExcels();
+                    break;
+                case "FlexiButton":
+                    FlexiProImport();
+                    break;
+                case "WMSButton":
+                    WMSImport();
+                    break;
+                case "PurolatorButton":
+                    CreatePurolatorSheet();
+                    break;
+                case "BarcodeButton":
+                    CreateBarcodes();
+                    break;
+                case "LotSheetButton":
+                    CreateLotSheet();
+                    break;
+                default:
+                    UpdateMessage("Unhandled button click!");
+                    break;
             }
-            // Import Excel
-            else if (((System.Windows.Controls.Button)sender).Content.ToString() == "Import")
-            {
-                OpenExcel();
-            }
-            // CTR Update
-            else if (((System.Windows.Controls.Button)sender).Content.ToString() == "CTR")
-            {
-                CombineExcels();
-            }
-            // Flexipro Import
-            else if (((System.Windows.Controls.Button)sender).Content.ToString() == "Flexi")
-            {
-                FlexiProImport();
-            }
-            // WMS Import
-            else if (((System.Windows.Controls.Button)sender).Content.ToString() == "WMS")
-            {
-                WMSImport();
-            }
-            // Print Purolator
-            else if (((System.Windows.Controls.Button)sender).Content.ToString() == "Purolator")
-            {
-                CreatePurolatorSheet();
-            }
-            // Print Barcodes
-            else if (((System.Windows.Controls.Button)sender).Content.ToString() == "Barcode")
-            {
-                CreateBarcodes();
-            }
-            // Print Lotsheet
-            else if (((System.Windows.Controls.Button)sender).Content.ToString() == "LotSheet")
-            {
-                CreateLotSheet();
-            }
-        } // Executes functions based on GUI buttons.
+        }
+        // Executes functions based on GUI buttons.
         private void SettingsButton_Click(object sender, RoutedEventArgs e) // Opens the settings menu.
         {
             SettingsWindow settingsWindow = new SettingsWindow();
@@ -221,51 +217,57 @@ namespace Rogers_Toolbox_v3._0
         } // Prints the serials as quickly as possible.
         private async void FlexiProImport()
         {
-            string currentDevice = DetermineDevice(serialsList[0]); // Declare outside the block
-            int quantityOfLoad = serialsList.Count(); // Declare outside the block
-            DateTime i = DateTime.Now;
-            DateTime utcDateTime = i.ToUniversalTime();
-
             string[] lines = TextBox.Text.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
-            UpdateMessage("Starting FlexiPro Import! Please click input location");
-            await Task.Delay(6000);  // Allows user to focus on the screen they want to import to
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-            foreach (string line in lines)
+            if (lines.Count() >= 1)
             {
-                UpdateMessage($"Working on serial {line}, {serialsList.Count()} Serials Remaining");
-                bool isPixelGood = CheckPixel("(250, 250, 250)", GetCurrentPixel(flexiProCheckPixel));
-                while (isPixelGood == false)
+                string currentDevice = DetermineDevice(lines[0]); // Declare outside the block
+                int quantityOfLoad = lines.Count(); // Declare outside the block
+                DateTime i = DateTime.Now;
+                DateTime utcDateTime = i.ToUniversalTime();
+                UpdateMessage("Starting FlexiPro Import! Please click input location");
+                await Task.Delay(6000);  // Allows user to focus on the screen they want to import to
+                Stopwatch stopwatch = new Stopwatch();
+                stopwatch.Start();
+                foreach (string line in lines)
                 {
-                    await Task.Delay(700);
-                    isPixelGood = CheckPixel("(250, 250, 250)", GetCurrentPixel(flexiProCheckPixel));
+                    UpdateMessage($"Working on serial {line}, {serialsList.Count()} Serials Remaining");
+                    bool isPixelGood = CheckPixel("(250, 250, 250)", GetCurrentPixel(flexiProCheckPixel));
+                    while (isPixelGood == false)
+                    {
+                        await Task.Delay(700);
+                        isPixelGood = CheckPixel("(250, 250, 250)", GetCurrentPixel(flexiProCheckPixel));
+                    }
+                    if (isPixelGood == true)
+                    {
+
+                        await SimulateTyping(line);
+                        await Task.Delay(100);
+                        SimulateTabKey();
+                        serialsList.Remove(line);
+                        UpdateSerialsDisplay();
+
+
+                        // Short Delay after finishing a serial
+                        await Task.Delay(flexiImportSpeed);
+                    }
                 }
-                if (isPixelGood == true)
+                if (isBomWip == true)
                 {
-
-                    await SimulateTyping(line);
-                    await Task.Delay(100);
-                    SimulateTabKey();
-                    serialsList.Remove(line);
-                    UpdateSerialsDisplay();
-                    
-
-                    // Short Delay after finishing a serial
-                    await Task.Delay(flexiImportSpeed);
+                    FirestoreHandler firestoreHandler = new FirestoreHandler();
+                    await firestoreHandler.PushToDatabase(currentDevice, username, quantityOfLoad, utcDateTime); // Pass DateTime directly
+                    UpdateMessage("Sending data to database");
                 }
+                stopwatch.Stop();
+                TimeSpan ts = stopwatch.Elapsed;
+                string elapsedTime = String.Format("{0:00}h : {1:00}m : {2:00}s : {3:00} ms",
+                ts.Hours, ts.Minutes, ts.Seconds,
+                ts.Milliseconds / 10);
+                UpdateMessage($"Import Completed in {elapsedTime}");
+
             }
-            if (isBomWip == true)
-            {
-                FirestoreHandler firestoreHandler = new FirestoreHandler();
-                await firestoreHandler.PushToDatabase(currentDevice, username, quantityOfLoad, utcDateTime); // Pass DateTime directly
-                UpdateMessage("Sending data to database");
+            else {
+                UpdateMessage("No Serials Identified, aborting FlexiPro Import.");
             }
-            stopwatch.Stop();
-            TimeSpan ts = stopwatch.Elapsed;
-            string elapsedTime = String.Format("{0:00}h : {1:00}m : {2:00}s : {3:00} ms",
-            ts.Hours, ts.Minutes, ts.Seconds,
-            ts.Milliseconds / 10);
-            UpdateMessage($"Import Completed in {elapsedTime}");
 
         } // Prints the serials Whenever it finds the loading bar has changes.
         private async void WMSImport()

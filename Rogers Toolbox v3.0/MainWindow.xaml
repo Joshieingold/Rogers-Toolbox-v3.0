@@ -16,6 +16,7 @@
                 <Setter Property="Cursor" Value="Hand" />
                 <Setter Property="HorizontalAlignment" Value="Center" />
                 <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="Margin" Value="2"/>
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="Button">
@@ -25,7 +26,7 @@
                                     CornerRadius="4">
                                 <Grid>
                                     <Image Source="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" 
-                                           Width="24" Height="24" 
+                                           Width="35" Height="35" 
                                            VerticalAlignment="Center" HorizontalAlignment="Center" />
                                 </Grid>
                             </Border>
@@ -46,7 +47,7 @@
         <!-- Navigation Bar -->
         <DockPanel Background="#FF1F1F1F" Height="61" VerticalAlignment="Top">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <Button x:Name="Import" Tag="button_6.png" Click="Button_Click" Width="48" Height="48" />
+                <Button x:Name="ImportButton" Tag="button_6.png" Click="Button_Click" Width="48" Height="48" />
                 <Button x:Name="BlitzButton" Tag="blitz_import_icon.png" Click="Button_Click" Width="48" Height="48" />
                 <Button x:Name="FlexiButton" Tag="button_8.png" Click="Button_Click" Width="48" Height="48" />
                 <Button x:Name="WMSButton" Tag="button_7.png" Click="Button_Click" Width="48" Height="48" />
@@ -61,8 +62,8 @@
             </StackPanel>
         </DockPanel>
 
-        <Label x:Name="InfoBox" Content="Welcome to The Rogers Toolbox v3." 
-               HorizontalAlignment="Center" Height="34" Margin="0,66,0,0" 
+        <Label x:Name="InfoBox" Content="Welcome to The Rogers Toolbox v3.1" 
+               HorizontalAlignment="Center" Height="34" Margin="0,78,0,0" 
                VerticalAlignment="Top" Width="500" Foreground="White" 
                FontSize="15" FontFamily="Sitka Text" Background="#FF1F1F1F" 
                HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
