@@ -6,7 +6,7 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="BlitzImportSpeed" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">5</Value>
+      <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="FlexiImportSpeed" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">700</Value>
@@ -30,7 +30,7 @@
       <Value Profile="(Default)">30,149</Value>
     </Setting>
     <Setting Name="CTRUpdateSpeed" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">7000</Value>
+      <Value Profile="(Default)">700</Value>
     </Setting>
     <Setting Name="IsBomWip" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
@@ -39,10 +39,10 @@
       <Value Profile="(Default)">8017 8037 8038 8041 8047 8080 8093</Value>
     </Setting>
     <Setting Name="CTRString" Type="System.String" Scope="User">
-      <Value Profile="(Default)">8052 8067 8975 8986 8990 8994 8997</Value>
+      <Value Profile="(Default)">8052 8067 8975 8994 8997</Value>
     </Setting>
     <Setting Name="CombinedCTRsBool" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
+      <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
 </SettingsFile>

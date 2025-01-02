@@ -37,7 +37,7 @@ namespace Rogers_Toolbox_v3._0.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
         public int BlitzImportSpeed {
             get {
                 return ((int)(this["BlitzImportSpeed"]));
@@ -133,7 +133,7 @@ namespace Rogers_Toolbox_v3._0.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("7000")]
+        [global::System.Configuration.DefaultSettingValueAttribute("700")]
         public int CTRUpdateSpeed {
             get {
                 return ((int)(this["CTRUpdateSpeed"]));
@@ -169,7 +169,7 @@ namespace Rogers_Toolbox_v3._0.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("8052 8067 8975 8986 8990 8994 8997")]
+        [global::System.Configuration.DefaultSettingValueAttribute("8052 8067 8975 8994 8997")]
         public string CTRString {
             get {
                 return ((string)(this["CTRString"]));
@@ -181,7 +181,7 @@ namespace Rogers_Toolbox_v3._0.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool CombinedCTRsBool {
             get {
                 return ((bool)(this["CombinedCTRsBool"]));
