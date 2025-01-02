@@ -18,6 +18,7 @@ using System.Windows.Forms;
 using Google.Cloud.Firestore;
 using static Rogers_Toolbox_v3._0.MainWindow;
 using System.Management;
+using Google.Cloud.Firestore.V1;
 
 
 
@@ -45,7 +46,7 @@ namespace Rogers_Toolbox_v3._0
         private static List<string> failedList = new List<string>(); // For WMS import storing the failed serials.
         private static int ctrImportSpeed = 0; // The speed that the user will get to click input locations between CTRS.
         private int remainingSerials; // Stores the count of remaining serials.
-
+        public bool isOnline = true;
         private string CtrString = null;
         private string RobString = null;
         private bool CombineCTR = true;
@@ -58,7 +59,61 @@ namespace Rogers_Toolbox_v3._0
         {
             InitializeComponent();
             LoadSettings();
-            InfoBox.Content = ($"Welcome to Rogers Toolbox v3.1 {username}");
+            CheckDeviceStatusAsync().ContinueWith(t =>
+            {
+                if (!isOnline)
+                {
+                    // If not online, close the window
+                    this.Dispatcher.Invoke(() => this.Close());
+                }
+                else
+                {
+                    // If online, update the InfoBox
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        InfoBox.Content = $"Welcome to Rogers Toolbox v3.1 {username}";
+                    });
+                }
+            }, TaskScheduler.FromCurrentSynchronizationContext());
+        }
+        public async Task CheckDeviceStatusAsync()
+        {
+            {
+                string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Keys", "bomwipstore-firebase-adminsdk-jhqev-acb5705838.json");
+                string pathToKey = filePath; // Update with your key's path
+                Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", pathToKey);
+                FirestoreDb firestoreDb = FirestoreDb.Create("bomwipstore");  // Replace with your actual Firestore project ID
+                CollectionReference collection = firestoreDb.Collection("bom-wip");  // Adjust the collection name as needed
+
+                // Query to order by 'Date' (timestamp) in descending order and get the most recent document
+                Query query = collection.OrderByDescending("Date").Limit(1);
+
+                // Get snapshot of the query result
+                QuerySnapshot snapshot = await query.GetSnapshotAsync();
+
+                // Check if we have a document
+                if (snapshot.Documents.Count > 0)
+                {
+                    // Get the most recent document
+                    DocumentSnapshot document = snapshot.Documents.FirstOrDefault();
+
+                    // Check if the document contains the 'Device' field
+                    if (document != null && document.ContainsField("Device"))
+                    {
+                        string deviceStatus = document.GetValue<string>("Device");
+
+                        // If the device status is "Shutdown", set isOnline to false
+                        if (deviceStatus == "Shutdown")
+                        {
+                            isOnline = false;
+                        }
+                        else
+                        {
+                            isOnline = true; // Assuming you want to set it to true if not shutdown
+                        }
+                    }
+                }
+            }
         }
         private void LoadSettings() // Applies the users settings to the global variables.
         {
@@ -73,7 +128,6 @@ namespace Rogers_Toolbox_v3._0
             wmsCheckPixel = Properties.Settings.Default.WMSCheckPixel;
             ctrImportSpeed = Properties.Settings.Default.CTRUpdateSpeed;
             isBomWip = Properties.Settings.Default.IsBomWip;
-
             CtrString = Properties.Settings.Default.CTRString;
             RobString = Properties.Settings.Default.RobitailleString;
             CombineCTR = Properties.Settings.Default.CombinedCTRsBool;
@@ -145,14 +199,12 @@ namespace Rogers_Toolbox_v3._0
             // Open settings window as a modal dialog
             settingsWindow.ShowDialog();
         }
-
-        // Event handler for when settings are saved
         private void SettingsWindow_SettingsSaved(object sender, EventArgs e)
         {
             // Reload settings after they are saved
             LoadSettings();
             UpdateMessage($"Your settings have been updated {username}");
-        }
+        } // Event handler for when settings are saved
         private void DatabaseButton_Click(object sender, RoutedEventArgs e)
         {
             DataShowcaseForm databaseForm = new DataShowcaseForm();
