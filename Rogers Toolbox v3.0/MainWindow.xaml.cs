@@ -17,6 +17,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Google.Cloud.Firestore;
 using static Rogers_Toolbox_v3._0.MainWindow;
+using System.Management;
 
 
 
@@ -742,43 +743,68 @@ namespace Rogers_Toolbox_v3._0
 
         // For Printing
 
-        public void CreatePurolatorSheet() // Prints purolator sheet based on device information gathered globally using a cmd script.
+        public void CreatePurolatorSheet()
         {
-            string[] lines = TextBox.Text.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
-            string device = DetermineDevice(lines[0]);
-            UpdateMessage($"Creating Purolator sheets for {device}");
-            if (device == "IPTVARXI6HD" || device == "IPTVTCXI6HD" || device == "SCXI11BEI")
+            try
             {
-                int formatBy = 10;
+                string[] lines = TextBox.Text.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+                string device = DetermineDevice(lines[0]);
+                UpdateMessage($"Creating Purolator sheets for {device}");
+
+                // Define formatBy based on device type
+                int formatBy = (device == "IPTVARXI6HD" || device == "IPTVTCXI6HD" || device == "SCXI11BEI") ? 10 : 8;
                 string puroSheet = FormatSheet(formatBy);
-                
-                // Write Purolator sheet to notepad
+
+                // Write Purolator sheet to Notepad
                 File.WriteAllText(bartenderNotepad, puroSheet + Environment.NewLine);
 
-                // Create and execute batch file
-                string cmdScript = @" @echo off
-                                    set ""target_printer=55EXP_Purolator""
-                                    powershell -Command ""Get-WmiObject -Query 'SELECT * FROM Win32_Printer WHERE ShareName=''%target_printer%'' ' | Invoke-WmiMethod -Name SetDefaultPrinter""
-                                    ""C:\Seagull\BarTender 7.10\Standard\bartend.exe"" /f=C:\BTAutomation\XI6.btw /p /x
-                                    ";
-                ExecuteBatchScript(cmdScript);
+                // Verify printer availability
+                if (!IsPrinterAvailable("55EXP_Purolator"))
+                {
+                    UpdateMessage("Printer '55EXP_Purolator' is unavailable. Purolator sheet creation aborted.");
+                    return;
+                }
+
+                // Create batch script
+                string batchFile = device == "IPTVARXI6HD" || device == "IPTVTCXI6HD" || device == "SCXI11BEI"
+                    ? @"@echo off
+               set ""target_printer=55EXP_Purolator""
+               powershell -Command ""Get-WmiObject -Query 'SELECT * FROM Win32_Printer WHERE ShareName=''%target_printer%'' ' | Invoke-WmiMethod -Name SetDefaultPrinter""
+               ""C:\Seagull\BarTender 7.10\Standard\bartend.exe"" /f=C:\BTAutomation\XI6.btw /p /x"
+                    : @"@echo off
+               set ""target_printer=55EXP_Purolator""
+               powershell -Command ""Get-WmiObject -Query 'SELECT * FROM Win32_Printer WHERE ShareName=''%target_printer%'' ' | Invoke-WmiMethod -Name SetDefaultPrinter""
+               ""C:\Seagull\BarTender 7.10\Standard\bartend.exe"" /f=C:\BTAutomation\CODA.btw /p /x";
+
+                // Execute the batch script
+                try
+                {
+                    ExecuteBatchScript(batchFile);
+                }
+                catch
+                {
+                    UpdateMessage("Failed to execute the Purolator sheet batch script.");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                int formatBy = 8;
-                string puroSheet = FormatSheet(formatBy);
+                UpdateMessage($"An unexpected error occurred: {ex.Message}");
+            }
+        }
+        private bool IsPrinterAvailable(string printerName)
+        {
+            try
+            {
+                var query = $"SELECT * FROM Win32_Printer WHERE ShareName='{printerName}'";
+                var searcher = new ManagementObjectSearcher(query);
+                var results = searcher.Get();
 
-                // Write Purolator sheet to notepad
-                File.WriteAllText(bartenderNotepad, puroSheet + Environment.NewLine);
-
-                // Create and execute batch file
-                string cmdScript = @"
-                                    @echo off
-                                    set ""target_printer=55EXP_Purolator""
-                                    powershell -Command ""Get-WmiObject -Query 'SELECT * FROM Win32_Printer WHERE ShareName=''%target_printer%'' ' | Invoke-WmiMethod -Name SetDefaultPrinter""
-                                    ""C:\Seagull\BarTender 7.10\Standard\bartend.exe"" /f=C:\BTAutomation\CODA.btw /p /x
-                                    ";
-                ExecuteBatchScript(cmdScript);
+                return results.Count > 0;
+            }
+            catch
+            {
+                // Log or handle any issues while querying the printer
+                return false;
             }
         }
         public static string DetermineDevice(string serial)
