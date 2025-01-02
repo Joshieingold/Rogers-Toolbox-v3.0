@@ -134,10 +134,24 @@ namespace Rogers_Toolbox_v3._0
             }
         }
         // Executes functions based on GUI buttons.
-        private void SettingsButton_Click(object sender, RoutedEventArgs e) // Opens the settings menu.
+        private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
+            // Create settings window
             SettingsWindow settingsWindow = new SettingsWindow();
-            settingsWindow.ShowDialog(); // Opens the settings window as a modal dialog
+
+            // Subscribe to the SettingsSaved event
+            settingsWindow.SettingsSaved += SettingsWindow_SettingsSaved;
+
+            // Open settings window as a modal dialog
+            settingsWindow.ShowDialog();
+        }
+
+        // Event handler for when settings are saved
+        private void SettingsWindow_SettingsSaved(object sender, EventArgs e)
+        {
+            // Reload settings after they are saved
+            LoadSettings();
+            UpdateMessage($"Your settings have been updated {username}");
         }
         private void DatabaseButton_Click(object sender, RoutedEventArgs e)
         {
@@ -1115,8 +1129,6 @@ namespace Rogers_Toolbox_v3._0
 
 
 // TO DO:
-// 6. Make the buttons have some highlight on mouse over.
-
 
 // For version 3.2:
 // 4. Make a way to easily edit data in the database to account for errors.
@@ -1141,3 +1153,4 @@ namespace Rogers_Toolbox_v3._0
 // x. The database UI still needs to scale to full screen view.
 // x. Make the CTR Import speed actually control the speed at which imports happen.
 // x. Optimize the speed of the CTR import a bit more.
+// x. Make the buttons have some highlight on mouse over.
