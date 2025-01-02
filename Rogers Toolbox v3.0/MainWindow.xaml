@@ -44,7 +44,7 @@
         </Grid.Resources>
 
         <!-- Navigation Bar -->
-        <DockPanel Background="#FF1F1F1F" Margin="0,0,0,379">
+        <DockPanel Background="#FF1F1F1F" Height="61" VerticalAlignment="Top">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <Button x:Name="Import" Tag="button_6.png" Click="Button_Click" Width="48" Height="48" />
                 <Button x:Name="BlitzButton" Tag="blitz_import_icon.png" Click="Button_Click" Width="48" Height="48" />
