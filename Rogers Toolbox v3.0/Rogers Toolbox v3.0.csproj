@@ -294,6 +294,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <Resource Include="button_6.png" />
+    <Resource Include="button_6_red.png" />
+    <Resource Include="button_7_red.png" />
     <Content Include="Keys\bomwipstore-firebase-adminsdk-jhqev-acb5705838.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -364,9 +367,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include=".nuget\mouse-keyboard-hook-logo.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="button_6.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="button_7.png" />

@@ -1039,17 +1039,17 @@ namespace Rogers_Toolbox_v3._0
 
 
 // TO DO:
-// 1. The print lots sheets should open a dialog box that will also make the outside papers for you if you select yes. 
-// 4. Make a way to easily edit data in the database to account for errors.
+// 6. Make the buttons have some highlight on mouse over.
+
 
 // For version 3.2:
-// 6. Make the buttons have some highlight on mouse over.
+// 4. Make a way to easily edit data in the database to account for errors.
+// 1. The print lots sheets should open a dialog box that will also make the outside papers for you if you select yes. 
 // 10. Have a static link to an excel file in settings that will allow for comparing with ERP data, similar to the existing comparison tool.
 // 10.1. Have a splitter that allows for you to split serials of a list into different lists that all have their own import options.
 // 10.2. Have a function that allows for the serials to be split based on the devices determined.
 // 10.3. Have a window dedicated to showing the results.
 // 10.4. Have this window have 3 small import buttons below each list.
-// 13. Optimize the speed of the CTR import a bit more.
 // 14. Maybe someday I can add an option to push to database based on your company. This is not so neccesary but yk it will be nice to implement in case.
 
 // COMPLETED:
@@ -1064,3 +1064,4 @@ namespace Rogers_Toolbox_v3._0
 // x. Make the CTR's in the CTR sheet customizable in settings.
 // x. The database UI still needs to scale to full screen view.
 // x. Make the CTR Import speed actually control the speed at which imports happen.
+// x. Optimize the speed of the CTR import a bit more.
