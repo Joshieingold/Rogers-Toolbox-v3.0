@@ -761,7 +761,7 @@ namespace Rogers_Toolbox_v3._0
                 // Verify printer availability
                 if (!IsPrinterAvailable("55EXP_Purolator"))
                 {
-                    UpdateMessage("Printer '55EXP_Purolator' is unavailable. Purolator sheet creation aborted.");
+                    UpdateMessage("Printer unavailable. Purolator sheet creation aborted.");
                     return;
                 }
 
@@ -884,37 +884,85 @@ namespace Rogers_Toolbox_v3._0
         }
         public void CreateLotSheet()
         {
-            UpdateMessage("Printing your lot sheets");
-            string[] lines = TextBox.Text.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries); // NEW
-            // string serialString = String.Join(Environment.NewLine, serialsList);
-            string serialString = String.Join(Environment.NewLine, lines); // Maybe this gets the serial list and puts it for the lot sheet?
-            File.WriteAllText(bartenderNotepad, serialString + Environment.NewLine);
+            try
+            {
+                UpdateMessage("Printing your lot sheets");
 
-            // Create and execute batch file
-            string cmdScript = @" @echo off
-                                    set ""target_printer=55EXP_2""
-                                    powershell -Command ""Get-WmiObject -Query 'SELECT * FROM Win32_Printer WHERE ShareName=''%target_printer%'' ' | Invoke-WmiMethod -Name SetDefaultPrinter""
-                                    ""C:\Seagull\BarTender 7.10\Standard\bartend.exe"" /f=C:\BTAutomation\NewPrintertest.btw /p /x
-                                    ";
-            ExecuteBatchScript(cmdScript);
+                // Read serials from TextBox
+                string[] lines = TextBox.Text.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+                string serialString = string.Join(Environment.NewLine, lines);
 
+                // Write serials to the lot sheet in Notepad
+                File.WriteAllText(bartenderNotepad, serialString + Environment.NewLine);
+
+                // Check printer availability
+                if (!IsPrinterAvailable("55EXP_2"))
+                {
+                    UpdateMessage("Printer '55EXP_2' is unavailable. Lot sheet creation aborted.");
+                    return;
+                }
+
+                // Create batch script
+                string cmdScript = @"@echo off
+                              set ""target_printer=55EXP_2""
+                              powershell -Command ""Get-WmiObject -Query 'SELECT * FROM Win32_Printer WHERE ShareName=''%target_printer%'' ' | Invoke-WmiMethod -Name SetDefaultPrinter""
+                              ""C:\Seagull\BarTender 7.10\Standard\bartend.exe"" /f=C:\BTAutomation\NewPrintertest.btw /p /x";
+
+                // Execute the batch script
+                try
+                {
+                    ExecuteBatchScript(cmdScript);
+                }
+                catch
+                {
+                    UpdateMessage("Failed to execute the lot sheet batch script.");
+                }
+            }
+            catch (Exception ex)
+            {
+                UpdateMessage($"An unexpected error occurred: {ex.Message}");
+            }
         } // prints all serials to a lot sheet.
         public void CreateBarcodes()
         {
-            UpdateMessage("Creating your barcodes");
-            string[] lines = TextBox.Text.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries); // NEW
-            // string serialString = String.Join(Environment.NewLine, serialsList);
-            string serialString = String.Join(Environment.NewLine, lines); // Maybe this gets the serial list and puts it for the barcodes?
-            File.WriteAllText(bartenderNotepad, serialString + Environment.NewLine);
+            try
+            {
+                UpdateMessage("Creating your barcodes");
 
-            // Create and execute batch file
-            string cmdScript = @" @echo off
-                                    set ""target_printer=55EXP_Barcode""
-                                    powershell -Command ""Get-WmiObject -Query 'SELECT * FROM Win32_Printer WHERE ShareName=''%target_printer%'' ' | Invoke-WmiMethod -Name SetDefaultPrinter""
-                                    ""C:\Seagull\BarTender 7.10\Standard\bartend.exe"" /f=C:\BTAutomation\singlebar.btw /p /x
-                                    ";
-            ExecuteBatchScript(cmdScript);
+                // Read serials from TextBox
+                string[] lines = TextBox.Text.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+                string serialString = string.Join(Environment.NewLine, lines);
 
+                // Write serials to the barcode file in Notepad
+                File.WriteAllText(bartenderNotepad, serialString + Environment.NewLine);
+
+                // Check printer availability
+                if (!IsPrinterAvailable("55EXP_Barcode"))
+                {
+                    UpdateMessage("Printer '55EXP_Barcode' is unavailable. Barcode creation aborted.");
+                    return;
+                }
+
+                // Create batch script
+                string cmdScript = @"@echo off
+                              set ""target_printer=55EXP_Barcode""
+                              powershell -Command ""Get-WmiObject -Query 'SELECT * FROM Win32_Printer WHERE ShareName=''%target_printer%'' ' | Invoke-WmiMethod -Name SetDefaultPrinter""
+                              ""C:\Seagull\BarTender 7.10\Standard\bartend.exe"" /f=C:\BTAutomation\singlebar.btw /p /x";
+
+                // Execute the batch script
+                try
+                {
+                    ExecuteBatchScript(cmdScript);
+                }
+                catch
+                {
+                    UpdateMessage("Failed to execute the barcode batch script.");
+                }
+            }
+            catch (Exception ex)
+            {
+                UpdateMessage($"An unexpected error occurred: {ex.Message}");
+            }
         } // prints all serials to the barcode printer.
 
         // For Serial Formatter
