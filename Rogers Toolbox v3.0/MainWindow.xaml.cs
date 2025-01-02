@@ -46,7 +46,7 @@ namespace Rogers_Toolbox_v3._0
         private static List<string> failedList = new List<string>(); // For WMS import storing the failed serials.
         private static int ctrImportSpeed = 0; // The speed that the user will get to click input locations between CTRS.
         private int remainingSerials; // Stores the count of remaining serials.
-        public bool isOnline = true;
+        public bool isOnline = true; // Kill Switch
         private string CtrString = null;
         private string RobString = null;
         private bool CombineCTR = true;
@@ -114,7 +114,7 @@ namespace Rogers_Toolbox_v3._0
                     }
                 }
             }
-        }
+        } // Kill Switch Detection
         private void LoadSettings() // Applies the users settings to the global variables.
         {
             username = Properties.Settings.Default.Username;
@@ -186,8 +186,7 @@ namespace Rogers_Toolbox_v3._0
                     UpdateMessage("Unhandled button click!");
                     break;
             }
-        }
-        // Executes functions based on GUI buttons.
+        } // Handles buttons that are based on functions in this window.
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
             // Create settings window
@@ -198,7 +197,7 @@ namespace Rogers_Toolbox_v3._0
 
             // Open settings window as a modal dialog
             settingsWindow.ShowDialog();
-        }
+        } // opens settings window.
         private void SettingsWindow_SettingsSaved(object sender, EventArgs e)
         {
             // Reload settings after they are saved
@@ -1183,16 +1182,16 @@ namespace Rogers_Toolbox_v3._0
 // TO DO:
 
 // For version 3.2:
-// 4. Make a way to easily edit data in the database to account for errors.
-// 1. The print lots sheets should open a dialog box that will also make the outside papers for you if you select yes. 
-// 10. Have a static link to an excel file in settings that will allow for comparing with ERP data, similar to the existing comparison tool.
-// 10.1. Have a splitter that allows for you to split serials of a list into different lists that all have their own import options.
-// 10.2. Have a function that allows for the serials to be split based on the devices determined.
-// 10.3. Have a window dedicated to showing the results.
-// 10.4. Have this window have 3 small import buttons below each list.
-// 14. Maybe someday I can add an option to push to database based on your company. This is not so neccesary but yk it will be nice to implement in case.
+// 1. Maybe have a way to edit data in the database easily? Kill Switch complicates this though.
+// 1.1 if this is done, the kill switch will need to check a seperate collection which isnt a terrible idea.
+// 2. The print lots sheets should open a dialog box that will also make the outside papers for you if you select yes. 
+// 3. Have a static link to an excel file in settings that will allow for comparing with ERP data, similar to the existing comparison tool.
+// 3.1. Have a splitter that allows for you to split serials of a list into different lists that all have their own import options.
+// 3.2. Have a window dedicated to showing the results.
+// 3.3. Have a function that allows for the serials to be split based on the devices determined.
+// 4. Maybe someday I can add an option to push to database based on your company. This would mean firebase collection based on the settings window.
 
-// COMPLETED:
+// 3.1 Change Log:
 // x. Make printing things use the textbox not the serial list. 
 // x. The actual FormatSheet function needs to be getting its data from the textbox.
 // x. Printing should have progress updates based on the process being done, not just once it is finished. 
