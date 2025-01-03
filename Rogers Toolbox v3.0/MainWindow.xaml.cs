@@ -1181,6 +1181,10 @@ namespace Rogers_Toolbox_v3._0
 
 // TO DO:
 
+
+// BUGS:
+// 1. Printing Purolator sheets now does not recognize properly based on device type.
+
 // For version 3.2:
 // 1. Maybe have a way to edit data in the database easily? Kill Switch complicates this though.
 // 1.1 if this is done, the kill switch will need to check a seperate collection which isnt a terrible idea.
