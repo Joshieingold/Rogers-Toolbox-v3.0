@@ -1194,6 +1194,7 @@ namespace Rogers_Toolbox_v3._0
 // 3.2. Have a window dedicated to showing the results.
 // 3.3. Have a function that allows for the serials to be split based on the devices determined.
 // 4. Maybe someday I can add an option to push to database based on your company. This would mean firebase collection based on the settings window.
+// 5. The Shutdown feature should be based in its own collection and that collection should be periodically checked.
 
 // 3.1 Change Log:
 // x. Make printing things use the textbox not the serial list. 
