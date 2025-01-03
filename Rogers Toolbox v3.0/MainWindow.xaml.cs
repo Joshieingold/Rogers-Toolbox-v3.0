@@ -1200,6 +1200,7 @@ namespace Rogers_Toolbox_v3._0
 // 6.2. Could also show the amount of devices needed per day to maintain on track. updated based on the latest data! 
 // 7. Add hover labels for the buttons.
 // 8. Maybe make the database styling nicer.
+// 9. Add titles for each of the windows.
 
 // 3.1 Change Log:
 // x. Make printing things use the textbox not the serial list. 
