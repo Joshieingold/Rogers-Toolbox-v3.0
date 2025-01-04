@@ -59,6 +59,8 @@ namespace Rogers_Toolbox_v3._0
         {
             InitializeComponent();
             LoadSettings();
+            StatsWindow statsWindow = new StatsWindow();
+            statsWindow.Show();
             CheckDeviceStatusAsync().ContinueWith(t =>
             {
                 if (!isOnline)
