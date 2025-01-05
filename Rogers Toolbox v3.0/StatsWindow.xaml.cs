@@ -17,13 +17,61 @@ namespace Rogers_Toolbox_v3._0
         private static readonly int PodsRequired = 600;
 
         private static readonly int XB8Actual = 3760;
-        private static readonly int XB7fcActual = 960;
+        private static readonly int XB7fcActual = 500;
         private static readonly int XB7FCActual = 500;
         private static readonly int Xi6tActual = 2600;
         private static readonly int Xi6AActual = 600;
         private static readonly int XiOneActual = 1300;
         private static readonly int PodsActual = 630;
+        public SeriesCollection CreateChart(int goal, int completed)
+        {
+            // getting the data for the chart.
+            double overflow = 0;
+            double required = goal;
+            double actual = completed;
 
+            // preparing the data for the chart.
+            if (required - actual < 0)
+            {
+                overflow = Math.Abs(required - actual);
+            }
+            if (overflow > 0)
+            {
+                actual = completed - overflow;
+            }
+            required = goal - (actual + overflow);
+            if (required < 0)
+            {
+                required = 0;
+            }
+            // Creating the chart.
+            SeriesCollection = new SeriesCollection
+            {
+            new PieSeries
+            {
+                Title = "Completed",
+                Values = new ChartValues<double> { completed },
+                DataLabels = false,
+                LabelPoint = chartPoint => $"{chartPoint.Y} ({chartPoint.Participation:P})"
+            },
+            new PieSeries
+            {
+                Title = "Unfinished",
+                Values = new ChartValues<double> { required },
+                DataLabels = false,
+                LabelPoint = chartPoint => $"{chartPoint.Y} ({chartPoint.Participation:P})"
+            },
+            new PieSeries
+            {
+                Title = "Overflow",
+                Values = new ChartValues<double> { overflow },
+                DataLabels = false,
+                LabelPoint = chartPoint => $"{chartPoint.Y} ({chartPoint.Participation:P})"
+            }
+        };
+
+            return SeriesCollection;
+                } 
         private int RequiredTotal => XB8Required + XB7fcRequired + XB7FCRequired + Xi6tRequired + Xi6ARequired + XiOneRequired + PodsRequired;
         private int ActualTotal => XB8Actual + XB7fcActual + XB7FCActual + Xi6tActual + Xi6AActual + XiOneActual + PodsActual;
 
@@ -35,39 +83,12 @@ namespace Rogers_Toolbox_v3._0
 
             double totalActual = ActualTotal;
             double totalRequired = RequiredTotal;
-            double overflow = totalActual > totalRequired ? totalActual - totalRequired : 0;
-            double completed = Math.Min(totalActual, totalRequired);
-            double unfinished = totalRequired - completed;
 
+            TotalPieChart.Series = CreateChart(RequiredTotal, ActualTotal);
 
-            // Initialize SeriesCollection
-            SeriesCollection = new SeriesCollection
-    {
-        new PieSeries
-        {
-            Title = "Completed",
-            Values = new ChartValues<double> { completed },
-            DataLabels = true,
-            LabelPoint = chartPoint => $"{chartPoint.Y} ({chartPoint.Participation:P})"
-        },
-        new PieSeries
-        {
-            Title = "Unfinished",
-            Values = new ChartValues<double> { unfinished },
-            DataLabels = true,
-            LabelPoint = chartPoint => $"{chartPoint.Y} ({chartPoint.Participation:P})"
-        },
-        new PieSeries
-        {
-            Title = "Overflow",
-            Values = new ChartValues<double> { overflow },
-            DataLabels = true,
-            LabelPoint = chartPoint => $"{chartPoint.Y} ({chartPoint.Participation:P})"
-        }
-    };
 
             // Assign the SeriesCollection to the PieChart
-            TotalPieChart.Series = SeriesCollection;
+          
         }
     }
 }
