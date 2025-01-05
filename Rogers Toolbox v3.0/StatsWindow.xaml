@@ -8,12 +8,24 @@
         Title="StatsWindow" Height="450" Width="800">
     <Grid Background="#FF1E1E1E">
         <!-- Pie Chart -->
-        <lvc:PieChart x:Name="TotalPieChart" Margin="10,84,548,122" InnerRadius="70">
+        <lvc:PieChart x:Name="TotalPieChart" Margin="60,79,498,127" InnerRadius="70">
             <!-- SeriesCollection will be populated dynamically from code -->
         </lvc:PieChart>
 
         <!-- Labels -->
-        <Label Content="Statistics" HorizontalAlignment="Center" Height="68" VerticalAlignment="Top" Width="194" Foreground="White" FontSize="48" Margin="0,-13,0,0"/>
-        <Label Content="Total" HorizontalAlignment="Left" Margin="98,37,0,0" VerticalAlignment="Top" FontSize="24" FontWeight="Bold" Foreground="White"/>
+        <Label Content="Statistics" Foreground="White" FontSize="48" Margin="303,-13,303,379"/>
+        <Label Content="Total" Margin="148,37,586,355" FontSize="24" FontWeight="Bold" Foreground="White"/>
+
+        <DockPanel Background="#FF1F1F1F" Height="100" VerticalAlignment="Bottom">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <lvc:PieChart x:Name="XB8Chart" InnerRadius="70" Height="90"/>
+                <lvc:PieChart x:Name="CGMChart" InnerRadius="70" Height="90"/>
+                <lvc:PieChart x:Name="TGChart" InnerRadius="70" Height="90"/>
+                <lvc:PieChart x:Name="XI6TChart" InnerRadius="70" Height="90"/>
+                <lvc:PieChart x:Name="XI6AChart" InnerRadius="70" Height="90"/>
+                <lvc:PieChart x:Name="XIONEChart" InnerRadius="70" Height="90"/>
+                <lvc:PieChart x:Name="PODSChart" InnerRadius="70" Height="90"/>
+            </StackPanel>
+        </DockPanel>
     </Grid>
 </Window>

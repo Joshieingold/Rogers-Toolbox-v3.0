@@ -20,7 +20,7 @@ namespace Rogers_Toolbox_v3._0
         private static readonly int XB7fcActual = 500;
         private static readonly int XB7FCActual = 500;
         private static readonly int Xi6tActual = 2600;
-        private static readonly int Xi6AActual = 600;
+        private static readonly int Xi6AActual = 900;
         private static readonly int XiOneActual = 1300;
         private static readonly int PodsActual = 630;
         public SeriesCollection CreateChart(int goal, int completed)
@@ -85,7 +85,13 @@ namespace Rogers_Toolbox_v3._0
             double totalRequired = RequiredTotal;
 
             TotalPieChart.Series = CreateChart(RequiredTotal, ActualTotal);
-
+            XB8Chart.Series = CreateChart(XB8Required, XB8Actual);
+            CGMChart.Series = CreateChart(XB7fcRequired, XB7fcActual);
+            TGChart.Series = CreateChart(XB7FCRequired, XB7FCActual);
+            XI6TChart.Series = CreateChart(Xi6tRequired, Xi6tActual);
+            XI6AChart.Series = CreateChart(Xi6ARequired, Xi6AActual);
+            XIONEChart.Series = CreateChart(XiOneRequired, XiOneActual);
+            PODSChart.Series = CreateChart(PodsRequired, PodsActual);
 
             // Assign the SeriesCollection to the PieChart
           
