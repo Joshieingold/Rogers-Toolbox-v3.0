@@ -8,7 +8,7 @@
         Title="StatsWindow" Height="450" Width="800">
     <Grid Background="#FF1E1E1E">
         <Grid.Resources>
-            <!-- Style for Navigation Buttons with Icons -->
+            <!-- Style for Buttons -->
             <Style TargetType="Button">
                 <Setter Property="Background" Value="#FF1F1F1F" />
                 <Setter Property="BorderBrush" Value="Gray" />
@@ -20,16 +20,12 @@
                 <Setter Property="Margin" Value="2"/>
                 <Setter Property="Template">
                     <Setter.Value>
-                        <ControlTemplate TargetType="lvc:PieChart">
+                        <ControlTemplate TargetType="Button">
                             <Border Background="{TemplateBinding Background}" 
-                            BorderBrush="{TemplateBinding BorderBrush}" 
-                            BorderThickness="{TemplateBinding BorderThickness}" 
-                            CornerRadius="4">
-                                <Grid>
-                                    <Image Source="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" 
-                                   Width="40" Height="40" 
-                                   VerticalAlignment="Center" HorizontalAlignment="Center" />
-                                </Grid>
+                                    BorderBrush="{TemplateBinding BorderBrush}" 
+                                    BorderThickness="{TemplateBinding BorderThickness}" 
+                                    CornerRadius="4">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
                         </ControlTemplate>
                     </Setter.Value>
@@ -44,16 +40,39 @@
                 </Style.Triggers>
             </Style>
         </Grid.Resources>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="609*"/>
+            <ColumnDefinition Width="191*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Orientation="Horizontal" Margin="10" Grid.ColumnSpan="2">
+            <Label Content="Select Month:" Foreground="White" Margin="5"/>
+            <ComboBox x:Name="monthSelector" Width="150" Margin="5">
+                <ComboBoxItem Content="January" Tag="1"/>
+                <ComboBoxItem Content="February" Tag="2"/>
+                <ComboBoxItem Content="March" Tag="3"/>
+                <ComboBoxItem Content="April" Tag="4"/>
+                <ComboBoxItem Content="May" Tag="5"/>
+                <ComboBoxItem Content="June" Tag="6"/>
+                <ComboBoxItem Content="July" Tag="7"/>
+                <ComboBoxItem Content="August" Tag="8"/>
+                <ComboBoxItem Content="September" Tag="9"/>
+                <ComboBoxItem Content="October" Tag="10"/>
+                <ComboBoxItem Content="November" Tag="11"/>
+                <ComboBoxItem Content="December" Tag="12"/>
+            </ComboBox>
+            <Button Content="Fetch Data" Width="100" Margin="5" Click="FetchDataByMonth_Click"/>
+        </StackPanel>
 
         <!-- Pie Chart -->
-        <lvc:PieChart x:Name="TotalPieChart" Margin="38,50,563,190" InnerRadius="70">
+        <lvc:PieChart x:Name="TotalPieChart" Margin="506,64,96,176" InnerRadius="70" Grid.ColumnSpan="2">
             <!-- SeriesCollection will be populated dynamically from code -->
         </lvc:PieChart>
 
-        <!-- Labels -->
+        <!-- Loading Indicator -->
+        <ProgressBar x:Name="LoadingIndicator" IsIndeterminate="True" Visibility="Collapsed" Height="20" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="120,10,10,0"/>
 
         <!-- UniformGrid for PieCharts at the bottom -->
-        <DockPanel Background="#FF1F1F1F" Height="144" VerticalAlignment="Bottom">
+        <DockPanel Background="#FF1F1F1F" Height="144" VerticalAlignment="Bottom" Grid.ColumnSpan="2">
             <UniformGrid Rows="1" Columns="7" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <StackPanel>
                     <Label VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Arial" FontWeight="Bold" Foreground="White">XB8</Label>
