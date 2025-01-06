@@ -2,6 +2,7 @@
 using LiveCharts.Wpf;
 using System.Windows;
 using System;
+using System.Windows.Media;
 
 namespace Rogers_Toolbox_v3._0
 {
@@ -50,23 +51,27 @@ namespace Rogers_Toolbox_v3._0
             new PieSeries
             {
                 Title = "Completed",
-                Values = new ChartValues<double> { completed },
+                Values = new ChartValues<double> { actual },
                 DataLabels = false,
-                LabelPoint = chartPoint => $"{chartPoint.Y} ({chartPoint.Participation:P})"
+                LabelPoint = chartPoint => $"{chartPoint.Y} ({chartPoint.Participation:P})",
+                StrokeThickness = 1
             },
             new PieSeries
             {
                 Title = "Unfinished",
                 Values = new ChartValues<double> { required },
                 DataLabels = false,
-                LabelPoint = chartPoint => $"{chartPoint.Y} ({chartPoint.Participation:P})"
+                LabelPoint = chartPoint => $"{chartPoint.Y} ({chartPoint.Participation:P})",
+                StrokeThickness = 1
             },
             new PieSeries
             {
                 Title = "Overflow",
                 Values = new ChartValues<double> { overflow },
                 DataLabels = false,
-                LabelPoint = chartPoint => $"{chartPoint.Y} ({chartPoint.Participation:P})"
+                Fill = new SolidColorBrush(Color.FromRgb(0 ,102 ,204)),
+                LabelPoint = chartPoint => $"{chartPoint.Y} ({chartPoint.Participation:P})",
+                StrokeThickness = 1
             }
         };
 

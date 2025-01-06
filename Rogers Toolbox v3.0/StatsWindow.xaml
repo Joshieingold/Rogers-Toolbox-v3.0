@@ -7,25 +7,83 @@
         mc:Ignorable="d"
         Title="StatsWindow" Height="450" Width="800">
     <Grid Background="#FF1E1E1E">
+        <Grid.Resources>
+            <!-- Style for Navigation Buttons with Icons -->
+            <Style TargetType="Button">
+                <Setter Property="Background" Value="#FF1F1F1F" />
+                <Setter Property="BorderBrush" Value="Gray" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="Padding" Value="8" />
+                <Setter Property="Cursor" Value="Hand" />
+                <Setter Property="HorizontalAlignment" Value="Center" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="Margin" Value="2"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="lvc:PieChart">
+                            <Border Background="{TemplateBinding Background}" 
+                            BorderBrush="{TemplateBinding BorderBrush}" 
+                            BorderThickness="{TemplateBinding BorderThickness}" 
+                            CornerRadius="4">
+                                <Grid>
+                                    <Image Source="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" 
+                                   Width="40" Height="40" 
+                                   VerticalAlignment="Center" HorizontalAlignment="Center" />
+                                </Grid>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="#FF3A3A3A" />
+                    </Trigger>
+                    <Trigger Property="IsPressed" Value="True">
+                        <Setter Property="Background" Value="#FF555555" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </Grid.Resources>
+
         <!-- Pie Chart -->
-        <lvc:PieChart x:Name="TotalPieChart" Margin="60,79,498,127" InnerRadius="70">
+        <lvc:PieChart x:Name="TotalPieChart" Margin="38,50,563,190" InnerRadius="70">
             <!-- SeriesCollection will be populated dynamically from code -->
         </lvc:PieChart>
 
         <!-- Labels -->
-        <Label Content="Statistics" Foreground="White" FontSize="48" Margin="303,-13,303,379"/>
-        <Label Content="Total" Margin="148,37,586,355" FontSize="24" FontWeight="Bold" Foreground="White"/>
 
-        <DockPanel Background="#FF1F1F1F" Height="100" VerticalAlignment="Bottom">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <lvc:PieChart x:Name="XB8Chart" InnerRadius="70" Height="90"/>
-                <lvc:PieChart x:Name="CGMChart" InnerRadius="70" Height="90"/>
-                <lvc:PieChart x:Name="TGChart" InnerRadius="70" Height="90"/>
-                <lvc:PieChart x:Name="XI6TChart" InnerRadius="70" Height="90"/>
-                <lvc:PieChart x:Name="XI6AChart" InnerRadius="70" Height="90"/>
-                <lvc:PieChart x:Name="XIONEChart" InnerRadius="70" Height="90"/>
-                <lvc:PieChart x:Name="PODSChart" InnerRadius="70" Height="90"/>
-            </StackPanel>
+        <!-- UniformGrid for PieCharts at the bottom -->
+        <DockPanel Background="#FF1F1F1F" Height="144" VerticalAlignment="Bottom">
+            <UniformGrid Rows="1" Columns="7" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <StackPanel>
+                    <Label VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Arial" FontWeight="Bold" Foreground="White">XB8</Label>
+                    <lvc:PieChart x:Name="XB8Chart" InnerRadius="15" Height="75" Margin="4"/>
+                </StackPanel>
+                <StackPanel>
+                    <Label VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Arial" FontWeight="Bold" Foreground="White">XB7-fc</Label>
+                    <lvc:PieChart x:Name="CGMChart" InnerRadius="15" Height="75" Margin="4"/>
+                </StackPanel>
+                <StackPanel>
+                    <Label VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Arial" FontWeight="Bold" Foreground="White">XB7-FC</Label>
+                    <lvc:PieChart x:Name="TGChart" InnerRadius="15" Height="75" Margin="4"/>
+                </StackPanel>
+                <StackPanel>
+                    <Label VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Arial" FontWeight="Bold" Foreground="White">Xi6-T</Label>
+                    <lvc:PieChart x:Name="XI6TChart" InnerRadius="15" Height="75" Margin="2"/>
+                </StackPanel>
+                <StackPanel>
+                    <Label VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Arial" FontWeight="Bold" Foreground="White">Xi6-A</Label>
+                    <lvc:PieChart x:Name="XI6AChart" InnerRadius="15" Height="75" Margin="2"/>
+                </StackPanel>
+                <StackPanel>
+                    <Label VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Arial" FontWeight="Bold" Foreground="White">XiOne</Label>
+                    <lvc:PieChart x:Name="XIONEChart" InnerRadius="15" Height="75" Margin="2"/>
+                </StackPanel>
+                <StackPanel>
+                    <Label VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Arial" FontWeight="Bold" Foreground="White">Pods</Label>
+                    <lvc:PieChart x:Name="PODSChart" InnerRadius="15" Height="75" Margin="2"/>
+                </StackPanel>
+            </UniformGrid>
         </DockPanel>
     </Grid>
 </Window>
