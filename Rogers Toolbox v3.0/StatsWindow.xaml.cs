@@ -82,6 +82,16 @@ namespace Rogers_Toolbox_v3._0
                     DeviceGoals.XiOneRequired = Convert.ToInt32(goalsData["SCXI11BEI"]);
                     DeviceGoals.PodsRequired = Convert.ToInt32(goalsData["XE2SGROG1"]);
                 }
+                else
+                {
+                    DeviceGoals.XB8Required = 0;
+                    DeviceGoals.XB7fcRequired = 0;
+                    DeviceGoals.XB7FCRequired = 0;
+                    DeviceGoals.Xi6tRequired = 0;
+                    DeviceGoals.Xi6ARequired = 0;
+                    DeviceGoals.XiOneRequired = 0;
+                    DeviceGoals.PodsRequired = 0;
+                }
 
                 // Get the current year
                 int year = DateTime.Now.Year;
