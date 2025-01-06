@@ -44,9 +44,9 @@
             <ColumnDefinition Width="609*"/>
             <ColumnDefinition Width="191*"/>
         </Grid.ColumnDefinitions>
-        <StackPanel Orientation="Horizontal" Margin="10" Grid.ColumnSpan="2">
-            <Label Content="Select Month:" Foreground="White" Margin="5"/>
-            <ComboBox x:Name="monthSelector" Width="150" Margin="5">
+        <StackPanel Orientation="vertical" Margin="50,64,375,217">
+            <Label Content="Select Month:" Foreground="White" Margin="5" HorizontalAlignment="Center"/>
+            <ComboBox x:Name="monthSelector" Width="150" Margin="5" Background="#FFDDACAC" BorderBrush="Red">
                 <ComboBoxItem Content="January" Tag="1"/>
                 <ComboBoxItem Content="February" Tag="2"/>
                 <ComboBoxItem Content="March" Tag="3"/>
@@ -60,7 +60,7 @@
                 <ComboBoxItem Content="November" Tag="11"/>
                 <ComboBoxItem Content="December" Tag="12"/>
             </ComboBox>
-            <Button Content="Fetch Data" Width="100" Margin="5" Click="FetchDataByMonth_Click"/>
+            <Button Content="Update" Width="100" Height="30" Margin="5" Click="FetchDataByMonth_Click" Foreground="White" BorderBrush="Gray"/>
         </StackPanel>
 
         <!-- Pie Chart -->
