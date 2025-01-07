@@ -41,38 +41,51 @@
             </Style>
         </Grid.Resources>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="609*"/>
-            <ColumnDefinition Width="191*"/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="0*"/>
         </Grid.ColumnDefinitions>
-        <StackPanel Orientation="vertical" Margin="50,64,375,217">
-            <Label Content="Select Month:" Foreground="White" Margin="5" HorizontalAlignment="Center"/>
-            <ComboBox x:Name="monthSelector" Width="150" Margin="5" Background="#FFDDACAC" BorderBrush="Red">
-                <ComboBoxItem Content="January" Tag="1"/>
-                <ComboBoxItem Content="February" Tag="2"/>
-                <ComboBoxItem Content="March" Tag="3"/>
-                <ComboBoxItem Content="April" Tag="4"/>
-                <ComboBoxItem Content="May" Tag="5"/>
-                <ComboBoxItem Content="June" Tag="6"/>
-                <ComboBoxItem Content="July" Tag="7"/>
-                <ComboBoxItem Content="August" Tag="8"/>
-                <ComboBoxItem Content="September" Tag="9"/>
-                <ComboBoxItem Content="October" Tag="10"/>
-                <ComboBoxItem Content="November" Tag="11"/>
-                <ComboBoxItem Content="December" Tag="12"/>
-            </ComboBox>
-            <Button Content="Update" Width="100" Height="30" Margin="5" Click="FetchDataByMonth_Click" Foreground="White" BorderBrush="Gray"/>
-        </StackPanel>
+
+        <DockPanel Background="#FF1F1F1F" Margin="0,0,0,144">
+            <UniformGrid Rows="1" Columns="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <StackPanel Orientation="vertical">
+                    <Label Content="Select Month:" Foreground="White" Margin="5" HorizontalAlignment="Center"/>
+                    <ComboBox x:Name="monthSelector" Width="150" Margin="5" Background="#FFDDACAC" BorderBrush="Red">
+                        <ComboBoxItem Content="January" Tag="1"/>
+                        <ComboBoxItem Content="February" Tag="2"/>
+                        <ComboBoxItem Content="March" Tag="3"/>
+                        <ComboBoxItem Content="April" Tag="4"/>
+                        <ComboBoxItem Content="May" Tag="5"/>
+                        <ComboBoxItem Content="June" Tag="6"/>
+                        <ComboBoxItem Content="July" Tag="7"/>
+                        <ComboBoxItem Content="August" Tag="8"/>
+                        <ComboBoxItem Content="September" Tag="9"/>
+                        <ComboBoxItem Content="October" Tag="10"/>
+                        <ComboBoxItem Content="November" Tag="11"/>
+                        <ComboBoxItem Content="December" Tag="12"/>
+                    </ComboBox>
+                    <Button Content="Update" Width="100" Height="30" Margin="5" Click="FetchDataByMonth_Click" Foreground="White" BorderBrush="Gray"/>
+                </StackPanel>
+                <StackPanel Width="399">
+                    <Label VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Arial" FontWeight="Bold" Foreground="White" FontSize="24">Totals</Label>
+                    <lvc:PieChart x:Name="TotalPieChart" InnerRadius="40" Grid.ColumnSpan="2" Height="200" Width="200"/>
+                </StackPanel>
+            </UniformGrid>
+        </DockPanel>
+        
+        
 
         <!-- Pie Chart -->
-        <lvc:PieChart x:Name="TotalPieChart" Margin="506,64,96,176" InnerRadius="70" Grid.ColumnSpan="2">
-            <!-- SeriesCollection will be populated dynamically from code -->
-        </lvc:PieChart>
+        
+
+
+
+
 
         <!-- Loading Indicator -->
-        <ProgressBar x:Name="LoadingIndicator" IsIndeterminate="True" Visibility="Collapsed" Height="20" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="120,10,10,0"/>
+        <ProgressBar x:Name="LoadingIndicator" IsIndeterminate="True" Visibility="Collapsed" Height="20" VerticalAlignment="Bottom" />
 
         <!-- UniformGrid for PieCharts at the bottom -->
-        <DockPanel Background="#FF1F1F1F" Height="144" VerticalAlignment="Bottom" Grid.ColumnSpan="2">
+        <DockPanel Background="#FF1F1F1F" Height="144" VerticalAlignment="Bottom">
             <UniformGrid Rows="1" Columns="7" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <StackPanel>
                     <Label VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Arial" FontWeight="Bold" Foreground="White">XB8</Label>

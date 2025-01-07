@@ -84,13 +84,13 @@ namespace Rogers_Toolbox_v3._0
                 }
                 else
                 {
-                    DeviceGoals.XB8Required = 0;
-                    DeviceGoals.XB7fcRequired = 0;
-                    DeviceGoals.XB7FCRequired = 0;
-                    DeviceGoals.Xi6tRequired = 0;
-                    DeviceGoals.Xi6ARequired = 0;
-                    DeviceGoals.XiOneRequired = 0;
-                    DeviceGoals.PodsRequired = 0;
+                    DeviceGoals.XB8Required = 1;
+                    DeviceGoals.XB7fcRequired = 1;
+                    DeviceGoals.XB7FCRequired = 1;
+                    DeviceGoals.Xi6tRequired = 1;
+                    DeviceGoals.Xi6ARequired = 1;
+                    DeviceGoals.XiOneRequired = 1;
+                    DeviceGoals.PodsRequired = 1;
                 }
 
                 // Get the current year
@@ -202,13 +202,13 @@ namespace Rogers_Toolbox_v3._0
             public static int XiOneRequired { get; set; }
             public static int PodsRequired { get; set; }
 
-            public static int XB8Actual { get; set; }
-            public static int XB7fcActual { get; set; }
-            public static int XB7FCActual { get; set; }
-            public static int Xi6tActual { get; set; }
-            public static int Xi6AActual { get; set; }
-            public static int XiOneActual { get; set; }
-            public static int PodsActual { get; set; }
+            public static int XB8Actual { get; set; } = 1;
+            public static int XB7fcActual { get; set; } = 1;
+            public static int XB7FCActual { get; set; } = 1;
+            public static int Xi6tActual { get; set; } = 1;
+            public static int Xi6AActual { get; set; } = 1;
+            public static int XiOneActual { get; set; } = 1;
+            public static int PodsActual { get; set; } = 1;
         }
     }
 }

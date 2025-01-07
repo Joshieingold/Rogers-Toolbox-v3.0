@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Rogers Toolbox v3.1" Height="456" Width="800" Background="#FF2E2E2E">
+        Title="Rogers Toolbox v3.2" Height="456" Width="800" Background="#FF2E2E2E">
     <Grid>
         <Grid.Resources>
             <!-- Style for Navigation Buttons with Icons -->
@@ -45,22 +45,77 @@
         </Grid.Resources>
 
         <!-- Navigation Bar -->
+        <!-- Navigation Bar -->
         <DockPanel Background="#FF1F1F1F" Height="61" VerticalAlignment="Top">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <Button x:Name="ImportButton" Tag="button_6.png" Click="Button_Click" Width="48" Height="48" />
-                <Button x:Name="BlitzButton" Tag="blitz_import_icon.png" Click="Button_Click" Width="48" Height="48" />
-                <Button x:Name="FlexiButton" Tag="button_8.png" Click="Button_Click" Width="48" Height="48" />
-                <Button x:Name="WMSButton" Tag="button_7.png" Click="Button_Click" Width="48" Height="48" />
-                <Button x:Name="CTRButton" Tag="contractor_update_icon.png" Click="Button_Click" Width="48" Height="48" />
-                <Button x:Name="PurolatorButton" Tag="button_4.png" Click="Button_Click" Width="48" Height="48" />
-                <Button x:Name="BarcodeButton" Tag="button_5.png" Click="Button_Click" Width="48" Height="48" />
-                <Button x:Name="LotSheetButton" Tag="button_1.png" Click="Button_Click" Width="48" Height="48" />
-                <Button x:Name="CompareListButton" Tag="compare_lst_icon.png" Click="CompareListButton_Click" Width="48" Height="48" />
-                <Button x:Name="FormatSerialsButton" Tag="format_serials_icon.png" Click="InputButton_Click" Width="48" Height="48" />
-                <Button x:Name="DatabaseButton" Tag="database_icon.png" Click="DatabaseButton_Click" Width="48" Height="48" />
-                <Button x:Name="SettingsButton" Tag="settings_icon.png" Click="SettingsButton_Click" Width="48" Height="48" />
+                <Button x:Name="ImportButton" Tag="button_6.png" Click="Button_Click" Width="48" Height="48">
+                    <Button.ToolTip>
+                        <ToolTip Content="Import From Excel" Background="Black" Foreground="White" FontSize="12" />
+                    </Button.ToolTip>
+                </Button>
+                <Button x:Name="BlitzButton" Tag="blitz_import_icon.png" Click="Button_Click" Width="48" Height="48">
+                    <Button.ToolTip>
+                        <ToolTip Content="Blitz Import" Background="Black" Foreground="White" FontSize="12" />
+                    </Button.ToolTip>
+                </Button>
+                <Button x:Name="FlexiButton" Tag="button_8.png" Click="Button_Click" Width="48" Height="48">
+                    <Button.ToolTip>
+                        <ToolTip Content="FlexiPro Import" Background="Black" Foreground="White" FontSize="12" />
+                    </Button.ToolTip>
+                </Button>
+                <Button x:Name="WMSButton" Tag="button_7.png" Click="Button_Click" Width="48" Height="48">
+                    <Button.ToolTip>
+                        <ToolTip Content="WMS Import" Background="Black" Foreground="White" FontSize="12" />
+                    </Button.ToolTip>
+                </Button>
+                <Button x:Name="CTRButton" Tag="contractor_update_icon.png" Click="Button_Click" Width="48" Height="48">
+                    <Button.ToolTip>
+                        <ToolTip Content="Contractor Update" Background="Black" Foreground="White" FontSize="12" />
+                    </Button.ToolTip>
+                </Button>
+                <Button x:Name="PurolatorButton" Tag="button_4.png" Click="Button_Click" Width="48" Height="48">
+                    <Button.ToolTip>
+                        <ToolTip Content="Print Purolator Sheets" Background="Black" Foreground="White" FontSize="12" />
+                    </Button.ToolTip>
+                </Button>
+                <Button x:Name="BarcodeButton" Tag="button_5.png" Click="Button_Click" Width="48" Height="48">
+                    <Button.ToolTip>
+                        <ToolTip Content="Print Barcodes" Background="Black" Foreground="White" FontSize="12" />
+                    </Button.ToolTip>
+                </Button>
+                <Button x:Name="LotSheetButton" Tag="button_1.png" Click="Button_Click" Width="48" Height="48">
+                    <Button.ToolTip>
+                        <ToolTip Content="Print Lot Sheets" Background="Black" Foreground="White" FontSize="12" />
+                    </Button.ToolTip>
+                </Button>
+                <Button x:Name="CompareListButton" Tag="compare_lst_icon.png" Click="CompareListButton_Click" Width="48" Height="48">
+                    <Button.ToolTip>
+                        <ToolTip Content="Compare Lists" Background="Black" Foreground="White" FontSize="12" />
+                    </Button.ToolTip>
+                </Button>
+                <Button x:Name="FormatSerialsButton" Tag="format_serials_icon.png" Click="InputButton_Click" Width="48" Height="48">
+                    <Button.ToolTip>
+                        <ToolTip Content="Format Serials" Background="Black" Foreground="White" FontSize="12" />
+                    </Button.ToolTip>
+                </Button>
+                <Button x:Name="DatabaseButton" Tag="database_icon.png" Click="DatabaseButton_Click" Width="48" Height="48">
+                    <Button.ToolTip>
+                        <ToolTip Content="Database" Background="Black" Foreground="White" FontSize="12" />
+                    </Button.ToolTip>
+                </Button>
+                <Button x:Name="GraphButton" Tag="graph.png" Click="GraphButton_Click" Width="48" Height="48">
+                    <Button.ToolTip>
+                        <ToolTip Content="View Monthly Statistics" Background="Black" Foreground="White" FontSize="12" />
+                    </Button.ToolTip>
+                </Button>
+                <Button x:Name="SettingsButton" Tag="settings_icon.png" Click="SettingsButton_Click" Width="48" Height="48">
+                    <Button.ToolTip>
+                        <ToolTip Content="Settings" Background="Black" Foreground="White" FontSize="12" />
+                    </Button.ToolTip>
+                </Button>
             </StackPanel>
         </DockPanel>
+
 
         <Label x:Name="InfoBox" Content="Welcome to The Rogers Toolbox v3.1" 
                HorizontalAlignment="Center" Height="34" Margin="0,78,0,0" 

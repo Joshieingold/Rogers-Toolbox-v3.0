@@ -3,22 +3,16 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using WindowsInput;  // This is the correct namespace
-using Microsoft.Win32;
+using WindowsInput; 
 using ClosedXML.Excel;
 using System.Linq;
-using System.Diagnostics.Contracts;
 using System.Diagnostics;
 using System.IO;
-using DocumentFormat.OpenXml.Packaging;
 using System.Text;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Google.Cloud.Firestore;
-using static Rogers_Toolbox_v3._0.MainWindow;
 using System.Management;
-using Google.Cloud.Firestore.V1;
 
 
 
@@ -59,8 +53,6 @@ namespace Rogers_Toolbox_v3._0
         {
             InitializeComponent();
             LoadSettings();
-            StatsWindow statsWindow = new StatsWindow();
-            statsWindow.Show();
             CheckDeviceStatusAsync().ContinueWith(t =>
             {
                 if (!isOnline)
@@ -73,7 +65,7 @@ namespace Rogers_Toolbox_v3._0
                     // If online, update the InfoBox
                     this.Dispatcher.Invoke(() =>
                     {
-                        InfoBox.Content = $"Welcome to Rogers Toolbox v3.1 {username}";
+                        InfoBox.Content = $"Welcome to Rogers Toolbox v3.2 {username}";
                     });
                 }
             }, TaskScheduler.FromCurrentSynchronizationContext());
@@ -154,7 +146,14 @@ namespace Rogers_Toolbox_v3._0
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             var button = sender as System.Windows.Controls.Button;
-
+            CheckDeviceStatusAsync().ContinueWith(t =>
+            {
+                if (!isOnline)
+                {
+                    // If not online, close the window
+                    this.Dispatcher.Invoke(() => this.Close());
+                }
+            }, TaskScheduler.FromCurrentSynchronizationContext());
             if (button == null)
                 return;
 
@@ -216,6 +215,11 @@ namespace Rogers_Toolbox_v3._0
             CompareLists compareLists = new CompareLists();
             compareLists.ShowDialog();
         } // Opens the Compare List Pannel.
+        private void GraphButton_Click(object sender, RoutedEventArgs e)
+        {
+            StatsWindow statsWindow = new StatsWindow();
+            statsWindow.Show();
+        }
         private void InputButton_Click(object sender, RoutedEventArgs e)
         {
             ShowInputDialog();
@@ -285,6 +289,7 @@ namespace Rogers_Toolbox_v3._0
         } // Prints the serials as quickly as possible.
         private async void FlexiProImport()
         {
+
             string[] lines = TextBox.Text.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
             if (lines.Count() >= 1)
             {
@@ -847,6 +852,7 @@ namespace Rogers_Toolbox_v3._0
                 try
                 {
                     ExecuteBatchScript(batchFile);
+                    UpdateMessage($"Printing Purolator Sheets for {device}");
                 }
                 catch
                 {
@@ -1187,22 +1193,25 @@ namespace Rogers_Toolbox_v3._0
 // BUGS:
 // 1. Printing Purolator sheets now does not recognize properly based on device type.
 
-// For version 3.2:
-// 1. Maybe have a way to edit data in the database easily? Kill Switch complicates this though.
-// 1.1 if this is done, the kill switch will need to check a seperate collection which isnt a terrible idea.
-// 2. The print lots sheets should open a dialog box that will also make the outside papers for you if you select yes. 
-// 3. Have a static link to an excel file in settings that will allow for comparing with ERP data, similar to the existing comparison tool.
-// 3.1. Have a splitter that allows for you to split serials of a list into different lists that all have their own import options.
-// 3.2. Have a window dedicated to showing the results.
-// 3.3. Have a function that allows for the serials to be split based on the devices determined.
-// 4. Maybe someday I can add an option to push to database based on your company. This would mean firebase collection based on the settings window.
-// 5. The Shutdown feature should be based in its own collection and that collection should be periodically checked.
+// For version 3.3:
+// 1. The print lots sheets should open a dialog box that will also make the outside papers for you if you select yes. 
+// 2. Maybe someday I can add an option to push to database based on your company. This would mean firebase collection based on the settings window.
+// 3. Maybe make the database styling nicer.
+// 4. Could also show the amount of devices needed per day to maintain on track. updated based on the latest data! 
+
+
+
+// ======================================================================================================================================================
+
+
+
+// 3.2 Change Log:
 // 6. Prodution goals could be tracked.
 // 6.1. Updated remotely, the goal could be compared to data we have and show percent of completion.
-// 6.2. Could also show the amount of devices needed per day to maintain on track. updated based on the latest data! 
+// 6.2. Added statistics Icon
 // 7. Add hover labels for the buttons.
-// 8. Maybe make the database styling nicer.
-// 9. Add titles for each of the windows.
+// 5. The Shutdown feature should be periodically checked.
+// 7. Fix the Settings window to scroll
 
 // 3.1 Change Log:
 // x. Make printing things use the textbox not the serial list. 

@@ -310,6 +310,7 @@
     <Resource Include="button_6.png" />
     <Resource Include="button_6_red.png" />
     <Resource Include="button_7_red.png" />
+    <Resource Include="graph.png" />
     <Content Include="Keys\bomwipstore-firebase-adminsdk-jhqev-acb5705838.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
