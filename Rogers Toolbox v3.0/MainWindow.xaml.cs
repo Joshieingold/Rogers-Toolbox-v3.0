@@ -1191,7 +1191,8 @@ namespace Rogers_Toolbox_v3._0
 
 
 // BUGS:
-// 1. Printing Purolator sheets now does not recognize properly based on device type.
+// 1. Printing Purolator sheets now does not recognize properly based on device type.  
+// 1.1. This worked and failed once in real life so I fee like it has to do with a hidden list in the background
 
 // For version 3.3:
 // 1. The print lots sheets should open a dialog box that will also make the outside papers for you if you select yes. 
