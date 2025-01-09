@@ -6,8 +6,9 @@
         mc:Ignorable="d"
         Title="Rogers Toolbox v3.2" Height="456" Width="800" Background="#FF2E2E2E">
     <Grid>
+        <!-- Style for Navigation Buttons with Icons -->
         <Grid.Resources>
-            <!-- Style for Navigation Buttons with Icons -->
+            
             <Style TargetType="Button">
                 <Setter Property="Background" Value="#FF1F1F1F" />
                 <Setter Property="BorderBrush" Value="Gray" />
@@ -44,7 +45,6 @@
             </Style>
         </Grid.Resources>
 
-        <!-- Navigation Bar -->
         <!-- Navigation Bar -->
         <DockPanel Background="#FF1F1F1F" Height="61" VerticalAlignment="Top">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -116,12 +116,13 @@
             </StackPanel>
         </DockPanel>
 
-
+        <!-- Info Box -->
         <Label x:Name="InfoBox" Content="Welcome to The Rogers Toolbox v3.1" 
                HorizontalAlignment="Center" Height="34" Margin="0,78,0,0" 
                VerticalAlignment="Top" Width="500" Foreground="White" 
                FontSize="15" FontFamily="Sitka Text" Background="#FF1F1F1F" 
-               HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+               HorizontalContentAlignment="Center" VerticalContentAlignment="Center" 
+               />
 
         <!-- Scrollable Content Area -->
         <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,127,0,30" Grid.RowSpan="2" HorizontalAlignment="Center" Width="752">

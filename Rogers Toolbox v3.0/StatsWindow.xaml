@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         mc:Ignorable="d"
-        Title="StatsWindow" Height="450" Width="800">
+        Title="Statistics" Height="450" Width="800">
     <Grid Background="#FF1E1E1E">
         <Grid.Resources>
             <!-- Style for Buttons -->
@@ -92,11 +92,6 @@
         
 
 
-
-
-
-        <!-- Loading Indicator -->
-        <ProgressBar x:Name="LoadingIndicator" IsIndeterminate="True" Visibility="Collapsed" Height="20" VerticalAlignment="Bottom" />
 
         <!-- UniformGrid for PieCharts at the bottom -->
         <DockPanel Background="#FF1F1F1F" Height="144" VerticalAlignment="Bottom">
