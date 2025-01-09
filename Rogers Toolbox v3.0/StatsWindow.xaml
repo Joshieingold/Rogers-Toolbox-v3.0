@@ -46,7 +46,7 @@
         </Grid.ColumnDefinitions>
 
         <DockPanel Background="#FF1F1F1F" Margin="0,0,0,144">
-            <UniformGrid Rows="1" Columns="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <UniformGrid Rows="1" Columns="3" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <StackPanel Orientation="vertical">
                     <Label Content="Select Month:" Foreground="White" Margin="5" HorizontalAlignment="Center"/>
                     <ComboBox x:Name="monthSelector" Width="150" Margin="5" Background="#FFDDACAC" BorderBrush="Red">
@@ -65,7 +65,21 @@
                     </ComboBox>
                     <Button Content="Update" Width="100" Height="30" Margin="5" Click="FetchDataByMonth_Click" Foreground="White" BorderBrush="Gray"/>
                 </StackPanel>
-                <StackPanel Width="399">
+                <StackPanel>
+                    <Label x:Name="RequiredPerDayLabel" 
+                       FontSize="16" 
+                       Foreground="White" 
+                       HorizontalAlignment="Center" 
+                       VerticalAlignment="Top" 
+                       Margin="10"/>
+                    <Label x:Name="DailyAverageLabel" 
+                        FontSize="16" 
+                        Foreground="White" 
+                        HorizontalAlignment="Center" 
+                        VerticalAlignment="Top" 
+                        Margin="10"/>
+                </StackPanel>
+                <StackPanel Width="257">
                     <Label VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Arial" FontWeight="Bold" Foreground="White" FontSize="24">Totals</Label>
                     <lvc:PieChart x:Name="TotalPieChart" InnerRadius="40" Grid.ColumnSpan="2" Height="200" Width="200"/>
                 </StackPanel>
