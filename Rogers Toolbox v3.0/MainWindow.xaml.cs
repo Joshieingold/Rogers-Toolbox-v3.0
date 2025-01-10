@@ -261,13 +261,13 @@ namespace Rogers_Toolbox_v3._0
         private async void BlitzImport()
         {
             // Lets the user know the import will begin soon and initializes the stopwatch.
-            UpdateMessage("Starting Blitz Import! Please click input location"); 
+            UpdateMessage("Starting Blitz Import! Please click input location");
             Stopwatch stopwatch = new Stopwatch();
-            
-            
+
+
             string[] lines = TextBox.Text.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries); // Gets the data from the textbox and splits it by new lines.
             await Task.Delay(6000);  // focus time for input location
-            
+
             // Starts stopwatch, prints all serials, and updates display accordingly.
             stopwatch.Start();
             foreach (string line in lines)
@@ -280,7 +280,7 @@ namespace Rogers_Toolbox_v3._0
                 await Task.Delay(blitzImportSpeed);  // Allows user to control the speed in settings.
             }
             stopwatch.Stop(); // TIME!
-            
+
             TimeSpan ts = stopwatch.Elapsed;
             string elapsedTime = String.Format("{0:00}h : {1:00}m : {2:00}s : {3:00} ms",
             ts.Hours, ts.Minutes, ts.Seconds,
@@ -338,7 +338,8 @@ namespace Rogers_Toolbox_v3._0
                 UpdateMessage($"Import Completed in {elapsedTime}");
 
             }
-            else {
+            else
+            {
                 UpdateMessage("No Serials Identified, aborting FlexiPro Import.");
             }
 
@@ -372,7 +373,7 @@ namespace Rogers_Toolbox_v3._0
                 }
                 serialsList.Remove(line);
                 UpdateSerialsDisplay();
-                
+
                 await Task.Delay(wmsImportSpeed);
             }
             stopwatch.Stop();
@@ -691,7 +692,7 @@ namespace Rogers_Toolbox_v3._0
             };
 
             allContractors = new List<string>();
-            foreach (string robctr in robitailleList )
+            foreach (string robctr in robitailleList)
             {
                 allContractors.Add(robctr);
             }
@@ -699,7 +700,7 @@ namespace Rogers_Toolbox_v3._0
             {
                 allContractors.Add(ctr);
             }
-            if (CombineCTR) 
+            if (CombineCTR)
             {
                 allContractors.Add("8993 & 8982");
             }
@@ -766,7 +767,7 @@ namespace Rogers_Toolbox_v3._0
                 var formattedTotals = FormatTotals(combinedContractorTotals, contractorDevices);
                 results.Add(formattedTotals);
             }
-            
+
 
 
             // Processing Warehouses.
@@ -1065,17 +1066,17 @@ namespace Rogers_Toolbox_v3._0
                 LoadSettings();
             }
         } // Opens the format serials box.
-        private List<string> MakeSerialsUppercase() 
+        private List<string> MakeSerialsUppercase()
         {
             string[] lines = TextBox.Text.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
             List<string> formattedList = new List<string>();
 
-            foreach (string line in lines) 
+            foreach (string line in lines)
             {
                 string uppercaseString = line.ToUpper();
                 formattedList.Add(uppercaseString);
             }
-            
+
             return formattedList;
         }
         private List<string> RemoveDuplicates()
@@ -1178,14 +1179,34 @@ namespace Rogers_Toolbox_v3._0
                 catch (Exception ex)
                 {
                     Console.WriteLine($"Error pushing data to Firestore: {ex.Message}");
-                    throw; 
+                    throw;
                 }
             }
         } // formats how to push the data to firestore
+        // Test
+        public class SerialNumber
+        {
+            // Property to hold the serial number
+            public string Serial { get; set; }
 
+            // Property to hold the device name
+            public string Device { get; set; }
+
+            // Constructor to initialize the properties
+            public SerialNumber(string serial)
+            {
+                Serial = serial;
+                Device = DetermineDevice(serial);
+            }
+
+            // Optionally, you can override ToString() for easier debugging and display
+            public override string ToString()
+            {
+                return $"Serial: {Serial}, Device: {Device}";
+            }
+        }
     }
 }
-
 
 // TO DO:
 
