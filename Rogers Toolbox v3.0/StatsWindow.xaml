@@ -47,83 +47,104 @@
 
         <DockPanel Background="#FF1F1F1F" Margin="0,0,0,144">
             <UniformGrid Rows="1" Columns="3" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <StackPanel Orientation="vertical">
-                    <Label Content="Select Month:" Foreground="White" Margin="5" HorizontalAlignment="Center"/>
-                    <ComboBox x:Name="monthSelector" Width="150" Margin="5" Background="#FFDDACAC" BorderBrush="Red">
-                        <ComboBoxItem Content="January" Tag="1"/>
-                        <ComboBoxItem Content="February" Tag="2"/>
-                        <ComboBoxItem Content="March" Tag="3"/>
-                        <ComboBoxItem Content="April" Tag="4"/>
-                        <ComboBoxItem Content="May" Tag="5"/>
-                        <ComboBoxItem Content="June" Tag="6"/>
-                        <ComboBoxItem Content="July" Tag="7"/>
-                        <ComboBoxItem Content="August" Tag="8"/>
-                        <ComboBoxItem Content="September" Tag="9"/>
-                        <ComboBoxItem Content="October" Tag="10"/>
-                        <ComboBoxItem Content="November" Tag="11"/>
-                        <ComboBoxItem Content="December" Tag="12"/>
-                    </ComboBox>
-                    <Button Content="Update" Width="100" Height="30" Margin="5" Click="FetchDataByMonth_Click" Foreground="White" BorderBrush="Gray"/>
-                </StackPanel>
-                <StackPanel>
-                    <Label x:Name="RequiredPerDayLabel" 
+                <Border BorderBrush="#FF383838" BorderThickness="2" CornerRadius="8" Background="#FF1A1A1A" Height="187" Width="217">
+                    <StackPanel Orientation="vertical" VerticalAlignment="Center" Width="187">
+
+                        <Label Content="Select Month:" Foreground="White" Margin="5" HorizontalAlignment="Center"/>
+                        <ComboBox x:Name="monthSelector" Width="136" Margin="5" Background="#FFDDACAC" BorderBrush="Red">
+                            <ComboBoxItem Content="January" Tag="1"/>
+                            <ComboBoxItem Content="February" Tag="2"/>
+                            <ComboBoxItem Content="March" Tag="3"/>
+                            <ComboBoxItem Content="April" Tag="4"/>
+                            <ComboBoxItem Content="May" Tag="5"/>
+                            <ComboBoxItem Content="June" Tag="6"/>
+                            <ComboBoxItem Content="July" Tag="7"/>
+                            <ComboBoxItem Content="August" Tag="8"/>
+                            <ComboBoxItem Content="September" Tag="9"/>
+                            <ComboBoxItem Content="October" Tag="10"/>
+                            <ComboBoxItem Content="November" Tag="11"/>
+                            <ComboBoxItem Content="December" Tag="12"/>
+                        </ComboBox>
+                        <Button Content="Update" Width="165" Height="30" Margin="5" Click="FetchDataByMonth_Click" Foreground="White" BorderBrush="#FF383838" Background="#FF1A1A1A"/>
+                    </StackPanel>
+                </Border>
+                <StackPanel VerticalAlignment="Center" Width="257">
+                    <Border BorderBrush="#FF383838" BorderThickness="2" CornerRadius="8" Margin="4" Background="#FF1A1A1A">
+                        <Label x:Name="RequiredPerDayLabel" 
                        FontSize="16" 
                        Foreground="White" 
                        HorizontalAlignment="Center" 
                        VerticalAlignment="Top" 
                        Margin="10"/>
-                    <Label x:Name="DailyAverageLabel" 
+                    </Border>
+                    <Border BorderBrush="#FF383838" BorderThickness="2" CornerRadius="8" Margin="4" Background="#FF1A1A1A">
+                        <Label x:Name="DailyAverageLabel" 
                         FontSize="16" 
                         Foreground="White" 
                         HorizontalAlignment="Center" 
                         VerticalAlignment="Top" 
                         Margin="10"/>
+                    </Border>
                 </StackPanel>
                 <StackPanel Width="257">
                     <Label VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Arial" FontWeight="Bold" Foreground="White" FontSize="24">Totals</Label>
-                    <lvc:PieChart x:Name="TotalPieChart" InnerRadius="40" Grid.ColumnSpan="2" Height="200" Width="200"/>
+                    <lvc:PieChart x:Name="TotalPieChart" InnerRadius="40" Grid.ColumnSpan="2" Height="200" Width="200" />
                 </StackPanel>
             </UniformGrid>
         </DockPanel>
-        
-        
+
+
 
         <!-- Pie Chart -->
-        
+
 
 
 
         <!-- UniformGrid for PieCharts at the bottom -->
         <DockPanel Background="#FF1F1F1F" Height="144" VerticalAlignment="Bottom">
-            <UniformGrid Rows="1" Columns="7" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <StackPanel>
-                    <Label VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Arial" FontWeight="Bold" Foreground="White">XB8</Label>
-                    <lvc:PieChart x:Name="XB8Chart" InnerRadius="15" Height="75" Margin="4"/>
-                </StackPanel>
-                <StackPanel>
-                    <Label VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Arial" FontWeight="Bold" Foreground="White">XB7-fc</Label>
-                    <lvc:PieChart x:Name="CGMChart" InnerRadius="15" Height="75" Margin="4"/>
-                </StackPanel>
-                <StackPanel>
-                    <Label VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Arial" FontWeight="Bold" Foreground="White">XB7-FC</Label>
-                    <lvc:PieChart x:Name="TGChart" InnerRadius="15" Height="75" Margin="4"/>
-                </StackPanel>
-                <StackPanel>
-                    <Label VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Arial" FontWeight="Bold" Foreground="White">Xi6-T</Label>
-                    <lvc:PieChart x:Name="XI6TChart" InnerRadius="15" Height="75" Margin="2"/>
-                </StackPanel>
-                <StackPanel>
-                    <Label VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Arial" FontWeight="Bold" Foreground="White">Xi6-A</Label>
-                    <lvc:PieChart x:Name="XI6AChart" InnerRadius="15" Height="75" Margin="2"/>
-                </StackPanel>
-                <StackPanel>
-                    <Label VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Arial" FontWeight="Bold" Foreground="White">XiOne</Label>
-                    <lvc:PieChart x:Name="XIONEChart" InnerRadius="15" Height="75" Margin="2"/>
-                </StackPanel>
-                <StackPanel>
-                    <Label VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Arial" FontWeight="Bold" Foreground="White">Pods</Label>
-                    <lvc:PieChart x:Name="PODSChart" InnerRadius="15" Height="75" Margin="2"/>
-                </StackPanel>
+            <UniformGrid Rows="1" Columns="7" Width="764" Height="124">
+                <Border BorderBrush="#FF383838" BorderThickness="2" CornerRadius="8" Margin="4" Background="#FF1A1A1A">
+                    <StackPanel>
+                        <Label VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Arial" FontWeight="Bold" Foreground="White">XB8</Label>
+                        <lvc:PieChart x:Name="XB8Chart" InnerRadius="15" Height="75" Margin="4"/>
+                    </StackPanel>
+                </Border>
+                <Border BorderBrush="#FF383838" BorderThickness="2" CornerRadius="8" Margin="4" Background="#FF1A1A1A">
+                    <StackPanel>
+                        <Label VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Arial" FontWeight="Bold" Foreground="White">XB7-fc</Label>
+                        <lvc:PieChart x:Name="CGMChart" InnerRadius="15" Height="75" Margin="4"/>
+                    </StackPanel>
+                </Border>
+                <Border BorderBrush="#FF383838" BorderThickness="2" CornerRadius="8" Margin="4" Background="#FF1A1A1A">
+                    <StackPanel>
+                        <Label VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Arial" FontWeight="Bold" Foreground="White">XB7-FC</Label>
+                        <lvc:PieChart x:Name="TGChart" InnerRadius="15" Height="75" Margin="4"/>
+                    </StackPanel>
+                </Border>
+                <Border BorderThickness="2" CornerRadius="8" Margin="4" Background="#FF1A1A1A" BorderBrush="#FF383838">
+                    <StackPanel>
+                        <Label VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Arial" FontWeight="Bold" Foreground="White">Xi6-T</Label>
+                        <lvc:PieChart x:Name="XI6TChart" InnerRadius="15" Height="75" Margin="2"/>
+                    </StackPanel>
+                </Border>
+                <Border BorderBrush="#FF383838" BorderThickness="2" CornerRadius="8" Margin="4" Background="#FF1A1A1A">
+                    <StackPanel >
+                        <Label VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Arial" FontWeight="Bold" Foreground="White">Xi6-A</Label>
+                        <lvc:PieChart x:Name="XI6AChart" InnerRadius="15" Height="75" Margin="2"/>
+                    </StackPanel>
+                </Border>
+                <Border BorderBrush="#FF383838" BorderThickness="2" CornerRadius="8" Margin="4" Background="#FF1A1A1A">
+                    <StackPanel>
+                        <Label VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Arial" FontWeight="Bold" Foreground="White">XiOne</Label>
+                        <lvc:PieChart x:Name="XIONEChart" InnerRadius="15" Height="75" Margin="2"/>
+                    </StackPanel>
+                </Border>
+                <Border BorderBrush="#FF383838" BorderThickness="2" CornerRadius="8" Margin="4" Background="#FF1A1A1A">
+                    <StackPanel>
+                        <Label VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Arial" FontWeight="Bold" Foreground="White">Pods</Label>
+                        <lvc:PieChart x:Name="PODSChart" InnerRadius="15" Height="75" Margin="2"/>
+                    </StackPanel>
+                </Border>
             </UniformGrid>
         </DockPanel>
     </Grid>
