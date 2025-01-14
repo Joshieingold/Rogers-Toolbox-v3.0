@@ -15,7 +15,7 @@ using Google.Cloud.Firestore;
 using System.Management;
 
 
-
+// Will be remade in object oriented design for 4.0....
 namespace Rogers_Toolbox_v3._0
 {
     public partial class MainWindow : Window
