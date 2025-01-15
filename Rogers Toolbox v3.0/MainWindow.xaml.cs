@@ -1220,6 +1220,7 @@ namespace Rogers_Toolbox_v3._0
 // 2. Maybe someday I can add an option to push to database based on your company. This would mean firebase collection based on the settings window.
 // 3. Maybe make the database styling nicer.
 // 4. Could also show the amount of devices needed per day to maintain on track. updated based on the latest data! 
+// 5. Easily split imports with a splitter like *
 
 
 
