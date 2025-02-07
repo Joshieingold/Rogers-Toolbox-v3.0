@@ -1221,6 +1221,7 @@ namespace Rogers_Toolbox_v3._0
 // 3. Maybe make the database styling nicer.
 // 4. Could also show the amount of devices needed per day to maintain on track. updated based on the latest data! 
 // 5. Easily split imports with a splitter like *
+// 6. Allow for customization of what happens on wms error.
 
 
 
